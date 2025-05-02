@@ -1,0 +1,2 @@
+# generasijuara-web
+SIAKAD GenerasiJuara
