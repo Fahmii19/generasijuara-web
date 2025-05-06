@@ -92,7 +92,7 @@
                     return {
                         _token: "{{ csrf_token() }}",
                         keyword: params.term, // search term
-                        limit: 10,
+                        limit: 30,
                     };
                 },
                 processResults: function (data, params) {
@@ -137,6 +137,7 @@
                 url: dtUrl,
                 dataType: "json",
                 "data": function ( d ) {
+
                     d._token = "{{ csrf_token() }}",
                     d.kelas_id = kelas_id
                 },
@@ -242,7 +243,7 @@
         });
 
         $('#kelas_id').on('change', function() {
-            kelas_id = this.value;
+            kelas_id = $('#kelas_id').val(); // Pakai jQuery ambil nilainya
             $('#btn_reset').removeClass('d-none');
             $('#param_kelas_id').val(kelas_id);
             table.ajax.reload();

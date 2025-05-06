@@ -135,7 +135,7 @@ Route::post('password/update-siab-password', [ForgotPasswordController::class, '
 // Route::get('/php-info', function(Request $request)
 // {
 //     $response = phpinfo();
-//     return $response; 
+//     return $response;
 // });
 
 Route::get('/', [WebDashboard::class, 'index'])->name('web.index');
@@ -146,7 +146,7 @@ Route::group(['prefix' => 'ppdb'], function () {
     Route::get('/paud', [WebPpdb::class, 'paud'])->name('web.ppdb.paud');
 });
 
-Route::group(['prefix' => 'su', 'middleware' => ['auth'] ], function () {
+Route::group(['prefix' => 'su', 'middleware' => ['auth']], function () {
     Route::get('/', [WebSu::class, 'home'])->name('web.su.home');
     Route::get('/tutor/list', [WebSu::class, 'tutorList'])->name('web.su.tutor.list');
     Route::get('/kelas/list', [WebSu::class, 'kelasList'])->name('web.su.kelas.list');
@@ -175,7 +175,7 @@ Route::group(['prefix' => 'su', 'middleware' => ['auth'] ], function () {
 
     Route::get('/cabang/list', [WebSu::class, 'cabangList'])->name('web.su.cabang.list');
     Route::get('/user/list', [WebSu::class, 'userList'])->name('web.su.user.list');
-    
+
     Route::get('/raport/list', [WebSu::class, 'raportList'])->name('web.su.raport.list');
     Route::get('/raport/print', [WebSu::class, 'raportPrint'])->name('web.su.raport.print');
     Route::get('/raport/detail', [WebSu::class, 'raportDetail'])->name('web.su.raport.detail');
@@ -188,14 +188,14 @@ Route::group(['prefix' => 'su', 'middleware' => ['auth'] ], function () {
     Route::get('/tahun-akademik/list', [WebSu::class, 'tahunAkademikList'])->name('web.su.tahun_akademik.list');
 
     Route::get('/ttd-raport/list', [WebSu::class, 'ttdRaportList'])->name('web.su.ttd_raport.list');
-    
+
     Route::get('/wb/edit/{id?}', [WebWB::class, 'edit'])->name('web.su.wb.edit');
 
     Route::get('/ppdb/abc/list', [WebSu::class, 'ppdbAbcList'])->name('web.su.ppdb.abc.list');
     Route::get('/ppdb/abc/add', [WebSu::class, 'ppdbAbcAdd'])->name('web.su.ppdb.abc.add');
     Route::get('/ppdb/abc/edit/{id?}', [WebSu::class, 'ppdbAbcEdit'])->name('web.su.ppdb.abc.edit');
     Route::get('/ppdb/abc-new/list', [WebSu::class, 'ppdbAbcNewList'])->name('web.su.ppdb.abc_new.list');
-    
+
     Route::get('/ppdb/paud/list', [WebSu::class, 'ppdbPaudList'])->name('web.su.ppdb.paud.list');
     Route::get('/ppdb/paud/add', [WebSu::class, 'ppdbPaudAdd'])->name('web.su.ppdb.paud.add');
     Route::get('/ppdb/paud/edit/{id?}', [WebSu::class, 'ppdbPaudEdit'])->name('web.su.ppdb.paud.edit');
@@ -236,12 +236,12 @@ Route::group(['prefix' => 'su', 'middleware' => ['auth'] ], function () {
 
     // voucher
     Route::get('/voucher/list', [WebSu::class, 'voucherList'])->name('web.su.voucher.list');
-    
+
     // settings
     Route::get('/settings', [WebSu::class, 'settings'])->name('web.su.settings');
 });
 
-Route::group(['prefix' => 'sireka', 'middleware' => ['auth'] ], function () {
+Route::group(['prefix' => 'sireka', 'middleware' => ['auth']], function () {
     Route::get('/', [WebSireka::class, 'home'])->name('web.sireka.home');
 
     Route::get('/keuangan/pembayaran/list', [WebSireka::class, 'keuanganPembayaranList'])->name('web.sireka.keuangan.pembayaran.list');
@@ -253,7 +253,7 @@ Route::group(['prefix' => 'sireka', 'middleware' => ['auth'] ], function () {
     Route::get('/keuangan/slip-gaji/add', [WebSireka::class, 'keuanganSlipGajiAdd'])->name('web.sireka.keuangan.slip_gaji.add');
 });
 
-Route::group(['prefix' => 'sirego', 'middleware' => ['auth'] ], function () {
+Route::group(['prefix' => 'sirego', 'middleware' => ['auth']], function () {
     Route::get('/', [WebSirego::class, 'home'])->name('web.sirego.home');
 
     Route::post('/user/get', [DTUser::class, 'getAll'])->name('ajax.dt.user.get');
@@ -267,12 +267,12 @@ Route::group(['prefix' => 'sirego', 'middleware' => ['auth'] ], function () {
     Route::post('/user/delete', [AjaxUser::class, 'delete'])->name('ajax.user.delete');
 });
 
-Route::group(['prefix' => 'sialum' ], function () {
+Route::group(['prefix' => 'sialum'], function () {
     // Route::get('/', [WebSialum::class, 'home'])->name('web.sialum.home');
     Route::get('/add', [WebSialum::class, 'add'])->name('web.sialum.alumni.add');
 });
 
-Route::group(['prefix' => 'siab', 'middleware' => ['auth'] ], function () {
+Route::group(['prefix' => 'siab', 'middleware' => ['auth']], function () {
     Route::get('/', [WebSiab::class, 'home'])->name('web.siab.home');
     Route::get('/profile', [WebSiab::class, 'profile'])->name('web.siab.profile');
     Route::get('/nilai/list', [WebSiab::class, 'nilaiList'])->name('web.siab.nilai.list');
@@ -289,7 +289,7 @@ Route::group(['prefix' => 'siab', 'middleware' => ['auth'] ], function () {
     Route::get('/susulan-remedial/list', [WebSiab::class, 'susulanRemedialList'])->name('web.siab.susulan_remedial.list');
 });
 
-Route::group(['prefix' => 'situ', 'middleware' => ['auth'] ], function () {
+Route::group(['prefix' => 'situ', 'middleware' => ['auth']], function () {
     Route::get('/', [WebSitu::class, 'home'])->name('web.situ.home');
     Route::get('/jadwal-pelajaran/list', [WebSitu::class, 'jadwalPelajaranList'])->name('web.situ.jadwal_pelajaran.list');
     Route::get('/nilai/list', [WebSitu::class, 'nilaiList'])->name('web.situ.nilai.list');
@@ -331,7 +331,7 @@ Route::group(['prefix' => 'ajax-dt'], function () {
     Route::post('/summary-rombel/get', [DtSummaryRombonganBelajar::class, 'getAll'])->name('ajax.dt.summary_rombel.get');
     Route::post('/summary-rombel/get-status-count', [DtSummaryRombonganBelajar::class, 'getStatusCount'])->name('ajax.dt.summary_rombel.get_status_count');
     Route::post('/summary-rombel/get-status-wb', [DtSummaryRombonganBelajar::class, 'getStatusWB'])->name('ajax.dt.summary_rombel.get_status_wb');
-    Route::post('/pembayaran/get', [DtPembayaran::class, 'getAll'])->name('ajax.dt.pembayaran.get');
+    Route::match(['get', 'post'], '/pembayaran/get/{kelas_id?}', [DtPembayaran::class, 'getAll'])->name('ajax.dt.pembayaran.get');
     Route::post('/tagihan/get', [DtTagihan::class, 'getAll'])->name('ajax.dt.tagihan.get');
     Route::post(('/kuisioner/get'), [DtKuisioner::class, 'getAll'])->name('ajax.dt.kuisioner.get');
     Route::post('/kuisioner-items/get', [DtKuisionerItems::class, 'getAll'])->name('ajax.dt.kuisioner_items.get');
@@ -359,7 +359,7 @@ Route::group(['prefix' => 'ajax'], function () {
     Route::post('/cabang/get', [AjaxCabang::class, 'getCabang'])->name('ajax.cabang.get');
     Route::post('/cabang/save', [AjaxCabang::class, 'save'])->name('ajax.cabang.save');
     Route::post('/cabang/delete', [AjaxCabang::class, 'delete'])->name('ajax.cabang.delete');
-    
+
     Route::post('/user/role', [AjaxUser::class, 'getRoles'])->name('ajax.user.get_roles');
     Route::post('/user/get', [AjaxUser::class, 'get'])->name('ajax.user.get');
     Route::post('/user/create', [AjaxUser::class, 'create'])->name('ajax.user.create');
@@ -376,22 +376,22 @@ Route::group(['prefix' => 'ajax'], function () {
     Route::post('/kelas/update-status-nilai', [AjaxKelas::class, 'updateStatusNilai'])->name('ajax.kelas.update_status_nilai');
     Route::post('/kelas/update-jenis-rapor', [AjaxKelas::class, 'updateJenisRapor'])->name('ajax.kelas.update_jenis_rapor');
     Route::post('/kelas/import-rombel-xls', [AjaxKelas::class, 'importRombelExcel'])->name('ajax.kelas.import_rombel_excel');
-    
+
     Route::post('/paket-kelas/save', [AjaxPaketKelas::class, 'save'])->name('ajax.paket_kelas.save');
     Route::post('/paket-kelas/get', [AjaxPaketKelas::class, 'get'])->name('ajax.paket_kelas.get');
     Route::post('/paket-kelas/get-all', [AjaxPaketKelas::class, 'getAll'])->name('ajax.paket_kelas.get_all');
     Route::post('/paket-kelas/delete', [AjaxPaketKelas::class, 'delete'])->name('ajax.paket_kelas.delete');
-    
+
     Route::post('/paket-kelas/save', [AjaxPaketKelas::class, 'save'])->name('ajax.paket_kelas.save');
     Route::post('/paket-kelas/get', [AjaxPaketKelas::class, 'get'])->name('ajax.paket_kelas.get');
     Route::post('/paket-kelas/get-all', [AjaxPaketKelas::class, 'getAll'])->name('ajax.paket_kelas.get_all');
     Route::post('/paket-kelas/delete', [AjaxPaketKelas::class, 'delete'])->name('ajax.paket_kelas.delete');
-    
+
     Route::post('/paket-spp/save', [AjaxPaketSpp::class, 'save'])->name('ajax.paket_spp.save');
     Route::post('/paket-spp/get', [AjaxPaketSpp::class, 'get'])->name('ajax.paket_spp.get');
     Route::post('/paket-spp/get-all', [AjaxPaketSpp::class, 'getAll'])->name('ajax.paket_spp.get_all');
     Route::post('/paket-spp/delete', [AjaxPaketSpp::class, 'delete'])->name('ajax.paket_spp.delete');
-    
+
     Route::post('/wb/update', [AjaxWb::class, 'update'])->name('ajax.wb.update');
 
     Route::post('/ppdb/create', [AjaxPpdb::class, 'create'])->name('ajax.ppdb.create');
@@ -426,25 +426,25 @@ Route::group(['prefix' => 'ajax'], function () {
 
     Route::post('/keuangan/tagihan/get', [AjaxTagihan::class, 'getTagihan'])->name('ajax.keuangan.tagihan.get');
     Route::post('/keuangan/tagihan-item/get', [AjaxTagihan::class, 'getTagihanItems'])->name('ajax.keuangan.tagihan-items.get');
-    
+
     Route::post('/mata-pelajaran/save', [AjaxMataPelajaran::class, 'save'])->name('ajax.mata_pelajaran.save');
     Route::post('/mata-pelajaran/get', [AjaxMataPelajaran::class, 'get'])->name('ajax.mata_pelajaran.get');
     Route::post('/mata-pelajaran/get-by-kelas', [AjaxMataPelajaran::class, 'getByKelas'])->name('ajax.mata_pelajaran.get_by_kelas');
     Route::post('/mata-pelajaran/get-all', [AjaxMataPelajaran::class, 'getAll'])->name('ajax.mata_pelajaran.get_all');
     Route::post('/mata-pelajaran/delete', [AjaxMataPelajaran::class, 'delete'])->name('ajax.mata_pelajaran.delete');
-    
+
     Route::post('/kelas-mp/save', [AjaxKelasMP::class, 'save'])->name('ajax.kelas_mp.save');
     Route::post('/kelas-mp/get', [AjaxKelasMP::class, 'get'])->name('ajax.kelas_mp.get');
     Route::post('/kelas-mp/get-all', [AjaxKelasMP::class, 'getAll'])->name('ajax.kelas_mp.get_all');
     Route::post('/kelas-mp/delete', [AjaxKelasMP::class, 'delete'])->name('ajax.kelas_mp.delete');
-    
+
     Route::post('/kelas-wb/save', [AjaxKelasWB::class, 'save'])->name('ajax.kelas_wb.save');
     Route::post('/kelas-wb/get', [AjaxKelasWB::class, 'get'])->name('ajax.kelas_wb.get');
     Route::post('/kelas-wb/get-all', [AjaxKelasWB::class, 'getAll'])->name('ajax.kelas_wb.get_all');
     Route::post('/kelas-wb/delete', [AjaxKelasWB::class, 'delete'])->name('ajax.kelas_wb.delete');
     Route::post('/kelas-wb/update-catatan', [AjaxKelasWB::class, 'updateCatatan'])->name('ajax.kelas_wb.update_catatan');
     Route::post('/kelas-wb/update-presensi', [AjaxKelasWB::class, 'updatePresensi'])->name('ajax.kelas_wb.update_presensi');
-    
+
     Route::post('/kmp-setting/save', [AjaxKMPSetting::class, 'save'])->name('ajax.kmp_setting.save');
     Route::post('/kmp-setting/get', [AjaxKMPSetting::class, 'get'])->name('ajax.kmp_setting.get');
     Route::post('/kmp-setting/get-all', [AjaxKMPSetting::class, 'getAll'])->name('ajax.kmp_setting.get_all');
