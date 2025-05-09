@@ -17,27 +17,20 @@ class PembayaranController extends Controller
         return $model;
     }
 
-    public function getAll(Request $request, $kelas_id = null)
+    public function getAll(Request $request)
     {
-        $kelas_id = $kelas_id ?? $request->kelas_id;
-
         $model = $this->getBaseModel();
-
-        if ($kelas_id != null) {
-            $model = $model->whereHas('ppdb', function ($query) use ($kelas_id) {
-                $query->where('ppdb.kelas_id', $kelas_id);
+        if ($request->has('kelas_id') && $request->kelas_id != null) {
+            $model = $model->whereHas('ppdb', function($query) {
+                $query->where('ppdb.kelas_id', request('kelas_id'));
             });
         }
-
-        if ($kelas_id != null) {
-            $model = $model->where(function ($q) use ($kelas_id) {
-                $q->whereHas('ppdb', function ($query) use ($kelas_id) {
-                    $query->where('ppdb.kelas_id', $kelas_id);
-                })->orWhereDoesntHave('ppdb');
+        if ($request->has('ppdb_id') && $request->ppdb_id != null) {
+            $model = $model->whereHas('ppdb', function($query) {
+                $query->where('ppdb.id', request('ppdb_id'));
             });
         }
-
-
+        
         return DataTables::of($model)
             ->addIndexColumn()
             ->make(true);

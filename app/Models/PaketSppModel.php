@@ -58,4 +58,9 @@ class PaketSppModel extends Model
     {
         return $this->hasOne(CabangModel::class, 'id', 'cabang_id');
     }
+    // Relasi ke tabel ppdb
+    public function ppdb()
+    {
+        return $this->hasMany(PpdbModel::class, 'paket_spp_id');
+    }
 }

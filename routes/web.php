@@ -331,7 +331,7 @@ Route::group(['prefix' => 'ajax-dt'], function () {
     Route::post('/summary-rombel/get', [DtSummaryRombonganBelajar::class, 'getAll'])->name('ajax.dt.summary_rombel.get');
     Route::post('/summary-rombel/get-status-count', [DtSummaryRombonganBelajar::class, 'getStatusCount'])->name('ajax.dt.summary_rombel.get_status_count');
     Route::post('/summary-rombel/get-status-wb', [DtSummaryRombonganBelajar::class, 'getStatusWB'])->name('ajax.dt.summary_rombel.get_status_wb');
-    Route::match(['get', 'post'], '/pembayaran/get/{kelas_id?}', [DtPembayaran::class, 'getAll'])->name('ajax.dt.pembayaran.get');
+    Route::post('/pembayaran/get', [DtPembayaran::class, 'getAll'])->name('ajax.dt.pembayaran.get');
     Route::post('/tagihan/get', [DtTagihan::class, 'getAll'])->name('ajax.dt.tagihan.get');
     Route::post(('/kuisioner/get'), [DtKuisioner::class, 'getAll'])->name('ajax.dt.kuisioner.get');
     Route::post('/kuisioner-items/get', [DtKuisionerItems::class, 'getAll'])->name('ajax.dt.kuisioner_items.get');
@@ -376,6 +376,9 @@ Route::group(['prefix' => 'ajax'], function () {
     Route::post('/kelas/update-status-nilai', [AjaxKelas::class, 'updateStatusNilai'])->name('ajax.kelas.update_status_nilai');
     Route::post('/kelas/update-jenis-rapor', [AjaxKelas::class, 'updateJenisRapor'])->name('ajax.kelas.update_jenis_rapor');
     Route::post('/kelas/import-rombel-xls', [AjaxKelas::class, 'importRombelExcel'])->name('ajax.kelas.import_rombel_excel');
+
+    // dummy_rombongan_belajar
+    // Route::get('/store-dummy-data', [AjaxKelas::class, 'storeDummyData']);
 
     Route::post('/paket-kelas/save', [AjaxPaketKelas::class, 'save'])->name('ajax.paket_kelas.save');
     Route::post('/paket-kelas/get', [AjaxPaketKelas::class, 'get'])->name('ajax.paket_kelas.get');

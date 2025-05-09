@@ -19,10 +19,16 @@ class TahunAkademikModel extends Model
         'tgl_cover_raport',
         'tgl_raport',
         'is_active',
+        'is_generate_rombel',
     ];
 
     public function alumni()
     {
         return $this->hasMany(AlumniModel::class, 'tahun_akademik_id');
+    }
+    // Relasi ke tabel ppdb
+    public function ppdb()
+    {
+        return $this->hasMany(PpdbModel::class, 'tahun_akademik_id');
     }
 }

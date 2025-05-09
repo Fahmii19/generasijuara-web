@@ -30,10 +30,10 @@ class TagihanModel extends Model
         'nominal',
         'status',
     ];
-
+    
     public function ppdb()
     {
-        return $this->belongsTo(PpdbModel::class, 'ppdb_id', 'id');
+        return $this->hasOne(PpdbModel::class, 'id', 'ppdb_id');
     }
 
     public function pembayaran()

@@ -27,4 +27,9 @@ class PaketKelasModel extends Model
     {
         return $this->hasOne(User::class, 'id', 'updated_by');
     }
+    // Relasi ke tabel ppdb
+    public function ppdb()
+    {
+        return $this->hasMany(PpdbModel::class, 'paket_kelas_id');
+    }
 }

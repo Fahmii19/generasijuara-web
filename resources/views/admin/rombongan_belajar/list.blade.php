@@ -20,7 +20,7 @@
                         </a> -->
                         <a class="btn btn-sm btn-light text-primary" href="#" id="importBtn">
                             <i class="me-1" data-feather="file"></i>
-                            Import Rombel Excel
+                            Import Rombel Excelll
                         </a>
                     </div>
                 </div>
@@ -142,6 +142,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                {{-- dummy_rombongan_belajar --}}
                 <h5 class="modal-title" id="modalImportLabel">Import</h5>
                 <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -376,7 +377,6 @@
                     "_token": "{{ csrf_token() }}",
                 },
                 success: function(res) {
-                    console.log(res);
                     var html_results = "<option value=''>Semua Cabang</option>";
                     $.each(res.data, function (i, row) {
                         html_results += "<option value='"+row.id+"'>"+row.nama_cabang+"</option>";
@@ -400,7 +400,6 @@
                     "_token": "{{ csrf_token() }}",
                 },
                 success: function(res) {
-                    console.log(res);
                     var html_results = "<option value=''>Semua</option>";
                     $.each(res.data, function (i, row) {
                         html_results += "<option value='"+row.id+"'>"+row.kode+" - "+row.keterangan+"</option>";
@@ -430,7 +429,6 @@
                     "_token": "{{ csrf_token() }}",
                 },
                 success: function(res) {
-                    console.log(res);
                     var html_results = null;
                     $.each(res.data, function (i, row) {
                         html_results += "<option value='"+row.id+"'>"+row.nama+"</option>";
@@ -481,7 +479,6 @@
 
         $('#dtRombel').on('click', '.rombelEditBtn', function(){
             var id = $(this).data('id');
-            console.log(id);
             $('#modalRombel').modal('show');
             $('#formRombel').trigger("reset");
             $('#formRombel').find('#id').val(null);
@@ -493,7 +490,6 @@
                     "_token": "{{ csrf_token() }}"
                 },
                 success: function(res) {
-                    console.log(res)
                     if (!res.error) {
                         $('#formRombel').find('#id').val(res.data.id);
                         $('#formRombel').find('#nama').val(res.data?.ppdb?.nama);
@@ -524,13 +520,11 @@
                 'kelas' : $('#formRombel').find('#kelas_id').val(),
                 'is_active' : $('#formRombel').find("#is_active").is(":checked"),
             }
-            console.log('submit', data);
             $.ajax({
                 type: "POST",
                 url: "{{route('ajax.rombel.save')}}",
                 data: data,
                 success: function(res) {
-                    console.log(res);
                     if (!res.error) {
                         $('#modalRombel').modal('hide');
                         swalSuccess({
@@ -579,13 +573,13 @@
                 importFile = this.files[0]
             }
         });
-        
+
         $('#importBtn').on('click', function(){
             $('#modalImport').modal('show');
             $('#formImport').trigger('reset');
             importFile = null;
         });
-        
+
         $('#submitImportBtn').on('click', function(e){
             e.preventDefault();
             var form = $("#formImport");
@@ -602,6 +596,7 @@
 
             formData.append('_token', "{{ csrf_token() }}");
             formData.append('import_file', importFile);
+
 
             $.ajax({
                 type: "POST",
@@ -645,11 +640,11 @@
 
         $('#submitExportBtn').on('click', function(e){
             e.preventDefault();
-            
+
             var form = $("#formExport");
             var layanan_kelas_id = $('#formExport').find('#export_layanan_kelas_id').val();
             var tahun_akademik_id = $('#formExport').find('#export_tahun_akademik_id').val();
-            
+
             if (!$(form).valid()) {
                 validatorExport.focusInvalid();
                 return false;

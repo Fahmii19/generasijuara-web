@@ -353,11 +353,11 @@
                         $('#formNilai').find('#div_modul_3').hide();
                         $('#formNilai').find('#div_modul_2').hide();
                     }
-    
+
                     if (!dataSetting?.need_nilai_sikap) {
                         $('#formNilai').find('#div_sikap').hide();
                     }
-    
+
                     persentase_tm = dataSetting?.persentase_tm || 0;
                     persentase_um = dataSetting?.persentase_um || 0;
                     k_persentase_tm = dataSetting?.k_persentase_tm || 0;
@@ -376,7 +376,7 @@
                     if (k_persentase_um == 0) {
                         $('#formNilai').find('input[id*="k_ujian_"]').attr('disabled', true);
                     }
-    
+
                     $('.p_rumus').text('(TM: ' + persentase_tm + '%, UM: ' + persentase_um + '%, KKM: ' + kkm + ')');
                     $('.k_rumus').text('(TM: ' + k_persentase_tm + '%, UM: ' + k_persentase_um + '%, KKM: ' + kkm + ')');
                     // $('.k_rumus').text('(TM: 100%, KKM: '+kkm+')');
@@ -616,7 +616,7 @@
                     if (res.data.jenis_rapor == 'lama') {
                         $('#capaian_kompetensi_wrapper').hide();
                     }
-                    
+
                     if (!res.error) {
                         if (res.data?.nilai.susulan_remedial != null) {
                             susulan_remedial = JSON.parse(res.data?.nilai.susulan_remedial);
@@ -649,7 +649,7 @@
                                 });
                             });
                         }
-                        
+
                         $('#formNilai').find('#wb_id').val(wb_id);
                         $('#formNilai').find('#kmp_id').val(kmpSelected);
 
@@ -1003,7 +1003,7 @@
                 'sikap_sosial': $('#formNilai').find('#sikap_sosial').val(),
                 'sikap_spiritual': $('#formNilai').find('#sikap_spiritual').val(),
                 'susulan_remedial': JSON.stringify(susulan_remedial),
-                
+
                 // 'p_susulan_tugas_1': $('#formNilai').find("#p_susulan_tugas_1").is(":checked"),
                 // 'p_susulan_tugas_2': $('#formNilai').find("#p_susulan_tugas_2").is(":checked"),
                 // 'p_susulan_tugas_3': $('#formNilai').find("#p_susulan_tugas_3").is(":checked"),
@@ -1042,13 +1042,14 @@
                 // 'k_remedial_2': $('#formNilai').find("#k_remedial_2").is(":checked"),
                 // 'k_remedial_3': $('#formNilai').find("#k_remedial_3").is(":checked"),
             }
-            
+
             console.log('submit', data);
             $.ajax({
                 type: "POST",
                 url: "{{route('ajax.nilai.save')}}",
                 data: data,
                 success: function(res) {
+                    console.log('res', res);
                     if (!res.error) {
                         reset_susulan_remedial();
                         $('#modalNilai').modal('hide');
@@ -1206,7 +1207,7 @@
                 //     'kelas_id': kelasSelected,
                 //     'kmp_id': kmpSelected,
                 // }
-                
+
                 // enableLoadingButton("#calculateBtn");
                 // $.ajax({
                 //     type: "POST",
@@ -1247,7 +1248,7 @@
                 });
             }
         });
-        
+
         // Select2 search autofocus
         $(document).on('select2:open', () => {
             document.querySelector('.select2-search__field').focus();

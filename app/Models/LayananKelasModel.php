@@ -26,4 +26,9 @@ class LayananKelasModel extends Model
     {
         return $this->hasOne(User::class, 'id', 'updated_by');
     }
+    // Relasi ke tabel ppdb
+    public function ppdb()
+    {
+        return $this->hasMany(PpdbModel::class, 'layanan_kelas_id');
+    }
 }
