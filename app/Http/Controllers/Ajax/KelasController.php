@@ -27,7 +27,7 @@ class KelasController extends Controller
             // Mulai proses import data Excel
             DB::beginTransaction();
             try {
-                $semuaNisn = [];
+                $CekDataBisaTidak = [];
                 $tahunAjar = '';
 
                 // Loop melalui data Excel untuk memproses tiap baris
@@ -154,7 +154,7 @@ class KelasController extends Controller
                     'error' => false,
                     'message' => 'File berhasil dibaca dan diimpor',
                     'data' => [
-                        'semua_nama' => $semuaNisn
+                        'semua_nama' => $CekDataBisaTidak
                     ]
                 ]);
             } catch (\Exception $e) {
