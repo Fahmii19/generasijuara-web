@@ -66,6 +66,7 @@
         <br>
         <div class="card">
             <div class="card-body">
+                {{-- table rombongan belajar list --}}
                 <table class="table table-bordered" id="dtRombel" width="100%" cellspacing="0">
                 </table>
             </div>
@@ -220,15 +221,21 @@
             serverSide: true,
             ajax: {
                 url: "{{route('ajax.dt.rombongan_belajar.get')}}",
-                dataType: "json",
-                "data": function ( d ) {
-                    d._token = "{{ csrf_token() }}",
-                    d.nama_orang_tua = namaOrangTua,
-                    d.cabang_id = cabangSelected,
-                    d.ppdb_type = ppdbTypeSelected,
-                    d.tahun_akademik_id = tahunAkademikSelected
-                },
                 type: "POST",
+                dataType: "json",
+                data: function ( d ) {
+                    d._token = "{{ csrf_token() }}";
+                    d.nama_orang_tua = namaOrangTua;
+                    d.cabang_id = cabangSelected;
+                    d.ppdb_type = ppdbTypeSelected;
+                    d.tahun_akademik_id = tahunAkademikSelected;
+                },
+                complete: function(xhr, status) {
+                    console.log("AJAX Response:", xhr.responseJSON);
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", error);
+                }
             },
             bSort: true,
             searching: true,
@@ -256,6 +263,8 @@
                             return 'ABC';
                         } else if(data == 1) {
                             return 'PAUD';
+                        } else {
+                            return '-';
                         }
                     }
                 },
@@ -263,58 +272,44 @@
                     "title":"NIS",
                     "width":"10%",
                     "data":"ppdb.nis",
-                    render: function(data, type, row, meta) {
-                        if(data == null) {
-                            return '-';
-                        } else {
-                            return data;
-                        }
+                    render: function(data) {
+                        return data ? data : '-';
                     }
                 },
                 {
                     "title":"NISN",
                     "width":"10%",
                     "data":"ppdb.nisn",
-                    render: function(data, type, row, meta) {
-                        if(data == null) {
-                            return '-';
-                        } else {
-                            return data;
-                        }
+                    render: function(data) {
+                        return data ? data : '-';
                     }
                 },
                 {
                     "title":"Nama Siswa",
                     "width":"30%",
                     "data":"ppdb.nama",
-                    render: function(data, type, row, meta) {
-                        if(data == null) {
-                            return '-';
-                        } else {
-                            return `<a target="_blank" href="{{route('web.su.wb.edit')}}/${row.ppdb_id}">${data}</a>`;
-                        }
+                    render: function(data, type, row) {
+                        if(data == null) return '-';
+                        return `<a target="_blank" href="{{route('web.su.wb.edit')}}/${row.ppdb_id}">${data}</a>`;
                     }
                 },
                 {
                     "title":"Kelas",
                     "width":"25%",
                     "data":"kelas.nama",
-                    render: function(data, type, row, meta) {
-                        if(data == null) {
-                            return '-';
-                        } else {
-                            return `<a target="_blank" href="{{route('web.su.kelas.detail')}}/${row.kelas_id}">${data}</a>`;
-                        }
+                    render: function(data, type, row) {
+                        if(data == null) return '-';
+                        return `<a target="_blank" href="{{route('web.su.kelas.detail')}}/${row.kelas_id}">${data}</a>`;
                     }
                 },
                 {
                     "title":"Status",
                     "width":"12%",
                     "data":"is_active",
-                    render: function (data, type, row) {
+                    render: function (data) {
                         if (data) {
                             return '<span class="badge bg-green-soft text-green">Aktif</span>';
-                        }else{
+                        } else {
                             return '<span class="badge bg-yellow-soft text-yellow">Tidak Aktif</span>';
                         }
                     }
@@ -326,20 +321,21 @@
                 },
                 {
                     "title": "Action",
-                    "data":null,
-                    "width":"30%",
-                    "orderable":false,
-                    "searchable":false,
-                    render: function (data,type, row){
-                        return ''+
-                        '<a href="#" class="rombelEditBtn btn-transparent-dark btn btn-sm" data-id="'+row.id+'"><i class="fas fa-edit"></i></a>'+
-                        `<a target="_blank" class="btn btn-sm btn-info" href="{{route('web.su.wb.edit')}}/${row.ppdb_id}"><i class="fas fa-edit"></i> Info WB</a>`
+                    "data": null,
+                    "width": "30%",
+                    "orderable": false,
+                    "searchable": false,
+                    render: function (data, type, row){
+                        return '' +
+                            '<a href="#" class="rombelEditBtn btn-transparent-dark btn btn-sm" data-id="' + row.id + '"><i class="fas fa-edit"></i></a>' +
+                            `<a target="_blank" class="btn btn-sm btn-info" href="{{route('web.su.wb.edit')}}/${row.ppdb_id}"><i class="fas fa-edit"></i> Info WB</a>`;
                     }
                 }
             ],
-            order:[[0,'desc']],
-            columnDefs:[]
+            order: [[0, 'desc']],
+            columnDefs: []
         });
+
 
         validatorExport = $("#formExport").validate({
             focusInvalid: true,

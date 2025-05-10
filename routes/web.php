@@ -327,8 +327,19 @@ Route::group(['prefix' => 'ajax-dt'], function () {
     Route::post('/nilai-kegiatan/get', [DtNilaiKegiatan::class, 'getAll'])->name('ajax.dt.nilai_kegiatan.get');
     Route::post('/voucher/get', [DtVoucher::class, 'getAll'])->name('ajax.dt.voucher.get');
     Route::post('/distribusi-mapel/get', [DtDistribusiMapel::class, 'getAll'])->name('ajax.dt.distribusi_mapel.get');
-    Route::post('/rombongan-belajar/get', [DtRombonganBelajar::class, 'getAll'])->name('ajax.dt.rombongan_belajar.get');
-    Route::post('/summary-rombel/get', [DtSummaryRombonganBelajar::class, 'getAll'])->name('ajax.dt.summary_rombel.get');
+    // Route::post('/rombongan-belajar/get', [DtRombonganBelajar::class, 'getAll'])->name('ajax.dt.rombongan_belajar.get');
+
+    // dummy
+    Route::get('/rombongan-belajar/get', [DtRombonganBelajar::class, 'getAllDump'])->name('ajax.dt.rombongan_belajar.get');
+
+    // untuk search rombel
+    // Route::post('/summary-rombel/get', [DtSummaryRombonganBelajar::class, 'getAll'])->name('ajax.dt.summary_rombel.get');
+    // untuk menampilkan data rombel di summary rombel
+    Route::get('/summary-rombel/get', [DtSummaryRombonganBelajar::class, 'getAll'])->name('ajax.dt.summary_rombel.get');
+
+
+
+
     Route::post('/summary-rombel/get-status-count', [DtSummaryRombonganBelajar::class, 'getStatusCount'])->name('ajax.dt.summary_rombel.get_status_count');
     Route::post('/summary-rombel/get-status-wb', [DtSummaryRombonganBelajar::class, 'getStatusWB'])->name('ajax.dt.summary_rombel.get_status_wb');
     Route::post('/pembayaran/get', [DtPembayaran::class, 'getAll'])->name('ajax.dt.pembayaran.get');
