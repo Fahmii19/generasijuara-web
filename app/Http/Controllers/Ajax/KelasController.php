@@ -6,173 +6,554 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\KelasModel;
 use App\Models\LayananKelasModel;
-use App\Models\TutorModel;
 use App\Models\PpdbModel;
-use App\Utils\Constant;
-use App\Imports\RombelImport;
+use App\Models\PaketKelasModel;
+use App\Models\TahunAkademikModel;
+use App\Models\UserRoleModel;
+use App\Models\User;
+use App\Models\KmpSettingModel;
 use App\Models\KelasMataPelajaranModel;
 use App\Models\KelasWbModel;
 use App\Models\RombelModel;
 use DB;
 use Excel;
+use Log;
+use App\Utils\Constant;
+use App\Models\TutorModel;
+
 
 class KelasController extends Controller
 {
+
+
     public function importRombelExcel(Request $request)
     {
-        if ($request->hasFile('import_file')) {
-            // Ambil isi Excel dalam bentuk array
-            $data = Excel::toArray([], $request->file('import_file'));
+        if (!$request->hasFile('import_file')) {
+            return response()->json([
+                'error' => true,
+                'message' => 'File tidak ditemukan'
+            ], 400);
+        }
 
-            // Mulai proses import data Excel
-            DB::beginTransaction();
-            try {
-                $CekDataBisaTidak = [];
-                $tahunAjar = '';
+        $data = Excel::toArray([], $request->file('import_file'));
 
-                // Loop melalui data Excel untuk memproses tiap baris
-                foreach ($data[0] as $key => $row) {
+        DB::beginTransaction();
+        try {
+            $tahunAjar = '';
+            $KodeBermasalah = [];
 
-                    if (isset($row[0]) && $row[0] == 'Tahun Ajaran') {
-                        $tahunAjar = $row[2]; // Ambil Tahun Ajaran dari kolom yang tepat
-                        continue;
-                    }
-
-                    // Lewati baris pertama dan kedua yang dianggap header
-                    if ($key < 3) continue;  // Lewati header jika ada
-                    if (empty($row)) continue;
-
-                    // Mulai membaca data sesuai dengan kolom-kolom yang ada pada data dummy
-                    $tempIndex = 0;
-                    $no = $row[$tempIndex++] ?? null;
-                    $kode_kelas = $row[$tempIndex++] ?? null;
-                    $kelas_sebelum = $row[$tempIndex++] ?? null;
-                    $nis = $row[$tempIndex++] ?? null;
-                    $nisn = $row[$tempIndex++] ?? null;
-                    $nama = $row[$tempIndex++] ?? null;
-                    $kelamin = $row[$tempIndex++] ?? null;
-                    $nama_ibu = $row[$tempIndex++] ?? null;
-                    $nama_ayah = $row[$tempIndex++] ?? null;
-                    $nik_siswa = $row[$tempIndex++] ?? null;
-                    $nik_ayah = $row[$tempIndex++] ?? null;
-                    $nik_ibu = $row[$tempIndex++] ?? null;
-                    $tempat_lahir = $row[$tempIndex++] ?? null;
-                    $tanggal_lahir = $row[$tempIndex++] ?? null;
-                    $status_dalam_keluarga = $row[$tempIndex++] ?? null;
-                    $anak_ke = $row[$tempIndex++] ?? null;
-                    $alamat_peserta_didik = $row[$tempIndex++] ?? null;
-                    $alamat_domisili = $row[$tempIndex++] ?? null;
-                    $alamat_orang_tua = $row[$tempIndex++] ?? null;
-                    $no_telp_rumah = $row[$tempIndex++] ?? null;
-                    $satuan_pendidikan_asal = $row[$tempIndex++] ?? null;
-                    $agama = $row[$tempIndex++] ?? null;
-                    $pekerjaan_ayah = $row[$tempIndex++] ?? null;
-                    $pekerjaan_ibu = $row[$tempIndex++] ?? null;
-                    $hp_siswa = $row[$tempIndex++] ?? null;
-                    $hp_ayah = $row[$tempIndex++] ?? null;
-                    $hp_ibu = $row[$tempIndex++] ?? null;
-                    $telegram_siswa = $row[$tempIndex++] ?? null;
-                    $telegram_ayah = $row[$tempIndex++] ?? null;
-                    $telegram_ibu = $row[$tempIndex++] ?? null;
-                    $nama_wali = $row[$tempIndex++] ?? null;
-                    $no_telp_wali = $row[$tempIndex++] ?? null;
-                    $alamat_wali = $row[$tempIndex++] ?? null;
-                    $pekerjaan_wali = $row[$tempIndex++] ?? null;
-                    $email = $row[$tempIndex++] ?? null;
-                    $tahun_akademik_id = $row[$tempIndex++] ?? null;
-                    $layanan_kelas_id = $row[$tempIndex++] ?? null;
-                    $paket_kelas_id = $row[$tempIndex++] ?? null;
-                    $tipe_kelas_sebelum = $row[$tempIndex++] ?? null;
-                    $kelas_sebelum = $row[$tempIndex++] ?? null;
-                    $smt_kelas_sebelum = $row[$tempIndex++] ?? null;
-                    $kelas = $row[$tempIndex++] ?? null;
-                    $smt_kelas = $row[$tempIndex++] ?? null;
-                    $lulusan = $row[$tempIndex++] ?? null;
-                    $tahun_lulus = $row[$tempIndex++] ?? null;
-                    $paket_spp_id = $row[$tempIndex++] ?? null;
-
-                    // Menyimpan data jika kolom-kolom tidak kosong
-                    if (!empty(array_filter([$nis, $nisn, $nama]))) {
-                        PpdbModel::updateOrCreate(
-                            ['nisn' => $nisn],  // Menggunakan nisn sebagai unique key
-                            [
-                                'no' => $no,
-                                'kode_kelas' => $kode_kelas,
-                                'kelas_sebelum' => $kelas_sebelum,
-                                'nis' => $nis,
-                                'nama' => $nama,
-                                'kelamin' => $kelamin,
-                                'nama_ibu' => $nama_ibu,
-                                'nama_ayah' => $nama_ayah,
-                                'nik_siswa' => $nik_siswa,
-                                'nik_ayah' => $nik_ayah,
-                                'nik_ibu' => $nik_ibu,
-                                'tempat_lahir' => $tempat_lahir,
-                                'tanggal_lahir' => $tanggal_lahir,
-                                'status_dalam_keluarga' => $status_dalam_keluarga,
-                                'anak_ke' => $anak_ke,
-                                'alamat_peserta_didik' => $alamat_peserta_didik,
-                                'alamat_domisili' => $alamat_domisili,
-                                'alamat_orang_tua' => $alamat_orang_tua,
-                                'no_telp_rumah' => $no_telp_rumah,
-                                'satuan_pendidikan_asal' => $satuan_pendidikan_asal,
-                                'agama' => $agama,
-                                'pekerjaan_ayah' => $pekerjaan_ayah,
-                                'pekerjaan_ibu' => $pekerjaan_ibu,
-                                'hp_siswa' => $hp_siswa,
-                                'hp_ayah' => $hp_ayah,
-                                'hp_ibu' => $hp_ibu,
-                                'telegram_siswa' => $telegram_siswa,
-                                'telegram_ayah' => $telegram_ayah,
-                                'telegram_ibu' => $telegram_ibu,
-                                'nama_wali' => $nama_wali,
-                                'no_telp_wali' => $no_telp_wali,
-                                'alamat_wali' => $alamat_wali,
-                                'pekerjaan_wali' => $pekerjaan_wali,
-                                'email' => $email,
-                                'tahun_akademik_id' => $tahun_akademik_id,
-                                'layanan_kelas_id' => $layanan_kelas_id,
-                                'paket_kelas_id' => $paket_kelas_id,
-                                'tipe_kelas_sebelum' => $tipe_kelas_sebelum,
-                                'kelas_sebelum' => $kelas_sebelum,
-                                'smt_kelas_sebelum' => $smt_kelas_sebelum,
-                                'kelas' => $kelas,
-                                'smt_kelas' => $smt_kelas,
-                                'lulusan' => $lulusan,
-                                'tahun_lulus' => $tahun_lulus,
-                                'paket_spp_id' => $paket_spp_id,
-                            ]
-                        );
-                    }
+            foreach ($data[0] as $key => $row) {
+                // Skip empty rows
+                if (empty(array_filter($row))) {
+                    continue;
                 }
 
-                // Commit transaction jika semua data berhasil diproses
-                DB::commit();
+                // Get academic year from header
+                if (isset($row[0]) && $row[0] == 'Tahun Ajaran') {
+                    $tahunAjar = $row[2]; // Get Tahun Ajaran
+                    continue;
+                }
 
-                // Return response jika berhasil
-                return response()->json([
-                    'error' => false,
-                    'message' => 'File berhasil dibaca dan diimpor',
-                    'data' => [
-                        'semua_nama' => $CekDataBisaTidak
+                // Skip header rows
+                if ($key < 3) {
+                    continue;
+                }
+
+                // Extract all fields from the row
+                $tempIndex = 0;
+                $no = $row[$tempIndex++] ?? null;
+                $kode_kelas_ini = $row[$tempIndex++] ?? null;
+                $kelas_sebelum = $row[$tempIndex++] ?? null;
+                $nis = $row[$tempIndex++] ?? null;
+                $nisn = $row[$tempIndex++] ?? null;
+                $nama = $row[$tempIndex++] ?? null;
+                $status_diverbal = $row[$tempIndex++] ?? null;
+                $status_rombel_dapodik = $row[$tempIndex++] ?? null;
+                $status_daftar_dapodik = $row[$tempIndex++] ?? null;
+                $status_kartu_pelajar = $row[$tempIndex++] ?? null;
+                $catatan_admin = $row[$tempIndex++] ?? null;
+                $status_wb = $row[$tempIndex++] ?? null;
+                $link_yandex = $row[$tempIndex++] ?? null;
+                $status_elcta = $row[$tempIndex++] ?? null;
+                $tgl_buat_akun = $row[$tempIndex++] ?? null;
+                $username_electa = $row[$tempIndex++] ?? null;
+                $email_ortu = $row[$tempIndex++] ?? null;
+                $username_ms_team = $row[$tempIndex++] ?? null;
+                $cabang_genju = $row[$tempIndex++] ?? null;
+                $hp_ayah = $row[$tempIndex++] ?? null;
+                $hp_ibu = $row[$tempIndex++] ?? null;
+                $tempat_lahir = $row[$tempIndex++] ?? null;
+                $tgl_lahir = $row[$tempIndex++] ?? null;
+                $usia = $row[$tempIndex++] ?? null;
+                $hobi = $row[$tempIndex++] ?? null;
+                $cita2 = $row[$tempIndex++] ?? null;
+                $tb = $row[$tempIndex++] ?? null;
+                $bb = $row[$tempIndex++] ?? null;
+                $jarak = $row[$tempIndex++] ?? null;
+                $gender = $row[$tempIndex++] ?? null;
+                $anak_ke = $row[$tempIndex++] ?? null;
+                $jumlah_saudara = $row[$tempIndex++] ?? null;
+                $status_anak = $row[$tempIndex++] ?? null; // Anak Kandung
+                $alamat = $row[$tempIndex++] ?? null;
+                $rt_rw = $row[$tempIndex++] ?? null;
+                $kelurahan = $row[$tempIndex++] ?? null;
+                $kecamatan = $row[$tempIndex++] ?? null;
+                $kota = $row[$tempIndex++] ?? null;
+                $provinsi = $row[$tempIndex++] ?? null;
+                $alamat_domisili = $row[$tempIndex++] ?? null;
+                $kode_pos = $row[$tempIndex++] ?? null;
+                $agama = $row[$tempIndex++] ?? null;
+                $nama_sekolah_asal = $row[$tempIndex++] ?? null;
+                $alamat_sekolah_asal = $row[$tempIndex++] ?? null;
+                $kelas_referal = $row[$tempIndex++] ?? null;
+                $kelas_matrikulasi = $row[$tempIndex++] ?? null;
+                $kelas_pertama_pkbm = $row[$tempIndex++] ?? null;
+                $kelas_smt_terakhir_sekolah_sebelum = $row[$tempIndex++] ?? null;
+                $tahun_lulus = $row[$tempIndex++] ?? null;
+                $tahun_ijazah = $row[$tempIndex++] ?? null;
+                $no_ijazah_skl = $row[$tempIndex++] ?? null;
+                $tahun_skhun = $row[$tempIndex++] ?? null;
+                $scan_foto_ijazah = $row[$tempIndex++] ?? null;
+                $scan_foto_skhun = $row[$tempIndex++] ?? null;
+                $scan_foto_bukti_tf = $row[$tempIndex++] ?? null;
+                $status_perkawinan_orang_tua = $row[$tempIndex++] ?? null;
+                $nama_ayah = $row[$tempIndex++] ?? null;
+                $nama_ibu = $row[$tempIndex++] ?? null;
+                $pekerjaan_ayah = $row[$tempIndex++] ?? null;
+                $pekerjaan_ibu = $row[$tempIndex++] ?? null;
+                $honor_ayah = $row[$tempIndex++] ?? null;
+                $honor_ibu = $row[$tempIndex++] ?? null;
+                $telegram_siswa = $row[$tempIndex++] ?? null;
+                $nama_konsultasi_pendidikan = $row[$tempIndex++] ?? null;
+                $sumber_info_pkbm = $row[$tempIndex++] ?? null;
+                $detail_sumber_info = $row[$tempIndex++] ?? null;
+                $no_pendaftaran = $row[$tempIndex++] ?? null;
+                $tgl_masuk_electa = $row[$tempIndex++] ?? null;
+                $tgl_dikirim_ppdb = $row[$tempIndex++] ?? null;
+                $status_lanjutan_baru = $row[$tempIndex++] ?? null; // Lanjutan, Baru
+                $akta_kelahiran = $row[$tempIndex++] ?? null;
+                $foto_id_ayah = $row[$tempIndex++] ?? null;
+                $foto_id_ibu = $row[$tempIndex++] ?? null;
+                $foto_2x3 = $row[$tempIndex++] ?? null;
+                $foto_3x4 = $row[$tempIndex++] ?? null;
+                $foto_4x6 = $row[$tempIndex++] ?? null;
+                $foto_kk = $row[$tempIndex++] ?? null;
+                $nota_kesepakatan = $row[$tempIndex++] ?? null;
+                $data_raport_yg_dimiliki = $row[$tempIndex++] ?? null;
+                $surat_pernyataan = $row[$tempIndex++] ?? null;
+                $ijazah = $row[$tempIndex++] ?? null;
+                $nik_ayah = $row[$tempIndex++] ?? null;
+                $nik_ibu = $row[$tempIndex++] ?? null;
+                $nik_siswa = $row[$tempIndex++] ?? null;
+                $no_kk = $row[$tempIndex++] ?? null;
+                $no_reg_akte = $row[$tempIndex++] ?? null;
+                $daftar_ulang = $row[$tempIndex++] ?? null;
+                $pilihan_kelas = $row[$tempIndex++] ?? null; // HST-REG
+                $ceklis_pindah_layanan = $row[$tempIndex++] ?? null;
+
+                $kode_kelas = $kode_kelas_ini;
+
+                // 1. Normalize and validate input
+                $kode_kelas = preg_replace('/\s+/', ' ', trim($kode_kelas ?? ''));
+
+                if (empty($kode_kelas)) {
+                    $rowNumber = $key + 1; // +1 because Excel rows start at 1
+                    throw new \Exception(
+                        "Error pada baris $rowNumber: Kolom kode_kelas tidak boleh kosong. " .
+                            "Pastikan kolom kode kelas telah diisi dengan format yang benar."
+                    );
+                }
+
+                // 2. Extract service code (HST/REG/INTENSIF)
+                $kodeLayananKelas = $this->extractLayananKelas($kode_kelas);
+
+                // 3. Determine class type (PAUD/ABC/SPECIAL)
+                try {
+                    [$typeKelas, $kodePaketKelas] = $this->determineTypeKelas($kode_kelas, $kodeLayananKelas);
+                } catch (\Exception $e) {
+                    throw new \Exception("Gagal menentukan jenis kelas: " . $e->getMessage());
+                }
+
+                // 4. Validate and normalize NISN
+                $nisn = is_numeric($nisn) ? $nisn : null;
+
+                // 5. Process data based on class type
+                if ($typeKelas == Constant::TYPE_KELAS_ABC) {
+                    if (!preg_match('/^[A-Ca-c][0-9]/', substr($kode_kelas, 0, 2))) {
+                        throw new \Exception(
+                            "Format kode kelas ABC tidak valid pada baris " . ($key + 1) . ". " .
+                                "Harus diawali A/B/C diikuti angka (contoh: A11, B22). " .
+                                "Kode yang diterima: '$kode_kelas'"
+                        );
+                    }
+                    $kodePaketKelas = 'PAKET' . strtoupper(substr($kode_kelas, 0, 1));
+                    [$kelasNum, $smtNum] = $this->processKelasABC($kode_kelas);
+                } elseif ($typeKelas == Constant::TYPE_KELAS_PAUD) {
+                    if (empty($kodePaketKelas)) {
+                        throw new \Exception("Kode Paket Kelas PAUD tidak ditemukan untuk: '$kode_kelas'");
+                    }
+                    [$kelasNum, $smtNum] = [null, substr($kode_kelas, strlen($kodePaketKelas), 1)];
+                } else {
+                    [$kelasNum, $smtNum] = [null, substr($kode_kelas, -1)];
+                    $kodePaketKelas = $kodeLayananKelas;
+                }
+
+                // 6. Process learner status
+                $status_wb = $this->determineStatusWB($status_wb ?? '');
+
+                // 7. Format academic year
+                $tahunAjar = $this->formatTahunAkademik($tahunAjar ?? date('Y'), $smtNum ?? '1');
+
+                // 8. Validate and get references
+                $references = $this->validateAndGetReferences($kodeLayananKelas, $kodePaketKelas, $tahunAjar, $kode_kelas);
+                [$layananKelas, $paketKelas, $tahunAkademik] = array_values($references);
+
+                // Update or create Kelas
+                $kelasDB = KelasModel::updateOrCreate(
+                    ['kode' => $kode_kelas, 'tahun_akademik_id' => $tahunAkademik->id],
+                    [
+                        'kelas' => $kelasNum,
+                        'semester' => $smtNum,
+                        'jurusan' => $this->getJurusan($kode_kelas),
+                        'layanan_kelas_id' => $layananKelas->id,
+                        'paket_kelas_id' => $paketKelas->id,
+                        'nama' => $kode_kelas,
+                        'type' => $typeKelas,
+                        'is_active' => true,
                     ]
-                ]);
-            } catch (\Exception $e) {
-                DB::rollBack(); // Rollback jika ada error
-                return response()->json([
-                    'error' => true,
-                    'message' => 'Terjadi kesalahan saat mengimpor data',
-                    'exception' => $e->getMessage(),
-                ], 500);
+                );
+
+                // Process user data
+                $user = $this->processUserData([
+                    'nisn' => $nisn,
+                    'nama' => $nama,
+                    'gender' => $gender,
+                    'tempat_lahir' => $tempat_lahir,
+                    'tgl_lahir' => $tgl_lahir,
+                    'nik_siswa' => $nik_siswa,
+                    'agama' => $agama,
+                    'alamat' => $alamat,
+                    'rt_rw' => $rt_rw,
+                    'kelurahan' => $kelurahan,
+                    'kecamatan' => $kecamatan,
+                    'kota' => $kota,
+                    'provinsi' => $provinsi,
+                    'kode_pos' => $kode_pos,
+                    'telegram_siswa' => $telegram_siswa,
+                    'hp_ayah' => $hp_ayah,
+                    'hp_ibu' => $hp_ibu,
+                ], $nisn);
+
+                // Process PPDB data
+                $ppdb = $this->processPpdbData([
+                    'user_id' => $user->id,
+                    'no_pendaftaran' => $no_pendaftaran,
+                    'tgl_dikirim_ppdb' => $tgl_dikirim_ppdb,
+                    'status_lanjutan_baru' => $status_lanjutan_baru,
+                    'layanan_kelas_id' => $layananKelas->id,
+                    'paket_kelas_id' => $paketKelas->id,
+                    'tahun_akademik_id' => $tahunAkademik->id,
+                    'nama_sekolah_asal' => $nama_sekolah_asal,
+                    'alamat_sekolah_asal' => $alamat_sekolah_asal,
+                    'nama_ayah' => $nama_ayah,
+                    'nama_ibu' => $nama_ibu,
+                    'pekerjaan_ayah' => $pekerjaan_ayah,
+                    'pekerjaan_ibu' => $pekerjaan_ibu,
+                    'nik_ayah' => $nik_ayah,
+                    'nik_ibu' => $nik_ibu,
+                    'no_kk' => $no_kk,
+                ], $user, $layananKelas, $paketKelas, $tahunAkademik);
+
+                // Process rombel
+                $rombel = $this->processRombel($ppdb, $tahunAkademik, $status_wb, $kelasDB);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'error' => false,
+                'message' => 'File berhasil dibaca dan diimpor',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => true,
+                'message' => 'Terjadi kesalahan saat mengimpor data',
+                'exception' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+    // Helper methods
+    private function formatTahunAkademik(string $tahunAjar, string $semester): string
+    {
+        // Jika tahun ajaran sudah dalam format lengkap
+        if (str_contains($tahunAjar, '-')) {
+            return $tahunAjar;
+        }
+
+        $semesterText = ($semester == '1' || strtolower($semester) == 'ganjil') ? 'Ganjil' : 'Genap';
+        return "{$tahunAjar}-{$semesterText}";
+    }
+
+    private function extractLayananKelas(string $kode_kelas): string
+    {
+        $kelasParts = explode(' ', $kode_kelas);
+        foreach ($kelasParts as $part) {
+            $partUpper = strtoupper($part);
+            if (str_contains($partUpper, 'HST')) return 'HST';
+            if (str_contains($partUpper, 'REG')) return 'REG';
+            if (str_contains($partUpper, 'INTENSIF')) return 'INTENSIF';
+        }
+        return 'UNKNOWN';
+    }
+
+    private function determineTypeKelas(string $kode_kelas, string $kodeLayananKelas): array
+    {
+        // 1. Check PAUD first
+        foreach (Constant::KELAS_PAUD as $kelasPaud) {
+            if (stripos($kode_kelas, $kelasPaud) !== false) {
+                return [Constant::TYPE_KELAS_PAUD, $kelasPaud];
             }
         }
 
-        // Return error jika file tidak ditemukan
-        return response()->json([
-            'error' => true,
-            'message' => 'File tidak ditemukan'
-        ], 400);
+        // 2. Check if it's a special class (HST/REG/INTENSIF)
+        if ($kodeLayananKelas !== 'UNKNOWN') {
+            return [Constant::TYPE_KELAS_KHUSUS, $kodeLayananKelas];
+        }
+
+        // 3. Default to ABC Class
+        return [Constant::TYPE_KELAS_ABC, null];
     }
+
+    private function processKelasABC(string $kode_kelas): array
+    {
+        $kodeKelasPart = explode(' ', $kode_kelas);
+        $firstPart = $kodeKelasPart[0];
+
+        // Handle various formats: A1, A11, A-1, A-11, etc
+        $cleanPart = preg_replace('/[^A-Z0-9]/i', '', $firstPart);
+
+        $kelasNum = substr($cleanPart, 1, strlen($cleanPart) > 2 ? 2 : 1);
+        $smtNum = substr($cleanPart, -1); // Take last digit as semester
+
+        return [$kelasNum, $smtNum];
+    }
+
+    private function determineStatusWB(?string $status_wb): string
+    {
+        if (!$status_wb) return Constant::STATUS_WB_BARU;
+
+        $statusLower = strtolower($status_wb);
+        if (str_contains($statusLower, 'baru')) return Constant::STATUS_WB_BARU;
+        if (str_contains($statusLower, 'lama')) return Constant::STATUS_WB_LAMA;
+        if (str_contains($statusLower, 'alumni')) return Constant::STATUS_WB_ALUMNI;
+
+        return Constant::STATUS_WB_BARU;
+    }
+
+    private function validateAndGetReferences(
+        string $kodeLayananKelas,
+        string $kodePaketKelas,
+        string $tahunAjar,
+        string $originalKodeKelas
+    ): array {
+        // 1. Validasi dan dapatkan Layanan Kelas
+        $layananKelas = LayananKelasModel::where('kode', $kodeLayananKelas)->first();
+        if (!$layananKelas) {
+            throw new \Exception("Layanan kelas dengan kode {$kodeLayananKelas} tidak ditemukan");
+        }
+
+        // 2. Validasi dan buat Paket Kelas jika belum ada
+        $paketKelas = PaketKelasModel::firstOrCreate(
+            ['kode' => $kodePaketKelas],
+            [
+                'nama' => 'Kelas ' . $kodeLayananKelas,
+                'is_active' => true,
+                'type' => 'khusus',
+                'created_by' => auth()->id() ?? 1,
+                'updated_by' => auth()->id() ?? 1
+            ]
+        );
+
+        // 3. Validasi dan dapatkan Tahun Akademik dengan penanganan khusus
+        $tahunAkademik = $this->getOrCreateTahunAkademik($tahunAjar, $originalKodeKelas);
+
+        return [
+            'layananKelas' => $layananKelas,
+            'paketKelas' => $paketKelas,
+            'tahunAkademik' => $tahunAkademik
+        ];
+    }
+
+    private function getOrCreateTahunAkademik(string $tahunAjar, string $kodeKelas): TahunAkademikModel
+    {
+        // Ekstrak semester dari kode kelas (karakter terakhir)
+        $semester = substr($kodeKelas, -1);
+        $semesterText = ($semester == '1') ? 'Ganjil' : 'Genap';
+
+        // Cari berdasarkan tahun ajar dan semester
+        $tahunAkademik = TahunAkademikModel::where('tahun_ajar', $tahunAjar)
+            ->where('keterangan', 'like', "%$semesterText%")
+            ->first();
+
+        if (!$tahunAkademik) {
+            // Jika tidak ditemukan, buat baru
+            $tahunMulai = explode('/', $tahunAjar)[0];
+
+            $tahunAkademik = TahunAkademikModel::create([
+                'kode' => substr(str_replace('/', '', $tahunAjar), 0, 4) . $semester,
+                'tahun_ajar' => $tahunAjar,
+                'keterangan' => "Semester $semesterText Tahun Ajaran " . str_replace('/', ' - ', $tahunAjar),
+                'periode_start' => $semester == '1' ? "$tahunMulai-07-01" : "$tahunMulai-01-01",
+                'periode_end' => $semester == '1' ? "$tahunMulai-12-31" : "$tahunMulai-06-30",
+                'is_active' => true,
+                'is_generate_rombel' => false
+            ]);
+        }
+
+        return $tahunAkademik;
+    }
+
+    private function processUserData(array $row, $nisn): User
+    {
+        try {
+            $nisn = $row['nisn'] ?? null;
+            $user = User::firstOrNew(['username' => $row['nis'] ?? null]);
+
+            if (!$user->exists) {
+                $user->fill([
+                    'name' => $row['nama'],
+                    'email' => $row['email_ortu'] ?? null,
+                    'password' => bcrypt(Constant::PPDB_DEFAULT_PASSWORD),
+                    'is_active' => true
+                ])->save();
+
+                UserRoleModel::firstOrCreate([
+                    'user_id' => $user->id,
+                    'role_id' => Constant::ROLE_WB_ID
+                ]);
+            }
+
+            return $user;
+        } catch (\Exception $e) {
+            throw new \Exception("Gagal memproses data user: " . $e->getMessage());
+        }
+    }
+
+    private function processPpdbData(
+        array $row,
+        User $user,
+        LayananKelasModel $layananKelas,
+        PaketKelasModel $paketKelas,
+        TahunAkademikModel $tahunAkademik
+    ): PpdbModel {
+        try {
+            return PpdbModel::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'nis' => $row['nis'],
+                    'nisn' => $row['nisn'] ?? null,
+                    'nama' => $row['nama'],
+                    'kelamin' => strtolower($row['gender']) == 'laki-laki' ? 'l' : 'p',
+                    'status_dalam_keluarga' => $row['status_anak'] ?? null,
+                    'alamat_peserta_didik' => $row['alamat'] ?? null,
+                    'email' => $row['email_ortu'] ?? null,
+                    'layanan_kelas_id' => $layananKelas->id,
+                    'paket_kelas_id' => $paketKelas->id,
+                    'tahun_akademik_id' => $tahunAkademik->id,
+                    'tanggal_lahir' => $this->formatTanggalLahir($row['tgl_lahir'] ?? null),
+                    'no_telepon_ortu' => $row['hp_ayah'] ?? $row['hp_ibu'] ?? null,
+                    'nama_ayah' => $row['nama_ayah'] ?? null,
+                    'nama_ibu' => $row['nama_ibu'] ?? null
+                ]
+            );
+        } catch (\Exception $e) {
+            throw new \Exception("Gagal memproses data PPDB: " . $e->getMessage());
+        }
+    }
+
+    private function processRombel(
+        PpdbModel $ppdb,
+        TahunAkademikModel $tahunAkademik,
+        string $status_wb,
+        KelasModel $kelasDB
+    ): RombelModel {
+        try {
+            $rombel = RombelModel::updateOrCreate(
+                ['ppdb_id' => $ppdb->id, 'tahun_akademik_id' => $tahunAkademik->id],
+                [
+                    'status_wb' => $status_wb,
+                    'is_active' => true,
+                    'kelas_id' => $kelasDB->id
+                ]
+            );
+
+            KelasWbModel::updateOrCreate(
+                ['wb_id' => $ppdb->id, 'kelas_id' => $kelasDB->id],
+                ['is_active' => true]
+            );
+
+            return $rombel;
+        } catch (\Exception $e) {
+            throw new \Exception("Gagal memproses rombel: " . $e->getMessage());
+        }
+    }
+
+    private function getJurusan($kode_kelas)
+    {
+        if (str_contains($kode_kelas, 'IPA')) {
+            return 'IPA';
+        } elseif (str_contains($kode_kelas, 'IPS')) {
+            return 'IPS';
+        } elseif (str_contains($kode_kelas, 'BHS')) {
+            return 'Bahasa';
+        }
+        return null;
+    }
+
+    private function formatTanggalLahir($tgl_lahir)
+    {
+        if (empty($tgl_lahir)) {
+            return null;
+        }
+
+        // Jika sudah format Y-m-d
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $tgl_lahir)) {
+            return $tgl_lahir;
+        }
+
+        // Format Indonesia: "1 Januari 2000"
+        if (preg_match('/^(\d{1,2})\s+([a-zA-Z]+)\s+(\d{4})$/', $tgl_lahir, $matches)) {
+            $bulanToAngka = [
+                'Januari' => '01',
+                'Februari' => '02',
+                'Maret' => '03',
+                'April' => '04',
+                'Mei' => '05',
+                'Juni' => '06',
+                'Juli' => '07',
+                'Agustus' => '08',
+                'September' => '09',
+                'Oktober' => '10',
+                'November' => '11',
+                'Desember' => '12'
+            ];
+
+            $hari = str_pad($matches[1], 2, '0', STR_PAD_LEFT);
+            $bulan = $bulanToAngka[$matches[2]] ?? '01';
+            $tahun = $matches[3];
+
+            return "{$tahun}-{$bulan}-{$hari}";
+        }
+
+        // Format lain bisa ditambahkan disini
+
+        return null;
+    }
+
+
 
     // dummy_rombongan_belajar
     // public function storeDummyData()

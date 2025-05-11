@@ -31,4 +31,9 @@ class TahunAkademikModel extends Model
     {
         return $this->hasMany(PpdbModel::class, 'tahun_akademik_id');
     }
+
+    public static function getActive()
+    {
+        return self::where('is_active', true)->first();
+    }
 }

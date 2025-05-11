@@ -80,5 +80,13 @@ class PpdbModel extends Model
         return $this->belongsTo(PaketSppModel::class, 'paket_spp_id');
     }
 
-    // Jika ada relasi atau function lain, bisa ditambahkan disini
+    // If there are additional relationships or methods, you can add them here.
+
+    // Optional: Cast fields to specific types
+    protected $casts = [
+        'tanggal_lahir' => 'date', // Ensure it's treated as a date
+    ];
+
+    // Optional: If you want to handle timestamps manually, set $timestamps to false
+    // protected $timestamps = false; // Uncomment this line if you do not use timestamps
 }
