@@ -64,13 +64,13 @@ class User extends Authenticatable
     public static function getByNikSiswa(string $username)
     {
         $user = null;
-        
+
         $ppdb = PpdbModel::where('nik_siswa', $username)->first();
         if ($ppdb) {
             $userPpdb = self::find($ppdb->user_id);
             $user = self::where('username', $userPpdb->username)->first();
         }
-        
+
         return $user;
     }
 

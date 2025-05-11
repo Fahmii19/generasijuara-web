@@ -40,7 +40,6 @@ class KelasController extends Controller
         DB::beginTransaction();
         try {
             $tahunAjar = '';
-            $KodeBermasalah = [];
 
             foreach ($data[0] as $key => $row) {
                 // Skip empty rows
@@ -156,12 +155,9 @@ class KelasController extends Controller
                 // 1. Normalize and validate input
                 $kode_kelas = preg_replace('/\s+/', ' ', trim($kode_kelas ?? ''));
 
-                if (empty($kode_kelas)) {
-                    $rowNumber = $key + 1; // +1 because Excel rows start at 1
-                    throw new \Exception(
-                        "Error pada baris $rowNumber: Kolom kode_kelas tidak boleh kosong. " .
-                            "Pastikan kolom kode kelas telah diisi dengan format yang benar."
-                    );
+                if (empty($kode_kelas) || trim($kode_kelas) === '') {
+                    $rowNumber = $key + 1;
+                    throw new \Exception("Error pada baris $rowNumber: Kolom kode_kelas harus diisi dengan format yang benar (contoh: A11-REG, B22-HST)");
                 }
 
                 // 2. Extract service code (HST/REG/INTENSIF)
@@ -416,20 +412,31 @@ class KelasController extends Controller
         return $tahunAkademik;
     }
 
-    private function processUserData(array $row, $nisn): User
+    private function processUserData(array $row): User
     {
         try {
-            $nisn = $row['nisn'] ?? null;
-            $user = User::firstOrNew(['username' => $row['nis'] ?? null]);
+            if (empty($row['nisn'])) {
+                throw new \Exception("NISN kosong, tidak bisa buat user.");
+            }
 
-            if (!$user->exists) {
-                $user->fill([
-                    'name' => $row['nama'],
-                    'email' => $row['email_ortu'] ?? null,
+            // Gunakan NISN sebagai username
+            $username = $row['nisn'];
+
+            // Buat email default jika tidak ada email ortu
+            $email = $row['email_ortu'] ?? $username . '@generasijuara.sch.id';
+
+            $user = User::updateOrCreate(
+                ['username' => $username],
+                [
+                    'name' => $row['nama'] ?? 'Siswa Baru',
+                    'email' => $email,
                     'password' => bcrypt(Constant::PPDB_DEFAULT_PASSWORD),
                     'is_active' => true
-                ])->save();
+                ]
+            );
 
+            // Tambahkan role jika user baru
+            if ($user->wasRecentlyCreated) {
                 UserRoleModel::firstOrCreate([
                     'user_id' => $user->id,
                     'role_id' => Constant::ROLE_WB_ID
@@ -442,6 +449,7 @@ class KelasController extends Controller
         }
     }
 
+
     private function processPpdbData(
         array $row,
         User $user,
@@ -453,10 +461,10 @@ class KelasController extends Controller
             return PpdbModel::updateOrCreate(
                 ['user_id' => $user->id],
                 [
-                    'nis' => $row['nis'],
+                    'nis' => $row['nis'] ?? null,
                     'nisn' => $row['nisn'] ?? null,
-                    'nama' => $row['nama'],
-                    'kelamin' => strtolower($row['gender']) == 'laki-laki' ? 'l' : 'p',
+                    'nama' => $row['nama'] ?? null,
+                    'kelamin' => isset($row['gender']) && strtolower($row['gender']) == 'laki-laki' ? 'l' : 'p',
                     'status_dalam_keluarga' => $row['status_anak'] ?? null,
                     'alamat_peserta_didik' => $row['alamat'] ?? null,
                     'email' => $row['email_ortu'] ?? null,
