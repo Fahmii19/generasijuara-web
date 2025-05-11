@@ -269,6 +269,7 @@ class KelasController extends Controller
             return response()->json([
                 'error' => false,
                 'message' => 'File berhasil dibaca dan diimpor',
+                'kode_kelas' => $kode_kelas_ini,
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
