@@ -44,6 +44,7 @@ class Constant
 		'KABAR'
 	];
 
+
 	// Student Status
 	public const STATUS_WB_BARU = "Baru";
 	public const STATUS_WB_LAMA = "Lama";
@@ -158,13 +159,12 @@ class Constant
 	public const DATATYPE = ['string'];
 
 	// Validation Patterns
-	public const KODE_KELAS_ABC_PATTERN = '/^[A-Ca-c][0-9]{1,2}/';
+	public const KODE_KELAS_ABC_PATTERN = '/^[A-C][0-9]{1,2}/';
 	public const NISN_PATTERN = '/^[0-9]{10}$/';
 	public const TAHUN_AJARAN_PATTERN = '/^20\d{2}[12]$/';
 
 	// Default Values
 	public const DEFAULT_SEMESTER = 1;
-	public const EMPTY_DATE = '0000-00-00';
 	public const DEFAULT_PAKET_KODE = 'REG';
 
 	/**

@@ -15,9 +15,11 @@ use App\Models\KmpSettingModel;
 use App\Models\KelasMataPelajaranModel;
 use App\Models\KelasWbModel;
 use App\Models\RombelModel;
+use App\Models\CabangModel;
 use DB;
 use Excel;
 use Log;
+use Carbon\Carbon;
 use App\Utils\Constant;
 use App\Models\TutorModel;
 
@@ -28,6 +30,7 @@ class KelasController extends Controller
 
     public function importRombelExcel(Request $request)
     {
+
         if (!$request->hasFile('import_file')) {
             return response()->json([
                 'error' => true,
@@ -152,46 +155,63 @@ class KelasController extends Controller
 
                 $kode_kelas = $kode_kelas_ini;
 
-                // 1. Normalize and validate input
+                // 1. Normalisasi input
                 $kode_kelas = preg_replace('/\s+/', ' ', trim($kode_kelas ?? ''));
 
-                if (empty($kode_kelas) || trim($kode_kelas) === '') {
+                if (empty($kode_kelas)) {
                     $rowNumber = $key + 1;
-                    throw new \Exception("Error pada baris $rowNumber: Kolom kode_kelas harus diisi dengan format yang benar (contoh: A11-REG, B22-HST)");
+                    throw new \Exception("Error pada baris $rowNumber: Kolom kode_kelas harus diisi");
                 }
 
-                // 2. Extract service code (HST/REG/INTENSIF)
+                // 2. Ekstrak kode layanan
                 $kodeLayananKelas = $this->extractLayananKelas($kode_kelas);
 
-                // 3. Determine class type (PAUD/ABC/SPECIAL)
+                // 3. Tentukan jenis kelas
                 try {
                     [$typeKelas, $kodePaketKelas] = $this->determineTypeKelas($kode_kelas, $kodeLayananKelas);
+
+                    // Debug: Pastikan typeKelas valid
+                    if (!in_array($typeKelas, [
+                        Constant::TYPE_KELAS_ABC,
+                        Constant::TYPE_KELAS_PAUD,
+                        Constant::TYPE_KELAS_KHUSUS
+                    ])) {
+                        throw new \Exception("Jenis kelas tidak valid: $typeKelas");
+                    }
                 } catch (\Exception $e) {
                     throw new \Exception("Gagal menentukan jenis kelas: " . $e->getMessage());
                 }
 
-                // 4. Validate and normalize NISN
+                // 4. Validasi NISN
                 $nisn = is_numeric($nisn) ? $nisn : null;
 
-                // 5. Process data based on class type
-                if ($typeKelas == Constant::TYPE_KELAS_ABC) {
-                    if (!preg_match('/^[A-Ca-c][0-9]/', substr($kode_kelas, 0, 2))) {
-                        throw new \Exception(
-                            "Format kode kelas ABC tidak valid pada baris " . ($key + 1) . ". " .
-                                "Harus diawali A/B/C diikuti angka (contoh: A11, B22). " .
-                                "Kode yang diterima: '$kode_kelas'"
-                        );
-                    }
-                    $kodePaketKelas = 'PAKET' . strtoupper(substr($kode_kelas, 0, 1));
-                    [$kelasNum, $smtNum] = $this->processKelasABC($kode_kelas);
-                } elseif ($typeKelas == Constant::TYPE_KELAS_PAUD) {
-                    if (empty($kodePaketKelas)) {
-                        throw new \Exception("Kode Paket Kelas PAUD tidak ditemukan untuk: '$kode_kelas'");
-                    }
-                    [$kelasNum, $smtNum] = [null, substr($kode_kelas, strlen($kodePaketKelas), 1)];
-                } else {
-                    [$kelasNum, $smtNum] = [null, substr($kode_kelas, -1)];
-                    $kodePaketKelas = $kodeLayananKelas;
+                // 5. Proses data berdasarkan jenis kelas
+                switch ($typeKelas) {
+                    case Constant::TYPE_KELAS_ABC:
+                        if (!preg_match('/^[A-C][0-9]{1,2}/', substr($kode_kelas, 0, 3))) {
+                            throw new \Exception(
+                                "Format kode kelas ABC tidak valid pada baris " . ($key + 1) . ". " .
+                                    "Harus diawali A/B/C diikuti angka (contoh: A11, B22). " .
+                                    "Kode yang diterima: '$kode_kelas'"
+                            );
+                        }
+                        [$kelasNum, $smtNum] = $this->processKelasABC($kode_kelas);
+                        break;
+
+                    case Constant::TYPE_KELAS_PAUD:
+                        if (empty($kodePaketKelas)) {
+                            throw new \Exception("Kode Paket Kelas PAUD tidak ditemukan untuk: '$kode_kelas'");
+                        }
+                        [$kelasNum, $smtNum] = [null, substr($kode_kelas, strlen($kodePaketKelas), 1)];
+                        break;
+
+                    case Constant::TYPE_KELAS_KHUSUS:
+                        [$kelasNum, $smtNum] = [null, substr($kode_kelas, -1)];
+                        break;
+
+                    default:
+                        [$kelasNum, $smtNum] = [null, 1]; // Default semester 1
+                        break;
                 }
 
                 // 6. Process learner status
@@ -214,8 +234,10 @@ class KelasController extends Controller
                         'layanan_kelas_id' => $layananKelas->id,
                         'paket_kelas_id' => $paketKelas->id,
                         'nama' => $kode_kelas,
-                        'type' => $typeKelas,
+                        'type' => $typeKelas, // Pastikan ini diisi dengan nilai 0, 1, atau 2
                         'is_active' => true,
+                        'jenis_rapor' => 'lama', // Default value jika diperlukan
+                        'is_lock_nilai' => false, // Default value
                     ]
                 );
 
@@ -243,22 +265,87 @@ class KelasController extends Controller
                 // Process PPDB data
                 $ppdb = $this->processPpdbData([
                     'user_id' => $user->id,
+                    'cabang_id' => $this->getCabangId($cabang_genju ?? null),
+                    'type' => $typeKelas,
+                    'nis' => $nis ?? $this->generateNIS(),
+                    'nama' => $nama,
+                    'kelamin' => isset($gender) && strtolower($gender) == 'laki-laki' ? 'l' : 'p',
+                    'nama_ayah' => $nama_ayah,
+                    'nama_ibu' => $nama_ibu,
+                    'nik_siswa' => $nik_siswa,
+                    'nik_ayah' => $nik_ayah,
+                    'nik_ibu' => $nik_ibu,
+                    'tempat_lahir' => $tempat_lahir,
+                    'tanggal_lahir' => $this->formatTanggalLahir($tgl_lahir),
+                    'status_dalam_keluarga' => $status_anak ?? null,
+                    'anak_ke' => $anak_ke ?? null,
+                    'alamat_peserta_didik' => $alamat,
+                    'alamat_domisili' => $alamat_domisili ?? $alamat,
+                    'alamat_orang_tua' => $alamat,
+                    'no_telp_rumah' => $no_telp_rumah ?? null,
+                    'satuan_pendidikan_asal' => $nama_sekolah_asal,
+                    'agama' => $agama,
+                    'pekerjaan_ayah' => $pekerjaan_ayah,
+                    'pekerjaan_ibu' => $pekerjaan_ibu,
+                    'hp_siswa' => $hp_siswa ?? null,
+                    'hp_ayah' => $hp_ayah,
+                    'hp_ibu' => $hp_ibu,
+                    'telegram_siswa' => $telegram_siswa,
+                    'telegram_ayah' => $telegram_ayah ?? null,
+                    'telegram_ibu' => $telegram_ibu ?? null,
+                    'nama_wali' => $nama_wali ?? null,
+                    'no_telp_wali' => $no_telp_wali ?? null,
+                    'alamat_wali' => $alamat_wali ?? null,
+                    'pekerjaan_wali' => $pekerjaan_wali ?? null,
+                    'email' => $email_ortu,
+                    'tahun_akademik_id' => $tahunAkademik->id,
+                    'layanan_kelas_id' => $layananKelas->id,
+                    'paket_kelas_id' => $paketKelas->id,
+                    'tipe_kelas_sebelum' => $kelas_sebelum ?? null,
+                    'kelas_sebelum' => $kelas_referal ?? null,
+                    'smt_kelas_sebelum' => $kelas_smt_terakhir_sekolah_sebelum ?? null,
+                    'kelas' => $kelas_pertama_pkbm ?? null,
+                    'smt_kelas' => $smtNum ?? null,
+                    'lulusan' => $tahun_lulus,
+                    'tahun_lulus' => $tahun_lulus,
+                    'paket_spp_id' => $paket_spp_id ?? null,
+                    'dokumen_ktp_orang_tua' => $foto_id_ayah ?? null,
+                    'dokumen_akta_lahir' => $akta_kelahiran ?? null,
+                    'dokumen_skhun' => $scan_foto_skhun ?? null,
+                    'dokumen_kartu_keluarga' => $foto_kk ?? null,
+                    'dokumen_ijazah' => $ijazah ?? null,
+                    'is_ktp_approval' => $is_ktp_approved ?? false,
+                    'is_akta_approval' => $is_akta_approved ?? false,
+                    'is_skhun_approval' => $is_shun_skhun_approved ?? false,
+                    'is_kk_approval' => $is_kk_approved ?? false,
+                    'is_ijazah_approval' => $is_ijasah_approved ?? false,
+                    'url_bukti_tf' => $scan_foto_bukti_tf ?? null,
+                    'url_bukti_trf2' => $scan_foto_bukti_tf2 ?? null,
+                    'biaya_daftar' => $biaya_daftar ?? null,
+                    'biaya_program' => $biaya_program ?? null,
+                    'biaya_spp' => $biaya_spp ?? null,
+                    'biaya' => $biaya ?? null,
+                    'peminatan' => $peminatan ?? null,
+                    'wakaf' => $wakaf ?? null,
+                    'infaq' => $infaq ?? null,
+                    'url_bukti_zakat' => $url_bukti_trf_zakat ?? null,
+                    'kelas_id' => $kelasDB->id ?? null,
+                    'is_active' => true,
+                    'is_approved' => false,
+                    'created_by' => auth()->id() ?? 1,
+                    'updated_by' => auth()->id() ?? 1,
+                    'nisn' => $nisn,
+                    'no_induk' => $no_induk ?? null,
                     'no_pendaftaran' => $no_pendaftaran,
                     'tgl_dikirim_ppdb' => $tgl_dikirim_ppdb,
                     'status_lanjutan_baru' => $status_lanjutan_baru,
-                    'layanan_kelas_id' => $layananKelas->id,
-                    'paket_kelas_id' => $paketKelas->id,
-                    'tahun_akademik_id' => $tahunAkademik->id,
-                    'nama_sekolah_asal' => $nama_sekolah_asal,
-                    'alamat_sekolah_asal' => $alamat_sekolah_asal,
-                    'nama_ayah' => $nama_ayah,
-                    'nama_ibu' => $nama_ibu,
-                    'pekerjaan_ayah' => $pekerjaan_ayah,
-                    'pekerjaan_ibu' => $pekerjaan_ibu,
-                    'nik_ayah' => $nik_ayah,
-                    'nik_ibu' => $nik_ibu,
                     'no_kk' => $no_kk,
-                ], $user, $layananKelas, $paketKelas, $tahunAkademik);
+                    'tgl_terima' => $tgl_terima ?? now(),
+                    'voucher_kode' => $voucher_code ?? null,
+                    'diskon_kode' => $discount_code ?? null,
+                    'diskon_type' => $discount_type ?? null,
+                    'discount' => $discount ?? null,
+                ], $user, $layananKelas, $paketKelas, $tahunAkademik, $typeKelas);
 
                 // Process rombel
                 $rombel = $this->processRombel($ppdb, $tahunAkademik, $status_wb, $kelasDB);
@@ -266,10 +353,25 @@ class KelasController extends Controller
 
             DB::commit();
 
+            $importedKelas = KelasModel::where('kode', $kode_kelas_ini)->first();
             return response()->json([
                 'error' => false,
                 'message' => 'File berhasil dibaca dan diimpor',
-                'kode_kelas' => $kode_kelas_ini,
+                'kelas' => [
+                    'kode' => $importedKelas->kode,
+                    'type' => $importedKelas->type,
+                    'type_text' => [
+                        0 => 'ABC',
+                        1 => 'PAUD',
+                        2 => 'KHUSUS'
+                    ][$importedKelas->type] ?? 'UNKNOWN',
+                    'nama' => $importedKelas->nama,
+                    'tahun_akademik' => $importedKelas->tahunAkademik->tahun_ajar ?? null
+                ],
+                'debug' => [
+                    'type_determined' => $typeKelas,
+                    'kode_paket' => $kodePaketKelas
+                ],
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -306,36 +408,69 @@ class KelasController extends Controller
         return 'UNKNOWN';
     }
 
-    private function determineTypeKelas(string $kode_kelas, string $kodeLayananKelas): array
+    private function formatTanggal($date)
     {
-        // 1. Check PAUD first
+        if (empty($date)) return null;
+
+        try {
+            return Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d');
+        } catch (\Exception $e) {
+            return $date; // Fallback jika format sudah benar
+        }
+    }
+
+
+    private function getCabangId($namaCabang)
+    {
+        if (empty($namaCabang)) {
+            return null;
+        }
+
+        // Cari berdasarkan nama_cabang
+        return CabangModel::where('nama_cabang', $namaCabang)->value('id') ?? null;
+    }
+
+    private function generateNIS()
+    {
+        $tahun = date('y');
+        $lastNIS = PpdbModel::max('nis') ?? '0000';
+        $sequence = (int)substr($lastNIS, -4) + 1;
+        return $tahun . str_pad($sequence, 4, '0', STR_PAD_LEFT);
+    }
+
+    protected function determineTypeKelas(string $kode_kelas, string $kodeLayananKelas): array
+    {
+        $kode_kelas = strtoupper(trim($kode_kelas));
+
+        // 1. Check PAUD classes first
         foreach (Constant::KELAS_PAUD as $kelasPaud) {
-            if (stripos($kode_kelas, $kelasPaud) !== false) {
+            if (strpos($kode_kelas, $kelasPaud) !== false) {
                 return [Constant::TYPE_KELAS_PAUD, $kelasPaud];
             }
         }
 
-        // 2. Check if it's a special class (HST/REG/INTENSIF)
-        if ($kodeLayananKelas !== 'UNKNOWN') {
+        // 2. Check ABC classes (format: A11, B22, C33)
+        if (preg_match(Constant::KODE_KELAS_ABC_PATTERN, $kode_kelas)) {
+            $prefix = substr($kode_kelas, 0, 1);
+            return [Constant::TYPE_KELAS_ABC, 'PAKET' . $prefix];
+        }
+
+        // 3. Special classes (REG, HST, INTENSIF)
+        if (in_array($kodeLayananKelas, ['REG', 'HST', 'INTENSIF'])) {
             return [Constant::TYPE_KELAS_KHUSUS, $kodeLayananKelas];
         }
 
-        // 3. Default to ABC Class
-        return [Constant::TYPE_KELAS_ABC, null];
+        // Default to ABC type if uncertain
+        return [Constant::TYPE_KELAS_ABC, Constant::DEFAULT_PAKET_KODE];
     }
 
-    private function processKelasABC(string $kode_kelas): array
+    protected function processKelasABC(string $kode_kelas): array
     {
-        $kodeKelasPart = explode(' ', $kode_kelas);
-        $firstPart = $kodeKelasPart[0];
+        $kode = explode(' ', $kode_kelas)[0];
+        $kelasNum = substr($kode, 1, 2);
+        $smtNum = (strlen($kode) > 3) ? substr($kode, -1) : Constant::DEFAULT_SEMESTER;
 
-        // Handle various formats: A1, A11, A-1, A-11, etc
-        $cleanPart = preg_replace('/[^A-Z0-9]/i', '', $firstPart);
-
-        $kelasNum = substr($cleanPart, 1, strlen($cleanPart) > 2 ? 2 : 1);
-        $smtNum = substr($cleanPart, -1); // Take last digit as semester
-
-        return [$kelasNum, $smtNum];
+        return [(int)$kelasNum, (int)$smtNum];
     }
 
     private function determineStatusWB(?string $status_wb): string
@@ -456,26 +591,92 @@ class KelasController extends Controller
         User $user,
         LayananKelasModel $layananKelas,
         PaketKelasModel $paketKelas,
-        TahunAkademikModel $tahunAkademik
+        TahunAkademikModel $tahunAkademik,
+        int $type
     ): PpdbModel {
         try {
+            // Format tanggal terima
+            $tglTerima = $this->formatTanggal($row['tgl_terima'] ?? now());
+
             return PpdbModel::updateOrCreate(
                 ['user_id' => $user->id],
                 [
-                    'nis' => $row['nis'] ?? null,
-                    'nisn' => $row['nisn'] ?? null,
+                    'cabang_id' => $row['cabang_id'] ?? $this->getCabangId($row['cabang_genju'] ?? null),
+                    'type' => $type,
+                    'nis' => $row['nis'] ?? $this->generateNIS(),
                     'nama' => $row['nama'] ?? null,
                     'kelamin' => isset($row['gender']) && strtolower($row['gender']) == 'laki-laki' ? 'l' : 'p',
+                    'nama_ayah' => $row['nama_ayah'] ?? null,
+                    'nama_ibu' => $row['nama_ibu'] ?? null,
+                    'nik_siswa' => $row['nik_siswa'] ?? null,
+                    'nik_ayah' => $row['nik_ayah'] ?? null,
+                    'nik_ibu' => $row['nik_ibu'] ?? null,
+                    'tempat_lahir' => $row['tempat_lahir'] ?? null,
+                    'tanggal_lahir' => $this->formatTanggalLahir($row['tgl_lahir'] ?? null),
                     'status_dalam_keluarga' => $row['status_anak'] ?? null,
+                    'anak_ke' => $row['anak_ke'] ?? null,
                     'alamat_peserta_didik' => $row['alamat'] ?? null,
-                    'email' => $row['email_ortu'] ?? null,
+                    'alamat_domisili' => $row['alamat_domisili'] ?? $row['alamat'] ?? null,
+                    'alamat_orang_tua' => $row['alamat'] ?? null,
+                    'no_telp_rumah' => $row['no_telp_rumah'] ?? null,
+                    'satuan_pendidikan_asal' => $row['nama_sekolah_asal'] ?? null,
+                    'agama' => $row['agama'] ?? null,
+                    'pekerjaan_ayah' => $row['pekerjaan_ayah'] ?? null,
+                    'pekerjaan_ibu' => $row['pekerjaan_ibu'] ?? null,
+                    'hp_siswa' => $row['hp_siswa'] ?? null,
+                    'hp_ayah' => $row['hp_ayah'] ?? null,
+                    'hp_ibu' => $row['hp_ibu'] ?? null,
+                    'telegram_siswa' => $row['telegram_siswa'] ?? null,
+                    'telegram_ayah' => $row['telegram_ayah'] ?? null,
+                    'telegram_ibu' => $row['telegram_ibu'] ?? null,
+                    'nama_wali' => $row['nama_wali'] ?? null,
+                    'no_telp_wali' => $row['no_telp_wali'] ?? null,
+                    'alamat_wali' => $row['alamat_wali'] ?? null,
+                    'pekerjaan_wali' => $row['pekerjaan_wali'] ?? null,
+                    'email' => $row['email'] ?? null,
+                    'tahun_akademik_id' => $tahunAkademik->id,
                     'layanan_kelas_id' => $layananKelas->id,
                     'paket_kelas_id' => $paketKelas->id,
-                    'tahun_akademik_id' => $tahunAkademik->id,
-                    'tanggal_lahir' => $this->formatTanggalLahir($row['tgl_lahir'] ?? null),
-                    'no_telepon_ortu' => $row['hp_ayah'] ?? $row['hp_ibu'] ?? null,
-                    'nama_ayah' => $row['nama_ayah'] ?? null,
-                    'nama_ibu' => $row['nama_ibu'] ?? null
+                    'tipe_kelas_sebelum' => $row['kelas_sebelum'] ?? null,
+                    'kelas_sebelum' => $row['kelas_referal'] ?? null,
+                    'smt_kelas_sebelum' => $row['semester'] ?? null,
+                    'kelas' => $row['kelas'] ?? null,
+                    'smt_kelas' => $row['semester'] ?? null,
+                    'lulusan' => $row['tahun_lulus'] ?? null,
+                    'paket_spp_id' => $row['paket_spp_id'] ?? null,
+                    'dokumen_ktp_orang_tua' => $row['scan_foto_ktp_ortu'] ?? null,
+                    'dokumen_akta_lahir' => $row['scan_foto_akta'] ?? null,
+                    'dokumen_skhun' => $row['scan_foto_skhun'] ?? null,
+                    'dokumen_kartu_keluarga' => $row['scan_foto_kk'] ?? null,
+                    'dokumen_ijazah' => $row['scan_foto_ijazah'] ?? null,
+                    'is_ktp_approval' => $row['is_ktp_approval'] ?? null,
+                    'is_akta_approval' => $row['is_akta_approval'] ?? null,
+                    'is_skhun_approval' => $row['is_skhun_approval'] ?? null,
+                    'is_kk_approval' => $row['is_kk_approval'] ?? null,
+                    'is_ijazah_approval' => $row['is_ijazah_approval'] ?? null,
+                    'url_bukti_tf' => $row['url_bukti_tf'] ?? null,
+                    'url_bukti_trf2' => $row['url_bukti_trf2'] ?? null,
+                    'biaya_daftar' => $row['biaya_daftar'] ?? null,
+                    'biaya_program' => $row['biaya_program'] ?? null,
+                    'biaya_spp' => $row['biaya_spp'] ?? null,
+                    'biaya' => $row['biaya'] ?? null,
+                    'peminatan' => $row['peminatan'] ?? null,
+                    'wakaf' => $row['wakaf'] ?? null,
+                    'infaq' => $row['infaq'] ?? null,
+                    'url_bukti_zakat' => $row['url_bukti_zakat'] ?? null,
+                    'kelas_id' => $row['kelas_id'] ?? null,
+                    'is_active' => true,
+                    'is_approved' => false,
+                    'created_by' => auth()->id() ?? 1,
+                    'updated_by' => auth()->id() ?? 1,
+                    'nisn' => $row['nisn'] ?? null,
+                    'no_induk' => $row['no_induk'] ?? null,
+                    'user_id' => $user->id,
+                    'tgl_terima' => $tglTerima,
+                    'voucher_kode' => $row['voucher_code'] ?? null,
+                    'diskon_kode' => $row['diskon_code'] ?? null,
+                    'diskon_type' => $row['diskon_type'] ?? null,
+                    'discount' => $row['discount'] ?? null,
                 ]
             );
         } catch (\Exception $e) {

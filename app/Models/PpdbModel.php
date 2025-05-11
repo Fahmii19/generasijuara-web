@@ -93,15 +93,15 @@ class PpdbModel extends Model
     {
         $prefix = date('Ym');
         $data = self::query()
-            ->where('nis', 'like', $prefix.'%')
-            ->orderBy('nis','desc')
+            ->where('nis', 'like', $prefix . '%')
+            ->orderBy('nis', 'desc')
             ->first();
         $last_no = 1;
         if (!empty($data)) {
             $last_no = (int) str_replace($prefix, "", $data->nis);
             if ($last_no < 1) {
                 $last_no = 1;
-            }else{
+            } else {
                 $last_no++;
             }
         }
@@ -109,6 +109,15 @@ class PpdbModel extends Model
         $prefix .= str_pad($last_no, 4, "0", STR_PAD_LEFT);
         // error_log($prefix);
         return $prefix;
+    }
+
+    public function getTypeKelasTextAttribute()
+    {
+        return [
+            0 => 'ABC',
+            1 => 'PAUD',
+            2 => 'KHUSUS'
+        ][$this->type_kelas] ?? 'TIDAK DIKENAL';
     }
 
     public function user_detail()
