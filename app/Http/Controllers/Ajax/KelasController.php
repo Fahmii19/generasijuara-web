@@ -344,7 +344,7 @@ class KelasController extends Controller
                     'voucher_kode' => $voucher_code ?? null,
                     'diskon_kode' => $discount_code ?? null,
                     'diskon_type' => $discount_type ?? null,
-                    'discount' => $discount ?? null,
+                    'discount' => isset($discount) && is_numeric($discount) ? $discount : 0,
                 ], $user, $layananKelas, $paketKelas, $tahunAkademik, $typeKelas);
 
                 // Process rombel
