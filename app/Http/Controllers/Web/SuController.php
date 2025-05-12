@@ -39,7 +39,7 @@ class SuController extends Controller
 {
     public function home(Request $request)
     {
-        if(session()->get('apps') != 'su') return redirect()->route('web.index');
+        if (session()->get('apps') != 'su') return redirect()->route('web.index');
         return view('admin.index');
     }
 
@@ -57,17 +57,17 @@ class SuController extends Controller
     {
         return view('admin.user.list');
     }
-    
+
     public function rombelAkademikList(Request $request)
     {
         return view('admin.rombel_akademik.list');
     }
-    
+
     public function kelasList(Request $request)
     {
         return view('admin.kelas.list');
     }
-    
+
     public function detailKelas(Request $request)
     {
         $data = [
@@ -75,7 +75,7 @@ class SuController extends Controller
         ];
         return view('admin.kelas.detail', $data);
     }
-    
+
     public function settingKMP(Request $request)
     {
         $data = [
@@ -83,12 +83,12 @@ class SuController extends Controller
         ];
         return view('admin.kelas.kmp_setting', $data);
     }
-    
+
     public function layananKelasList(Request $request)
     {
         return view('admin.layanan_kelas.list');
     }
-    
+
     public function paketKelasAbcList(Request $request)
     {
         $data = [
@@ -96,7 +96,7 @@ class SuController extends Controller
         ];
         return view('admin.paket_kelas.abc.list', $data);
     }
-    
+
     public function paketKelasPaudList(Request $request)
     {
         $data = [
@@ -104,7 +104,7 @@ class SuController extends Controller
         ];
         return view('admin.paket_kelas.paud.list', $data);
     }
-    
+
     public function paketSppAbcList(Request $request)
     {
         $data = [
@@ -112,7 +112,7 @@ class SuController extends Controller
         ];
         return view('admin.paket_spp.abc.list', $data);
     }
-    
+
     public function paketSppPaudList(Request $request)
     {
         $data = [
@@ -120,12 +120,12 @@ class SuController extends Controller
         ];
         return view('admin.paket_spp.paud.list', $data);
     }
-    
+
     public function kotaList(Request $request)
     {
         return view('admin.kota.list');
     }
-    
+
     public function distribusiMapel(Request $request)
     {
         return view('admin.distribusi_mapel.list');
@@ -135,27 +135,27 @@ class SuController extends Controller
     {
         return view('admin.jadwal_pelajaran.list');
     }
-    
+
     public function kalenderAkademikList(Request $request)
     {
         return view('admin.kalender_akademik.list');
     }
-    
+
     public function mataPelajaranList(Request $request)
     {
         return view('admin.mata_pelajaran.list');
     }
-    
+
     public function uploadRaportList(Request $request)
     {
         return view('admin.upload_raport.list');
     }
-    
+
     public function raportList(Request $request)
     {
         return view('admin.raport.list');
     }
-    
+
     public function legerList(Request $request)
     {
         return view('admin.leger.list');
@@ -188,15 +188,15 @@ class SuController extends Controller
     {
         $ppdb = Ppdbmodel::selectRaw('nis, nama')->where('id', $ppdb_id)->first();
         $kuisioner = KuisionerModel::with('tahun_akademik')
-                        ->where('tahun_akademik_id', $ta_id)
-                        ->first();
-        
+            ->where('tahun_akademik_id', $ta_id)
+            ->first();
+
         $kuisioner_items = KuisionerItemsModel::where('kuisioner_id', $kuisioner->id)->get();
 
         $kuisioner_wb_id = KuisionerWbModel::where('ppdb_id', $ppdb_id)
-                                ->where('kuisioner_id', $kuisioner->id)
-                                ->first();
-        
+            ->where('kuisioner_id', $kuisioner->id)
+            ->first();
+
         $kuisioner_respon = KuisionerResponModel::where('kuisioner_wb_id', $kuisioner_wb_id->id)->get();
 
         $data = [
@@ -229,10 +229,10 @@ class SuController extends Controller
 
         return Excel::download(
             new SusulanRemedialExport($data),
-            'Susulan Remedial_'.time().'.xlsx'
+            'Susulan Remedial_' . time() . '.xlsx'
         );
     }
-    
+
     public function tahunAkademikList(Request $request)
     {
         return view('admin.tahun_akademik.list');
@@ -242,7 +242,7 @@ class SuController extends Controller
     {
         return view('admin.ttd_raport.list');
     }
-    
+
     public function ppdbAbcList(Request $request)
     {
         $data = [
@@ -250,7 +250,7 @@ class SuController extends Controller
         ];
         return view('admin.ppdb.abc.list', $data);
     }
-    
+
     public function ppdbAbcAdd(Request $request)
     {
         $data = [
@@ -258,7 +258,7 @@ class SuController extends Controller
         ];
         return view('admin.ppdb.abc.add-new', $data);
     }
-    
+
     public function ppdbAbcEdit(Request $request, $id)
     {
         $tagihan = TagihanModel::where('ppdb_id', $id)->first();
@@ -271,12 +271,12 @@ class SuController extends Controller
         ];
         return view('admin.ppdb.abc.add', $data);
     }
-    
+
     public function ppdbAbcNewList(Request $request)
     {
         return view('admin.ppdb.abc_new.list');
     }
-    
+
     public function ppdbPaudList(Request $request)
     {
         $data = [
@@ -292,7 +292,7 @@ class SuController extends Controller
         ];
         return view('admin.ppdb.paud.add-new', $data);
     }
-    
+
     public function ppdbPaudEdit(Request $request, $id)
     {
         $tagihan = TagihanModel::where('ppdb_id', $id)->first();
@@ -325,8 +325,8 @@ class SuController extends Controller
     public function ppdbUlangAbcEdit(Request $request, $id)
     {
         $tagihan = TagihanModel::where('ppdb_id', $id)
-                                ->where('type', TagihanModel::TYPE_DAFTAR_ULANG)
-                                ->first();
+            ->where('type', TagihanModel::TYPE_DAFTAR_ULANG)
+            ->first();
         $data = [
             'type' => Constant::TYPE_KELAS_ABC,
             'id' => $id,
@@ -354,8 +354,8 @@ class SuController extends Controller
     public function ppdbUlangPaudEdit(Request $request, $id)
     {
         $tagihan = TagihanModel::where('ppdb_id', $id)
-                                ->where('type', TagihanModel::TYPE_DAFTAR_ULANG)
-                                ->first();
+            ->where('type', TagihanModel::TYPE_DAFTAR_ULANG)
+            ->first();
         $data = [
             'type' => Constant::TYPE_KELAS_PAUD,
             'id' => $id,
@@ -374,17 +374,17 @@ class SuController extends Controller
         $data_pembayaran = PembayaranModel::where('tagihan_id', $id)->first();
         $terbayar = [];
         $terbayar_query = PembayaranItemsModel::selectRaw("pembayaran.tagihan_id, pembayaran_items.item, SUM(pembayaran_items.nominal) as terbayar")
-                            ->leftJoin('pembayaran','pembayaran.id','=','pembayaran_items.pembayaran_id')
-                            ->where('pembayaran.tagihan_id', $id)
-                            ->where('pembayaran.is_approved', 1)
-                            ->groupBy('pembayaran.tagihan_id','pembayaran_items.item')
-                            ->get()
-                            ->toArray();
-        
+            ->leftJoin('pembayaran', 'pembayaran.id', '=', 'pembayaran_items.pembayaran_id')
+            ->where('pembayaran.tagihan_id', $id)
+            ->where('pembayaran.is_approved', 1)
+            ->groupBy('pembayaran.tagihan_id', 'pembayaran_items.item')
+            ->get()
+            ->toArray();
+
         array_map(function ($item) use (&$terbayar) {
             $terbayar[$item['item']] = $item;
         }, $terbayar_query);
-        
+
         $data = [
             'id' => $id,
             'data_pembayaran' => $data_pembayaran,
@@ -402,11 +402,11 @@ class SuController extends Controller
         ];
         return view('admin.keuangan.pembayaran.detail-item', $data);
     }
-    
+
     public function raportPrint(Request $request)
     {
         $raportService = new RaportService();
-        $data = $raportService->getData(['kelas_wb_id'=>$request->kelas_wb]);
+        $data = $raportService->getData(['kelas_wb_id' => $request->kelas_wb]);
 
         if (!$data) {
             dd('data tidak ditemukan');
@@ -438,7 +438,7 @@ class SuController extends Controller
     public function raportCoverPrint(Request $request)
     {
         $raportService = new RaportService();
-        $data = $raportService->getData(['kelas_wb_id'=>$request->kelas_wb]);
+        $data = $raportService->getData(['kelas_wb_id' => $request->kelas_wb]);
 
         if (!$data) {
             dd('data tidak ditemukan');
@@ -459,7 +459,7 @@ class SuController extends Controller
 
         return $pdf->stream('Raport-Cover.pdf');
     }
-    
+
     public function raportDetail(Request $request)
     {
         // $raportService = new RaportService();
@@ -491,10 +491,10 @@ class SuController extends Controller
 
         return Excel::download(
             new RombelExport($layanan_kelas_id, $tahun_akademik_id),
-            'Rombel_'.$layanan_kelas->kode.'_'.$tahun_akademik->kode.'.xlsx'
+            'Rombel_' . $layanan_kelas->kode . '_' . $tahun_akademik->kode . '.xlsx'
         );
     }
-    
+
     public function nilaiList(Request $request)
     {
         return view('admin.nilai.list');
@@ -521,39 +521,39 @@ class SuController extends Controller
             return back()->with('message', 'Kelas tidak ditemukan');
         }
 
-        return Excel::download(new NilaiExport($kelas), 'Nilai - '.$kelas->nama.'.xlsx');
+        return Excel::download(new NilaiExport($kelas), 'Nilai - ' . $kelas->nama . '.xlsx');
     }
-    
+
     public function siswaNilaiList(Request $request)
     {
         return view('siswa.nilai.list');
     }
-    
+
     public function siswaRaportList(Request $request)
     {
         return view('siswa.raport.list');
     }
-    
+
     public function tutorNilaiList(Request $request)
     {
         return view('tutor.nilai.list');
     }
-    
+
     public function keuanganDaftarAbcList(Request $request)
     {
         return view('admin.keuangan.daftar_abc.list');
     }
-    
+
     public function keuanganDaftarAbcAdd(Request $request)
     {
         return view('admin.keuangan.daftar_abc.add');
     }
-    
+
     public function keuanganSlipGajiList(Request $request)
     {
         return view('admin.keuangan.slip_gaji.list');
     }
-    
+
     public function keuanganSlipGajiAdd(Request $request)
     {
         return view('admin.keuangan.slip_gaji.add');
@@ -563,7 +563,7 @@ class SuController extends Controller
     {
         return view('admin.alumni.list');
     }
-    
+
     public function alumniAdd(Request $request)
     {
         return view('admin.alumni.add');
@@ -580,13 +580,13 @@ class SuController extends Controller
     {
         return view('admin.berita.list');
     }
-    
+
     public function newsAdd(Request $request)
     {
         $data = [];
         return view('admin.berita.add', $data);
     }
-    
+
     public function newsEdit(Request $request, $id)
     {
         $data = [
@@ -599,7 +599,7 @@ class SuController extends Controller
     {
         return view('admin.voucher.list');
     }
-    
+
     public function settings(Request $request)
     {
         return view('admin.settings.list');
