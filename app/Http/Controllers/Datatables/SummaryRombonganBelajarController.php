@@ -9,6 +9,7 @@ use App\Models\RombelModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Log;
 
 class SummaryRombonganBelajarController extends Controller
 {
@@ -19,19 +20,17 @@ class SummaryRombonganBelajarController extends Controller
 
     public function getBaseModel()
     {
-        $model = KelasModel::from('rombel')
-                    ->select(DB::raw($this->select))
-                    ->leftJoin('kelas', 'kelas.id', '=', 'rombel.kelas_id')
-                    ->leftJoin('ppdb', 'ppdb.id', '=', 'rombel.ppdb_id')
-                    ->leftJoin('layanan_kelas', 'layanan_kelas.id', '=', 'ppdb.layanan_kelas_id')
-                    ->whereNotNull('rombel.kelas_id')
-                    ->groupBy('rombel.kelas_id');
-        
-        return $model;    
+        return RombelModel::select(DB::raw($this->select))
+            ->leftJoin('kelas', 'kelas.id', '=', 'rombel.kelas_id')
+            ->leftJoin('ppdb', 'ppdb.id', '=', 'rombel.ppdb_id')
+            ->leftJoin('layanan_kelas', 'layanan_kelas.id', '=', 'ppdb.layanan_kelas_id')
+            ->whereNotNull('rombel.kelas_id')
+            ->groupBy('rombel.kelas_id', 'kelas.nama');
     }
 
     public function getAll(Request $request)
     {
+        Log::info('Request data:', $request->all());
         $model = $this->getBaseModel();
         if ($request->has('cabang_id') && $request->cabang_id != null) {
             $model = $model->where('ppdb.cabang_id', $request->cabang_id);
@@ -46,9 +45,10 @@ class SummaryRombonganBelajarController extends Controller
             $model = $model->where('layanan_kelas.kode', $request->layanan_kelas);
         }
 
+        Log::info('SQL Query:', [$model->toSql(), $model->getBindings()]);
         return DataTables::of($model)
-                        ->addIndexColumn()
-                        ->make(true);
+            ->addIndexColumn()
+            ->make(true);
     }
 
     public function getStatusCount(Request $request)
@@ -67,14 +67,14 @@ class SummaryRombonganBelajarController extends Controller
             $model = $model->where('rombel.tahun_akademik_id', $request->tahun_akademik_id);
         }
         if ($request->has('ppdb_type') && $request->ppdb_type != null) {
-            $model->whereHas('ppdb', function($query) use($request) {
+            $model->whereHas('ppdb', function ($query) use ($request) {
                 $query->where('ppdb.type', $request->ppdb_type);
             });
         }
 
         return DataTables::of($model)
-                        ->setTotalRecords(1)
-                        ->make(true);
+            ->setTotalRecords(1)
+            ->make(true);
     }
 
     public function getStatusWB(Request $request)
@@ -88,9 +88,9 @@ class SummaryRombonganBelajarController extends Controller
         ";
 
         $model = RombelModel::select(DB::raw($select))
-                    ->leftJoin('kelas as kls', 'kls.id', '=', 'rombel.kelas_id')
-                    ->leftJoin('layanan_kelas as lk', 'lk.id', '=', 'kls.layanan_kelas_id')
-                    ->groupBy('kls.type', 'lk.kode');
+            ->leftJoin('kelas as kls', 'kls.id', '=', 'rombel.kelas_id')
+            ->leftJoin('layanan_kelas as lk', 'lk.id', '=', 'kls.layanan_kelas_id')
+            ->groupBy('kls.type', 'lk.kode');
 
         if ($request->has('tahun_akademik_id') && $request->tahun_akademik_id != null) {
             $model = $model->where('rombel.tahun_akademik_id', $request->tahun_akademik_id);
@@ -100,7 +100,7 @@ class SummaryRombonganBelajarController extends Controller
         }
 
         return DataTables::of($model)
-                    ->addIndexColumn()
-                    ->make(true);
+            ->addIndexColumn()
+            ->make(true);
     }
 }

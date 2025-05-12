@@ -256,6 +256,10 @@
                     d.tahun_akademik_id = tahunAkademikSelected
                 },
                 type: "POST",
+                error: function(xhr) {
+            console.error('Error:', xhr.responseText);
+            alert('Terjadi error saat memuat data HST');
+        }
             },
             bSort: true,
             searching: true,

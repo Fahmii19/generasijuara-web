@@ -333,9 +333,9 @@ Route::group(['prefix' => 'ajax-dt'], function () {
     // Route::get('/rombongan-belajar/get', [DtRombonganBelajar::class, 'getAllDump'])->name('ajax.dt.rombongan_belajar.get');
 
     // untuk search rombel
-    // Route::post('/summary-rombel/get', [DtSummaryRombonganBelajar::class, 'getAll'])->name('ajax.dt.summary_rombel.get');
+    Route::post('/summary-rombel/get', [DtSummaryRombonganBelajar::class, 'getAll'])->name('ajax.dt.summary_rombel.get');
     // untuk menampilkan data rombel di summary rombel
-    Route::get('/summary-rombel/get', [DtSummaryRombonganBelajar::class, 'getAll'])->name('ajax.dt.summary_rombel.get');
+    // Route::get('/summary-rombel/get', [DtSummaryRombonganBelajar::class, 'getAll'])->name('ajax.dt.summary_rombel.get');
 
 
 
