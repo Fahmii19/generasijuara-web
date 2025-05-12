@@ -9,6 +9,7 @@ use App\Models\AlumniModel;
 class TahunAkademikModel extends Model
 {
     use HasFactory;
+    public $timestamps = true;
     protected $table = "tahun_akademik";
     protected $fillable = [
         'kode',
