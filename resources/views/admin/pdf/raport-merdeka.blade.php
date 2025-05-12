@@ -3,9 +3,61 @@
 <head>
 	<title>Raport Merdeka</title>
 	<style>
+
+{
+        box-sizing: border-box;
+        }
 		body{
 			font-family: "Roboto", sans-serif;
+            margin: 0;
+            padding: 0;
 		}
+
+        table {
+            table-layout: fixed;
+            width: 100%;
+            min-width: 100%;
+        }
+
+        td {
+            min-width: 20px;
+            overflow: hidden;
+        }
+
+        .font-size-10 { font-size: 10px; }
+        .font-size-9 { font-size: 9px; }
+        .font-size-12 { font-size: 12px; }
+        .font-size-14 { font-size: 14px; }
+        .font-predikat { font-size: 60px; }
+        .font-weight-600 { font-weight: 600; }
+        .font-bold { font-weight: bolder; }
+        .letter-spacing-sm { letter-spacing: 1px; }
+        .line-height-sm { line-height: 1.25; }
+        .new-page { page-break-before: always; }
+        .border-bottom-sm { border-bottom: solid 1px #000; }
+        .table-collapse { border-collapse: collapse; }
+        .mapel-row > td:first-child { text-align: center; }
+        .table-sikap, .table-nilai { margin-left: 15px; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .vertical-middle { vertical-align: middle; }
+        .mt-0 { margin-top: 0; }
+        .mb-0 { margin-bottom: 0; }
+        .petunjuk-pengisian li {
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+
+        .no-divide {
+            width: 100%;
+            table-layout: fixed;
+        }
+        .no-divide td {
+            width: auto !important;
+            min-width: 30px !important;
+        }
+
+        /*  */
 		.font-size-10{
 			font-size: 10px;
 		}
@@ -107,7 +159,7 @@
 		<div class="font-size-14">NIS/NISN:</div>
 		<div style="margin: auto; width: 60%; background: #c5d9f1; border-top-style: solid; border-top-color: #000; padding: 10px; text-align: center;">
 			<strong>
-				{{$kelas_wb->wb_detail->no_induk}} / {{$kelas_wb->wb_detail->nisn}}									
+				{{$kelas_wb->wb_detail->no_induk}} / {{$kelas_wb->wb_detail->nisn}}
 			</strong>
 		</div>
 	</div>
@@ -180,7 +232,7 @@
 					087784164812/087882525896
 				</td>
 			</tr>
-			
+
 		</table>
     </div>
 
@@ -422,7 +474,7 @@
 					{{ ucwords($kelas_wb->wb_detail->pekerjaan_wali) ?? '-' }}
 				</td>
 			</tr>
-			
+
 		</table>
 
 
@@ -463,7 +515,7 @@
 		</table>
 	</div>
 
-	
+
 	{{-- PAGE BREAK --}}
 	<div class="new-page"></div>
 
@@ -568,10 +620,10 @@
                 <span style="margin-left: 4px;">Lembar Isi Mata Pelajaran</span>
             </td>
             <td width="7%" style="">
-                
+
             </td>
             <td width="40%" style="">
-                
+
             </td>
         </tr>
     </table>
@@ -582,7 +634,7 @@
                 No
             </td>
             <td width="40%" style="border: 1px solid black;">
-                <span>Mata Pelajaran/Program</span> 
+                <span>Mata Pelajaran/Program</span>
                 <br>
                 <span>Pemberdayaan dan Keterampilan</span>
             </td>
@@ -627,16 +679,16 @@
                         </span>
                     </td>
                     <td class="text-center" width="7%" style="border: 1px solid black;">
-                        
+
                     </td>
                     <td width="40%" style="border: 1px solid black; padding-left: 4px;">
-                        
+
                     </td>
-                </tr>   
+                </tr>
             @endif
         @endforeach ()
 
-        
+
 
         <tr class="text-left" style="font-weight: bold;">
             <td colspan="4" class="text-left" width="3%" style="border: 1px solid black; padding-left: 2px;">
@@ -718,7 +770,7 @@
                 Ketidakhadiran
             </td>
             <td width="40%">
-                
+
             </td>
         </tr>
         <tr class="text-left" style="">
@@ -738,7 +790,7 @@
                 hari
             </td>
             <td width="40%">
-                
+
             </td>
         </tr>
         <tr class="text-left" style="">
@@ -758,7 +810,7 @@
                 hari
             </td>
             <td width="40%">
-                
+
             </td>
         </tr>
         <tr class="text-left" style="">
@@ -778,14 +830,14 @@
                 hari
             </td>
             <td width="40%">
-                
+
             </td>
         </tr>
     </table>
 
     <!-- TTD PJ -->
     @include('includes.components.ttd_pj_raport_merdeka')
-    
+
     {{-- PAGE BREAK --}}
 	<div class="new-page"></div>
 
@@ -831,7 +883,7 @@
             @endforeach
 
             <!-- Catatan Proses -->
-            
+
             <tr class="font-size-12 text-center" style="font-weight: normal;">
                 <td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>
                 <td width="95%" colspan="5" class="text-center" style="border: 1px solid black; padding: 4px 0px 4px 2px;">Catatan Proses</td>
