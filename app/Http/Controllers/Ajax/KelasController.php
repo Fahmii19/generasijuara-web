@@ -155,6 +155,11 @@ class KelasController extends Controller
 
                 $kode_kelas = $kode_kelas_ini;
 
+                // Skip if NISN is empty
+                if (empty($nisn)) {
+                    continue;
+                }
+
                 // 1. Normalisasi input
                 $kode_kelas = preg_replace('/\s+/', ' ', trim($kode_kelas ?? ''));
 
@@ -260,7 +265,7 @@ class KelasController extends Controller
                     'telegram_siswa' => $telegram_siswa,
                     'hp_ayah' => $hp_ayah,
                     'hp_ibu' => $hp_ibu,
-                ], $nisn);
+                ], $nis ?? $this->generateNIS());
 
                 // Process PPDB data
                 $ppdb = $this->processPpdbData([
@@ -558,15 +563,15 @@ class KelasController extends Controller
         return $tahunAkademik;
     }
 
-    private function processUserData(array $row): User
+    private function processUserData(array $row, $nis): User
     {
         try {
-            if (empty($row['nisn'])) {
-                throw new \Exception("NISN kosong, tidak bisa buat user.");
-            }
+            // Gunakan NISN jika ada, jika tidak gunakan NIS dari PPDB
+            $username = $row['nisn'] ?? $nis;
 
-            // Gunakan NISN sebagai username
-            $username = $row['nisn'];
+            if (empty($username)) {
+                throw new \Exception("NISN dan NIS kosong, tidak bisa buat user.");
+            }
 
             // Buat email default jika tidak ada email ortu
             $email = $row['email_ortu'] ?? $username . '@generasijuara.sch.id';
