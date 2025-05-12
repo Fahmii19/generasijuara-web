@@ -519,27 +519,37 @@ class KelasController extends Controller
         ];
     }
 
-    private function getOrCreateTahunAkademik(string $tahunAjar, string $kodeKelas): TahunAkademikModel
+    private function getOrCreateTahunAkademik(string $tahunAjar, string $originalKodeKelas): TahunAkademikModel
     {
-        // Ekstrak semester dari kode kelas (karakter terakhir)
-        $semester = substr($kodeKelas, -1);
+        // Tentukan semester berdasarkan bulan sekarang (default)
+        $currentMonth = date('n'); // 1-12
+        $defaultSemester = ($currentMonth >= 1 && $currentMonth <= 6) ? '1' : '2';
+
+        // Coba ekstrak semester dari kode kelas (karakter terakhir)
+        $semester = substr($originalKodeKelas, -1);
+
+        // Validasi semester, jika tidak valid gunakan default
+        $semester = ($semester == '1' || $semester == '2') ? $semester : $defaultSemester;
+
         $semesterText = ($semester == '1') ? 'Ganjil' : 'Genap';
 
-        // Cari berdasarkan tahun ajar dan semester
-        $tahunAkademik = TahunAkademikModel::where('tahun_ajar', $tahunAjar)
-            ->where('keterangan', 'like', "%$semesterText%")
-            ->first();
+        // Format kode tahun akademik: 4 digit tahun + semester (contoh: "20241")
+        $kodeTahunAkademik = substr(str_replace('/', '', $tahunAjar), 0, 4) . $semester;
+
+        // Cari berdasarkan kode unik tahun akademik
+        $tahunAkademik = TahunAkademikModel::where('kode', $kodeTahunAkademik)->first();
 
         if (!$tahunAkademik) {
-            // Jika tidak ditemukan, buat baru
-            $tahunMulai = explode('/', $tahunAjar)[0];
+            $tahunParts = explode('/', $tahunAjar);
+            $tahunMulai = $tahunParts[0];
+            $tahunSelesai = $tahunParts[1] ?? $tahunParts[0] + 1;
 
             $tahunAkademik = TahunAkademikModel::create([
-                'kode' => substr(str_replace('/', '', $tahunAjar), 0, 4) . $semester,
+                'kode' => $kodeTahunAkademik,
                 'tahun_ajar' => $tahunAjar,
-                'keterangan' => "Semester $semesterText Tahun Ajaran " . str_replace('/', ' - ', $tahunAjar),
-                'periode_start' => $semester == '1' ? "$tahunMulai-07-01" : "$tahunMulai-01-01",
-                'periode_end' => $semester == '1' ? "$tahunMulai-12-31" : "$tahunMulai-06-30",
+                'keterangan' => "Semester $semesterText Tahun Ajaran $tahunMulai/$tahunSelesai",
+                'periode_start' => $semester == '1' ? "$tahunMulai-01-01" : "$tahunMulai-07-01",
+                'periode_end' => $semester == '1' ? "$tahunMulai-06-30" : "$tahunMulai-12-31",
                 'is_active' => true,
                 'is_generate_rombel' => false
             ]);
