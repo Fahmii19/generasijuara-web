@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(LayananSeeder::class);
         $this->call(TahunAkademikSeeder::class);
         $this->call(PaketKelasSeeder::class);
+        $this->call(DimensiSeeder::class);
     }
 }

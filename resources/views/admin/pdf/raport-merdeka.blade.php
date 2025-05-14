@@ -851,7 +851,8 @@
     </table>
 
     <table class="font-size-12" style="width: 95%; border-collapse: collapse; margin-top: 16px; margin-right: 16px; margin-left: 10px;">
-        @foreach ($dimensis as $index => $dimensi)
+        {{-- debugx --}}
+        {{-- @foreach ($dimensis as $index => $dimensi)
             <tr class="font-size-12 text-center" style="font-weight: bold;">
                 <td width="5%" style="padding: 2px 2px 2px 2px; border: 1px solid black;">{{ $index+1 }}</td>
                 <td width="65%" class="text-left" style="padding: 2px 10px 2px 2px; border: 1px solid black;">{{ $dimensi->dimensi_name }}</td>
@@ -898,8 +899,9 @@
                     @endforeach
                 </td>
             </tr>
-        @endforeach
+        @endforeach --}}
     </table>
+
 
     <!-- TTD PJ -->
     @include('includes.components.ttd_pj_raport_merdeka')
