@@ -60,7 +60,7 @@ class SiabController extends Controller
             'id' => auth()->user()->id,
             'data_ppdb' => $data_ppdb,
         ];
-        
+
         return view('siswa.profile', $data);
     }
 
@@ -78,8 +78,8 @@ class SiabController extends Controller
     {
         $nik_siswa = PpdbModel::where('user_id', Auth::user()->id)->first()->nik_siswa;
         $data_ppdb = PpdbModel::where('nik_siswa', $nik_siswa)
-                        ->whereNotNull('nik_siswa')
-                        ->get();
+            ->whereNotNull('nik_siswa')
+            ->get();
 
         $ppdb_ids = [];
         foreach ($data_ppdb as $item) {
@@ -120,17 +120,17 @@ class SiabController extends Controller
 
         // Cek apakah sudah mengisi kuisioner
         $kuisioner_check = KuisionerWbModel::where('ppdb_id', $ppdb->id)
-                                ->whereHas('kuisioner', function($q) use ($tahun_akademik_id) {
-                                    $q->where('tahun_akademik_id', $tahun_akademik_id);
-                                })->first();
+            ->whereHas('kuisioner', function ($q) use ($tahun_akademik_id) {
+                $q->where('tahun_akademik_id', $tahun_akademik_id);
+            })->first();
 
         if (empty($kuisioner_check)) {
             $kuisioner = KuisionerModel::where('tahun_akademik_id', $tahun_akademik_id)
-                            ->where('is_published', true)
-                            ->first();
-            
+                ->where('is_published', true)
+                ->first();
+
             if (!empty($kuisioner)) {
-                return redirect()->route('web.siab.kuisioner.respon','tahun_akademik='.$tahun_akademik_id.'&kelas_id='.$kelas_id.'&destination=raport');
+                return redirect()->route('web.siab.kuisioner.respon', 'tahun_akademik=' . $tahun_akademik_id . '&kelas_id=' . $kelas_id . '&destination=raport');
             }
         }
 
@@ -146,7 +146,7 @@ class SiabController extends Controller
 
         $headerHtml = null;
         $footerHtml = null;
-        
+
         $view = 'admin.pdf.raport';
         if ($data['kelas_wb']->kelas_detail->jenis_rapor == 'merdeka') {
             $view = 'admin.pdf.raport-merdeka';
@@ -172,7 +172,7 @@ class SiabController extends Controller
         $kelas_id = $request->kelas_id;
         $ppdb_id =  $request->ppdb_id;
         $kelas_wb_id =  $request->kelas_wb_id;
-        
+
         $ppdb = PpdbModel::where('user_id', Auth::user()->id)->first();
 
         if ($ppdb_id != $ppdb->id) {
@@ -181,17 +181,17 @@ class SiabController extends Controller
 
         $tahun_akademik_id = KelasModel::where('id', $kelas_id)->first()->tahun_akademik_id;
         $kuisioner_check = KuisionerWbModel::where('ppdb_id', $ppdb->id)
-                                            ->whereHas('kuisioner', function($q) use ($tahun_akademik_id) {
-                                                $q->where('tahun_akademik_id', $tahun_akademik_id);
-                                            })->first();
+            ->whereHas('kuisioner', function ($q) use ($tahun_akademik_id) {
+                $q->where('tahun_akademik_id', $tahun_akademik_id);
+            })->first();
 
         if (empty($kuisioner_check)) {
             $kuisioner = KuisionerModel::where('tahun_akademik_id', $tahun_akademik_id)
-                            ->where('is_published', true)
-                            ->first();
+                ->where('is_published', true)
+                ->first();
 
             if (!empty($kuisioner)) {
-                return redirect()->route('web.siab.kuisioner.respon','tahun_akademik='.$tahun_akademik_id.'&kelas_id='.$kelas_id.'&destination=cover_raport');
+                return redirect()->route('web.siab.kuisioner.respon', 'tahun_akademik=' . $tahun_akademik_id . '&kelas_id=' . $kelas_id . '&destination=cover_raport');
             }
         }
 
@@ -226,9 +226,9 @@ class SiabController extends Controller
         $destination = '';
         $ppdb = PpdbModel::where('user_id', Auth::user()->id)->first();
         $kuisioner = KuisionerModel::where('tahun_akademik_id', $request->tahun_akademik)
-                        ->where('is_published', true)
-                        ->first();
-        
+            ->where('is_published', true)
+            ->first();
+
         if ($request->destination == 'cover_raport') {
             $destination = route('web.siab.raport-cover.print', ['kelas_id' => $request->kelas_id, 'ppdb_id' => $ppdb->id]);
         } elseif ($request->destination == 'raport') {
@@ -251,9 +251,9 @@ class SiabController extends Controller
 
         // Cek apakah pernah mengisi kuisioner
         $already_filled_check = KuisionerWbModel::where('ppdb_id', $ppdb->id)
-                                    ->where('kuisioner_id', $kuisioner->id)
-                                    ->first();
-            
+            ->where('kuisioner_id', $kuisioner->id)
+            ->first();
+
         if (!empty($already_filled_check)) {
             return redirect()->route('web.siab.riwayat-kelas.list')->withErrors(['Anda sudah pernah mengisi kuisioner']);
         }
@@ -273,8 +273,8 @@ class SiabController extends Controller
     {
         $tahun_akademik = TahunAkademikModel::where('is_active', 1)->first();
         $is_paid = PpdbUlangModel::where('user_id', auth()->user()->id)
-                                    ->where('tahun_akademik_id', $tahun_akademik->id)
-                                    ->count();
+            ->where('tahun_akademik_id', $tahun_akademik->id)
+            ->count();
         $ppdb = PpdbModel::where('user_id', auth()->user()->id)->first();
         $data = [
             'type' => Constant::TYPE_KELAS_ABC,
@@ -327,13 +327,13 @@ class SiabController extends Controller
 
         $terbayar = [];
         $terbayar_query = PembayaranItemsModel::selectRaw("pembayaran.tagihan_id, pembayaran_items.item, SUM(pembayaran_items.nominal) as terbayar")
-                            ->leftJoin('pembayaran','pembayaran.id','=','pembayaran_items.pembayaran_id')
-                            ->where('pembayaran.tagihan_id', $id)
-                            ->where('pembayaran.is_approved', 1)
-                            ->groupBy('pembayaran.tagihan_id','pembayaran_items.item')
-                            ->get()
-                            ->toArray();
-        
+            ->leftJoin('pembayaran', 'pembayaran.id', '=', 'pembayaran_items.pembayaran_id')
+            ->where('pembayaran.tagihan_id', $id)
+            ->where('pembayaran.is_approved', 1)
+            ->groupBy('pembayaran.tagihan_id', 'pembayaran_items.item')
+            ->get()
+            ->toArray();
+
         array_map(function ($item) use (&$terbayar) {
             $terbayar[$item['item']] = $item;
         }, $terbayar_query);

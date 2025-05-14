@@ -27,16 +27,17 @@ class NilaiController extends Controller
         if ($request->hasFile('import_file')) {
             try {
                 Excel::import(new NilaiImport(3), $request->file('import_file'));
-                return response()->json([], 200); 
+                return response()->json([], 200);
             } catch (\Throwable $th) {
                 return response()->json([
                     'error' => true,
                     'message' => $th->getMessage(),
+                    'ini' => 'perbaikx'
                 ], 500);
             }
         }
     }
-    
+
     public function get(Request $request)
     {
         try {
@@ -49,18 +50,18 @@ class NilaiController extends Controller
                 ->where('wb_id', $wb_id)
                 ->where('kmp_id', $kmp_id)
                 ->first();
-            
+
             $data = [
                 'nilai' => $nilai,
                 'jenis_rapor' => $jenis_rapor
             ];
 
             // dd($data);
-            return response()->json(['error' => false, 'message' => null, 'data' => $data ], 200); 
+            return response()->json(['error' => false, 'message' => null, 'data' => $data], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 400); 
-        }catch (\Throwable $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
+        } catch (\Throwable $e) {
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
         }
     }
 
@@ -82,11 +83,11 @@ class NilaiController extends Controller
             $params = $request->all();
             $kelas = KelasModel::find($params['kelas_id']);
             if (empty($kelas)) {
-                return response()->json(['error' => true, 'message' => 'Kelas tidak ditemukan'], 400); 
+                return response()->json(['error' => true, 'message' => 'Kelas tidak ditemukan'], 400);
             }
 
             if ($kelas->is_lock_nilai) {
-                return response()->json(['error' => true, 'message' => 'Nilai kelas sudah dikunci. silahkan hubungi admin'], 400); 
+                return response()->json(['error' => true, 'message' => 'Nilai kelas sudah dikunci. silahkan hubungi admin'], 400);
             }
             // dd($params);
             $data = [
@@ -160,14 +161,14 @@ class NilaiController extends Controller
             // ];
 
             // $test = [];
-            for ($i=1; $i <=$jumlah_modul ; $i++) { 
-                $data['p_tugas_'.$i] = $params['p_tugas_'.$i] ? $params['p_tugas_'.$i] : null;
-                $data['p_ujian_'.$i] = $params['p_ujian_'.$i] ? $params['p_ujian_'.$i] : null;
-                $data['p_nilai_'.$i] = (($params['p_tugas_'.$i] ? $params['p_tugas_'.$i] : 0) * $persentase_tm / 100)
-                                        + (($params['p_ujian_'.$i] ? $params['p_ujian_'.$i] : 0) * $persentase_um / 100);
-                $data['p_predikat_'.$i] = $params['p_predikat_'.$i] ? $params['p_predikat_'.$i] : null;
-                $data['k_nilai_'.$i] = $params['k_nilai_'.$i] ? $params['k_nilai_'.$i] : null;
-                $data['k_predikat_'.$i] = $params['k_predikat_'.$i] ? $params['k_predikat_'.$i] : null;
+            for ($i = 1; $i <= $jumlah_modul; $i++) {
+                $data['p_tugas_' . $i] = $params['p_tugas_' . $i] ? $params['p_tugas_' . $i] : null;
+                $data['p_ujian_' . $i] = $params['p_ujian_' . $i] ? $params['p_ujian_' . $i] : null;
+                $data['p_nilai_' . $i] = (($params['p_tugas_' . $i] ? $params['p_tugas_' . $i] : 0) * $persentase_tm / 100)
+                    + (($params['p_ujian_' . $i] ? $params['p_ujian_' . $i] : 0) * $persentase_um / 100);
+                $data['p_predikat_' . $i] = $params['p_predikat_' . $i] ? $params['p_predikat_' . $i] : null;
+                $data['k_nilai_' . $i] = $params['k_nilai_' . $i] ? $params['k_nilai_' . $i] : null;
+                $data['k_predikat_' . $i] = $params['k_predikat_' . $i] ? $params['k_predikat_' . $i] : null;
 
                 // $data_items['p_susulan_tugas_'.$i] = Misc::castBoolean($params['p_susulan_tugas_'.$i]) ? Misc::castBoolean($params['p_susulan_tugas_'.$i]) : null;
                 // $data_items['k_susulan_tugas_'.$i] = Misc::castBoolean($params['k_susulan_tugas_'.$i]) ? Misc::castBoolean($params['k_susulan_tugas_'.$i]) : null;
@@ -192,17 +193,17 @@ class NilaiController extends Controller
                 $data_nilai = NilaiModel::create($data);
                 // $data_items['nilai_id'] = $data_nilai->id;
                 // NilaiItemsModel::create($data_items);
-            }else{
+            } else {
                 $nilai->update($data);
                 // $data_items['nilai_id'] = $nilai->id;
                 // $nilai_items = NilaiItemsModel::where('nilai_id', $nilai->id)->first();
                 // $nilai_items->update($data_items);
             }
-            return response()->json(['error' => false, 'message' => null, 'data' => $nilai ], 200); 
+            return response()->json(['error' => false, 'message' => null, 'data' => $nilai], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400); 
-        }catch (\Throwable $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400);
+        } catch (\Throwable $e) {
+            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400);
         }
     }
 
@@ -213,7 +214,7 @@ class NilaiController extends Controller
             $kelas_id = !empty($request->get('kelas_id')) ? $request->get('kelas_id') : null;
             $kmp_id = !empty($request->get('kmp_id')) ? $request->get('kmp_id') : null;
 
-            $nilai = NilaiModel::with(['kmp','items'])
+            $nilai = NilaiModel::with(['kmp', 'items'])
                 ->where('kelas_id', $kelas_id)
                 ->where('kmp_id', $kmp_id)
                 ->where('is_tagihan_created', 0)
@@ -223,7 +224,7 @@ class NilaiController extends Controller
             $biaya_susulan_um = 150000;
             $biaya_remedial_tm = 100000;
             $biaya_remedial_um = 150000;
-            
+
             foreach ($nilai as $key => $value) {
                 if (empty($value->susulan_remedial)) {
                     continue;
@@ -290,7 +291,7 @@ class NilaiController extends Controller
                 $total_biaya_remedial_tm = $total_remedial_tm * $biaya_remedial_tm;
                 $total_biaya_remedial_um = $total_remedial_um * $biaya_remedial_um;
 
-                
+
                 // Keterangan
                 $keterangan = null;
                 $have_bill = true;
@@ -370,12 +371,12 @@ class NilaiController extends Controller
                 NilaiModel::where('id', $value->id)->update(['is_tagihan_created' => true]);
             }
 
-            return response()->json(['error' => false, 'message' => null, 'data' => null ], 200);
+            return response()->json(['error' => false, 'message' => null, 'data' => null], 200);
         } catch (\Exception $e) {
             Log::error(__METHOD__ . " | on line: " . $e->getLine() . " | " . $e->getMessage());
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 400); 
-        }catch (\Throwable $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
+        } catch (\Throwable $e) {
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
         }
     }
 }

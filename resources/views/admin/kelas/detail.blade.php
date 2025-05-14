@@ -9,7 +9,7 @@
                     <div class="col-auto mb-3">
                         <h1 class="page-header-title">
                             <div class="page-header-icon"><a href="{{route('web.su.kelas.list')}}"><i data-feather="arrow-left"></i></a></div>
-                            Kelas: Detail 
+                            Kelas: Detail
                         </h1>
                     </div>
                     <div class="col-12 col-xl-auto mb-3">
@@ -185,7 +185,7 @@
                         <label><strong>Data</strong></label>
                     </div>
                     <input class="form-control" id="kmp_id" type="hidden" placeholder="">
-                    
+
                     <div class="mb-3">
                         <label for="persentase_tm">Persentase Tugas Modul - Pengetahuan</label>
                         <input class="form-control" id="persentase_tm" type="text" placeholder="40">
@@ -511,7 +511,7 @@
             order:[[0,'asc']],
             columnDefs:[]
         });
-        
+
         $('#input-search-table').on('keyup change clear',function() {
             tableMP.search($(this).val()).draw()
         })
@@ -523,7 +523,7 @@
             $('#formSettingKMP').trigger("reset");
             $('#formSettingKMP').find('#id').val(null);
             $('#formSettingKMP').find('#kmp_id').val(kmpId);
-            
+
             getKMPSettingDetail(kmpId, function(output) {
                 $('#formSettingKMP').find('#persentase_tm').val(output?.persentase_tm);
                 $('#formSettingKMP').find('#persentase_um').val(output?.persentase_um);
@@ -715,9 +715,9 @@
                 'skk' : $('#formSettingKMP').find("#skk").val(),
                 'need_nilai_sikap' : $('#formSettingKMP').find("#need_nilai_sikap").is(":checked"),
             }
-            
+
             console.log('submit', data);
-            
+
             $.ajax({
                 type: "POST",
                 url: "{{route('ajax.kmp_setting.save')}}",
@@ -809,7 +809,7 @@
         // getWBOptions(function(output) {
         //     $('#wb_id').html(output);
         // });
-        
+
         tableWB = $('#dtKWB').DataTable({
             processing: true,
             serverSide: true,
@@ -860,7 +860,7 @@
             order:[[0,'asc']],
             columnDefs:[]
         });
-        
+
         $('#input-search-table').on('keyup change clear',function() {
             table.search($(this).val()).draw();
         })
@@ -884,7 +884,7 @@
                         var $optionWB = $("<option selected></option>")
                             .val(res.data.id)
                             .text(res.data.wb_detail.nama);
-                        
+
                         $('#formKWB').find('#id').val(res.data.id);
                         $('#formKWB').find('#old_wb_id').val(res.data.wb_id);
                         $('#formKWB').find('#wb_id').append($optionWB).trigger('change');

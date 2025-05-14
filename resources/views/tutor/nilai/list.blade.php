@@ -386,11 +386,11 @@
                         $('#formNilai').find('#div_modul_3').hide();
                         $('#formNilai').find('#div_modul_2').hide();
                     }
-    
+
                     if (!dataSetting?.need_nilai_sikap) {
                         $('#formNilai').find('#div_sikap').hide();
                     }
-    
+
                     persentase_tm = dataSetting?.persentase_tm || 0;
                     persentase_um = dataSetting?.persentase_um || 0;
                     k_persentase_tm = dataSetting?.k_persentase_tm || 0;
@@ -409,7 +409,7 @@
                     if (k_persentase_um == 0) {
                         $('#formNilai').find('input[id*="k_ujian_"]').attr('disabled', true);
                     }
-    
+
                     $('.p_rumus').text('(TM: ' + persentase_tm + '%, UM: ' + persentase_um + '%, KKM: ' + kkm + ')');
                     $('.k_rumus').text('(TM: ' + k_persentase_tm + '%, UM: ' + k_persentase_um + '%, KKM: ' + kkm + ')');
                     // $('.k_rumus').text('(TM: 100%, KKM: '+kkm+')');
@@ -630,7 +630,7 @@
         $('#dtNilai').on('click', '.editRowBtn', function() {
             var wb_id = $(this).data('wb_id');
             reset_susulan_remedial();
-            
+
             console.log(wb_id, kmpSelected);
             $('#modalNilai').modal('show');
             $('#formNilai').trigger("reset");
@@ -690,7 +690,7 @@
                                 });
                             });
                         }
-                        
+
                         $('#formNilai').find('#wb_id').val(wb_id);
                         $('#formNilai').find('#kmp_id').val(kmpSelected);
 

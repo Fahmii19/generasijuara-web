@@ -403,10 +403,13 @@ class SuController extends Controller
         return view('admin.keuangan.pembayaran.detail-item', $data);
     }
 
+    // debugx
     public function raportPrint(Request $request)
     {
         $raportService = new RaportService();
         $data = $raportService->getData(['kelas_wb_id' => $request->kelas_wb]);
+
+        // dd($data);
 
         if (!$data) {
             dd('data tidak ditemukan');

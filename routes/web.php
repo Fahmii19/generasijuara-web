@@ -278,6 +278,7 @@ Route::group(['prefix' => 'siab', 'middleware' => ['auth']], function () {
     Route::get('/nilai/list', [WebSiab::class, 'nilaiList'])->name('web.siab.nilai.list');
     Route::get('/riwayat-kelas/list', [WebSiab::class, 'riwayatKelasList'])->name('web.siab.riwayat-kelas.list');
     Route::get('/laporan-perkembangan/list', [WebSiab::class, 'laporanPerkembanganList'])->name('web.siab.laporan-perkembangan.list');
+    //debugx
     Route::get('/raport/print/{kelas_id?}', [WebSiab::class, 'raportPrint'])->name('web.siab.raport.print');
     Route::post('/raport-cover/print', [WebSiab::class, 'raportCoverPrint'])->name('web.siab.raport-cover.print');
     Route::get('/jadwal-pelajaran/list', [WebSiab::class, 'jadwalPelajaranList'])->name('web.siab.jadwal_pelajaran.list');
@@ -466,6 +467,7 @@ Route::group(['prefix' => 'ajax'], function () {
 
     Route::post('/nilai/get', [AjaxNilai::class, 'get'])->name('ajax.nilai.get');
     Route::post('/nilai/save', [AjaxNilai::class, 'save'])->name('ajax.nilai.save');
+    // perbaikx
     Route::post('/nilai/import-excel', [AjaxNilai::class, 'importExcel'])->name('ajax.nilai.import_excel');
     Route::post('/nilai/calculate-tagihan', [AjaxNilai::class, 'calculateTagihan'])->name('ajax.nilai.calculate_tagihan');
 
