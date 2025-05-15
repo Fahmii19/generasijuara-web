@@ -692,7 +692,7 @@
 
         <tr class="text-left" style="font-weight: bold;">
             <td colspan="4" class="text-left" width="3%" style="border: 1px solid black; padding-left: 2px;">
-                Program Pemberdayaan dan Keterampilan Berbasis Profil Pelajar Pancasila
+                Pemberdayaan dan Keterampilan
             </td>
         </tr>
 
@@ -843,64 +843,84 @@
 
     @include('includes.components.data_siswa_raport_merdeka')
 
-    <table class="font-size-12" style="width: 95%; border-collapse: collapse; margin-top: 16px; margin-right: 16px; margin-left: 10px;">
+    <table class="font-size-12" style="width: 95%; border-collapse: collapse; margin-top: 16px; margin-right: 16px; margin-left: 10px; margin-bottom: 10px;">
         <tr class="font-size-12" style="font-weight: bold;">
             <td width="5%" style="padding-left: 2px;">B. </td>
             <td width="95%%" colspan="5" style="padding-left: 2px;">Lembar Isi Capaian Dimensi Profil Pelajar Pancasila pada Program Pemberdayaan dan Keterampilan</td>
         </tr>
     </table>
 
-    <table class="font-size-12" style="width: 95%; border-collapse: collapse; margin-top: 16px; margin-right: 16px; margin-left: 10px;">
-        {{-- debugx --}}
-        {{-- @foreach ($dimensis as $index => $dimensi)
-            <tr class="font-size-12 text-center" style="font-weight: bold;">
-                <td width="5%" style="padding: 2px 2px 2px 2px; border: 1px solid black;">{{ $index+1 }}</td>
-                <td width="65%" class="text-left" style="padding: 2px 10px 2px 2px; border: 1px solid black;">{{ $dimensi->dimensi_name }}</td>
-                <td width="7.5%" class="text-center" colspan="4" style="border: 1px solid black; padding: 2px 2px 2px 2px;">Penilaian</td>
-            </tr>
+    <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+        <!-- Header -->
+        <tr>
+            <td style="border: 1px solid black; width: 3%; text-align: center;">1</td>
+            <td style="border: 1px solid black; width: 60%; font-weight: bold;">
+                Dimensi Beriman, Bertaqwa kepada Tuhan Yang Maha Esa, dan Berakhlak Mulia
+            </td>
+            <td colspan="4" style="border: 1px solid black; text-align: center; font-weight: bold;">
+                Penilaian
+            </td>
 
-            @foreach ($dimensi->elemens as $elemen)
-                <tr class="font-size-12 text-center" style="font-weight: bold;">
-                    <td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>
-                    <td width="65%" class="text-left" style="border: 1px solid black; padding-left: 2px; font-weight: normal; background: #d6d3d1;">{{ $elemen->elemen_name }}</td>
-                    <td width="7.5%" style="border: 1px solid black; padding-left: 2px;">MB</td>
-                    <td width="7.5%" style="border: 1px solid black; padding-left: 2px;">SB</td>
-                    <td width="7.5%" style="border: 1px solid black; padding-left: 2px;">BSH</td>
-                    <td width="7.5%" style="border: 1px solid black; padding-left: 2px;">SAB</td>
-                </tr>
+        </tr>
 
-                @foreach ($elemen->points as $point)
-                    <tr class="font-size-12 text-center" style="font-weight: bold;">
-                        <td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>
-                        <td width="65%" class="text-left" style="border: 1px solid black; padding-left: 2px; font-weight: normal;">
-                            {{ $point->point_name }}
-                        </td>
-                        <td width="7.5%" style="border: 1px solid black; padding-left: 2px; font-family: ZapfDingbats, sans-serif;">{{ $point->point_nilai == 'mb' ? '4' : '' }}</td>
-                        <td width="7.5%" style="border: 1px solid black; padding-left: 2px; font-family: ZapfDingbats, sans-serif;">{{ $point->point_nilai == 'sb' ? '4' : ''}}</td>
-                        <td width="7.5%" style="border: 1px solid black; padding-left: 2px; font-family: ZapfDingbats, sans-serif;">{{ $point->point_nilai == 'bsh' ? '4' : ''}}</td>
-                        <td width="7.5%" style="border: 1px solid black; padding-left: 2px; font-family: ZapfDingbats, sans-serif;">{{ $point->point_nilai == 'sab' ? '4' : ''}}</td>
-                    </tr>
-                @endforeach
-            @endforeach
+        <!-- Elemen -->
+        <tr>
+            <td colspan="2" style="border: 1px solid black; background-color: #f2f2f2; font-weight: bold;">
+                Elemen akhlak beragama
+            </td>
+            <td style="border: 1px solid black; text-align: center; font-weight: bold;">MB</td>
+            <td style="border: 1px solid black; text-align: center; font-weight: bold;">SB</td>
+            <td style="border: 1px solid black; text-align: center; font-weight: bold;">BSH</td>
+            <td style="border: 1px solid black; text-align: center; font-weight: bold;">SAB</td>
+        </tr>
 
-            <!-- Catatan Proses -->
+        <!-- Baris Isi 1 -->
+        <tr>
+            <td style="border-left: 1px solid black; border-bottom: 1px solid black;"></td>
+            <td style="border: 1px solid black;">
+                Mengenal sifat-sifat utama Tuhan Yang Maha Esa bahwa Dia adalah Sang Pencipta yang Maha Pengasih dan Maha Penyayang dan mengenali kebaikan dirinya sebagai cerminan sifat Tuhan.
+            </td>
+            <td style="border: 1px solid black;"></td>
+            <td style="border: 1px solid black;"></td>
+            <td style="border: 1px solid black;"></td>
+            <td style="border: 1px solid black;"></td>
+        </tr>
 
-            <tr class="font-size-12 text-center" style="font-weight: normal;">
-                <td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>
-                <td width="95%" colspan="5" class="text-center" style="border: 1px solid black; padding: 4px 0px 4px 2px;">Catatan Proses</td>
-            </tr>
-            <tr class="font-size-12 text-center" style="font-weight: normal;">
-                <td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>
-                <td width="95%" height="60px" colspan="5" class="text-left" style="border: 1px solid black; padding-left: 2px; min-height: 20px; vertical-align: top;">
-                    @foreach ($catatan_proses as $catatan)
-                        @if ($catatan->dimensi_id == $dimensi->id)
-                            {{ $catatan->catatan_proses }}
-                        @endif
-                    @endforeach
-                </td>
-            </tr>
-        @endforeach --}}
+        <!-- Baris Isi 2 -->
+        <tr>
+            <td style="border-left: 1px solid black; border-bottom: 1px solid black;"></td>
+            <td style="border: 1px solid black;">
+                Mengenal unsur-unsur utama agama/kepercayaan (ajaran, ritual keagamaan, kitab suci, dan orang suci/utusan Tuhan YME).
+            </td>
+            <td style="border: 1px solid black;"></td>
+            <td style="border: 1px solid black;"></td>
+            <td style="border: 1px solid black;"></td>
+            <td style="border: 1px solid black;"></td>
+        </tr>
+
+        <!-- Baris Isi 3 -->
+        <tr>
+            <td style="border-left: 1px solid black; border-bottom: 1px solid black;"></td>
+            <td style="border: 1px solid black;">
+                Terbiasa melaksanakan ibadah sesuai ajaran agama/kepercayaannya.
+            </td>
+            <td style="border: 1px solid black;"></td>
+            <td style="border: 1px solid black;"></td>
+            <td style="border: 1px solid black;"></td>
+            <td style="border: 1px solid black;"></td>
+        </tr>
+
+        <!-- Catatan Proses -->
+        <tr>
+            <td colspan="6" style="border: 1px solid black; text-align: center; padding: 6px;">
+                <strong>Catatan Proses</strong>
+            </td>
+        </tr>
     </table>
+
+
+
+
 
 
     <!-- TTD PJ -->

@@ -9,9 +9,9 @@
                     <div class="col-auto mb-3">
                         <h1 class="page-header-title">
                             <div class="page-header-icon"><a href="{{route('web.su.raport.list')}}"><i data-feather="arrow-left"></i></a></div>
-                            Raport: 
-                            <label class="btn btn-sm btn-light text-primary" id="kelas_name"></label> | 
-                            <label class="btn btn-sm btn-light text-primary" id="wb_name"></label> 
+                            Raport:
+                            <label class="btn btn-sm btn-light text-primary" id="kelas_name"></label> |
+                            <label class="btn btn-sm btn-light text-primary" id="wb_name"></label>
                         </h1>
                     </div>
                     <div class="col-12 col-xl-auto mb-3">
@@ -28,7 +28,7 @@
     <div class="container-fluid px-4">
         <div class="card">
             <div class="card-body">
-                <h2>Ekstrakulikuler</h2> 
+                <h2>Ekstrakulikuler</h2>
                 <a class="btn btn-sm btn-light text-primary" href="#" id="addEkskul">
                     <i class="me-1" data-feather="plus"></i>
                     Add
@@ -43,7 +43,7 @@
         <br>
         <div class="card">
             <div class="card-body">
-                <h2>Nilai Kegiatan</h2> 
+                <h2>Nilai Kegiatan</h2>
                 <a class="btn btn-sm btn-light text-primary" href="#" id="addKegiatan">
                     <i class="me-1" data-feather="plus"></i>
                     Add
@@ -59,7 +59,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <h2 class="col-md-6">Penilaian Capaian Dimensi</h2> 
+                    <h2 class="col-md-6">Penilaian Capaian Dimensi</h2>
                     <div class="col-md-6 d-flex justify-content-end">
                         <button class="btn btn-sm btn-light text-primary" href="#" id="show-penilaian">
                             Show
@@ -75,7 +75,7 @@
         <br>
         <div class="card">
             <div class="card-body">
-                <h2>Data Presensi</h2> 
+                <h2>Data Presensi</h2>
                 <a class="btn btn-sm btn-light text-primary" href="#" id="editPresensi">
                     <i class="me-1" data-feather="edit"></i>
                     Edit
@@ -102,7 +102,7 @@
         <br>
         <div class="card">
             <div class="card-body">
-                <h2>Catatan</h2> 
+                <h2>Catatan</h2>
                 <a class="btn btn-sm btn-light text-primary" href="#" id="editCatatan">
                     <i class="me-1" data-feather="edit"></i>
                     Edit
@@ -376,7 +376,7 @@
                         });
 
                         // check selected radio button
-                        $.each(nilai_poin_penilaian, function (index, nilai_point) { 
+                        $.each(nilai_poin_penilaian, function (index, nilai_point) {
                             let point_id = nilai_point.point_id;
 
                             let point_nilai = nilai_point.point_nilai;
@@ -390,7 +390,7 @@
                             }
                         });
 
-                        $.each(catatan_proses_wb, function (index, cp) { 
+                        $.each(catatan_proses_wb, function (index, cp) {
                             let dimensi_id = cp.dimensi_id;
 
                             let catatan_proses = cp.catatan_proses;
@@ -415,7 +415,7 @@
                         $('#tbCatatan').find('#catatan_pj_rombel').text(res.data.kelas_wb.catatan_pj_rombel);
                         $('#tbCatatan').find('#tanggapan_wali').text(res.data.kelas_wb.tanggapan_wali);
                         $('#tbCatatan').find('#catatan').text(res.data.kelas_wb.catatan);
-                        
+
                         // catatan rapor merdeka
                         $('#tbCatatan').find('#catatan_perkembangan_profil_pelajar_detail').text(res.data.kelas_wb.catatan_perkembangan_profil_pelajar);
                         $('#tbCatatan').find('#catatan_perkembangan_pemberdayaan_detail').text(res.data.kelas_wb.catatan_perkembangan_pemberdayaan);
@@ -509,7 +509,7 @@
                 success: function(res) {
                     if (!res.error) {
                         showSuccess("Success");
-                        
+
                     }else{
                         showError(res.message);
                     }
@@ -575,14 +575,14 @@
             order:[[0,'asc']],
             columnDefs:[]
         });
-        
+
         $('#input-search-table').on('keyup change clear',function() {
             dtEkskul.search($(this).val()).draw()
         })
 
         $('#dtEkskul').on('click', '.editRowBtn', function() {
             var id = $(this).data('id');
-            
+
             $('#modalEkskul').modal('show');
             $('#formEkskul').trigger("reset");
             $('#formEkskul').find('#id').val(null);
@@ -594,7 +594,7 @@
                     "_token": "{{ csrf_token() }}"
                 },
                 success: function(res) {
-                    
+
                     if (!res.error) {
                         $('#formEkskul').find('#id').val(res.data.kelas_wb.id);
                         $('#formEkskul').find('#kegiatan').val(res.data.kelas_wb.kegiatan);
@@ -672,7 +672,7 @@
                 'deskripsi' : $('#formEkskul').find('#deskripsi').val(),
                 'kwb_id' : kwbId,
             }
-            
+
             $.ajax({
                 type: "POST",
                 url: "{{route('ajax.ekskul.save')}}",
@@ -744,14 +744,14 @@
             order:[[0,'asc']],
             columnDefs:[]
         });
-        
+
         $('#input-search-table').on('keyup change clear',function() {
             dtKegiatan.search($(this).val()).draw()
         })
 
         $('#dtKegiatan').on('click', '.editRowBtn', function() {
             var id = $(this).data('id');
-            
+
             $('#modalKegiatan').modal('show');
             $('#formKegiatan').trigger("reset");
             $('#formKegiatan').find('#id').val(null);
@@ -763,7 +763,7 @@
                     "_token": "{{ csrf_token() }}"
                 },
                 success: function(res) {
-                    
+
                     if (!res.error) {
                         $('#formKegiatan').find('#id').val(res.data.kelas_wb.id);
                         $('#formKegiatan').find('#jenis_kegiatan').val(res.data.kelas_wb.jenis_kegiatan);
@@ -839,7 +839,7 @@
                 'jenis_kegiatan' : $('#formKegiatan').find('#jenis_kegiatan').val(),
                 'prestasi' : $('#formKegiatan').find('#prestasi').val(),
             }
-            
+
             $.ajax({
                 type: "POST",
                 url: "{{route('ajax.nilai_kegiatan.save')}}",
@@ -881,7 +881,7 @@
                 },
                 success: function(res) {
                     if (!res.error) {
-                        
+
                         $('#formPresensi').find('#izin').val(res.data.kelas_wb.izin);
                         $('#formPresensi').find('#sakit').val(res.data.kelas_wb.sakit);
                         $('#formPresensi').find('#alpa').val(res.data.kelas_wb.alpa);
@@ -917,7 +917,7 @@
                 },
                 success: function(res) {
                     if (!res.error) {
-                        
+
 
                         if (res.data.kelas_wb.kelas_detail.jenis_rapor == 'lama') {
                             $('.catatan-rapor-merdeka').hide();
@@ -968,7 +968,7 @@
                 'sakit' : $('#formPresensi').find('#sakit').val(),
                 'alpa' : $('#formPresensi').find('#alpa').val(),
             }
-            
+
             $.ajax({
                 type: "POST",
                 url: "{{route('ajax.kelas_wb.update_presensi')}}",
@@ -1017,7 +1017,7 @@
                 'catatan_perkembangan_keterampilan' : $('#formCatatan').find('#catatan_perkembangan_keterampilan').val(),
 
             }
-            
+
             $.ajax({
                 type: "POST",
                 url: "{{route('ajax.kelas_wb.update_catatan')}}",
