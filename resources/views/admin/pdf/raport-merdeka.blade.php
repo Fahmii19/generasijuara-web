@@ -652,7 +652,6 @@
             </td>
         </tr>
 
-        {{-- debugx --}}
         @foreach ($kmp as $index => $kmpItem)
 
             <tr class="text-left" style="">

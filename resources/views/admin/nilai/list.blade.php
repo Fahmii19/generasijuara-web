@@ -84,8 +84,10 @@
                         <i class="fas fa-exclamation-triangle"></i> Setting nilai belum bisa diatur, silahkan hubungi admin
                     </div>
 
-                    <input class="form-control" id="wb_id" type="hidden" placeholder="">
-                    <input class="form-control" id="kmp_id" type="hidden" placeholder="">
+                    {{-- ongoing --}}
+                    <input class="form-control" id="wb_id" name="wb_id" placeholder="wb_id" type="hidden">
+                    <input class="form-control" id="kmp_id" name="kmp_id" placeholder="kmp_id" type="hidden">
+
                     @for ($i = 1; $i <= 3; $i++) <div id="div_modul_{{$i}}">
                         <div class="mb-3">
                             <label><strong>Modul {{$i}}</strong></label>
@@ -337,6 +339,7 @@
 
         $('#mata_pelajaran_id').on('change', function() {
             kmpSelected = this.value
+            // console.log('KMP Selected diubah:', kmpSelected)
             getKMPSetting()
             table.ajax.reload();
         });
@@ -391,93 +394,57 @@
             })
         }
 
-        function recalculate() {
-            var p_tugas = null;
-            var p_ujian = null;
-            var p_nilai = null;
-            var k_tugas = null;
-            var k_nilai = null;
-            // for (var i = 1; i <= 3; i++) {
+            function recalculate() {
+                for (var i = 1; i <= 3; i++) {
+                // Pengetahuan
+                var p_tugas = parseFloat($("#p_tugas_" + i).val()) || 0;
+                var p_ujian = parseFloat($("#p_ujian_" + i).val()) || 0;
+                var p_nilai = (p_tugas * persentase_tm / 100) + (p_ujian * persentase_um / 100);
 
-            //     p_tugas.push(parseFloat($("#p_tugas_"+i).val(), 0) || 0);
-            //     p_ujian.push(parseFloat($("#p_ujian_"+i).val(), 0) || 0);
-            //     p_nilai.push(parseFloat($("#p_nilai_"+i).val(), 0) || 0);
-            // }
-            // console.log(p_tugas);
-            for (var i = 1; i <= 3; i++) {
-                // pengetahuan
-                if ($('#formNilai').find("#p_susulan_" + i).is(":checked")) {
-                    p_tugas = null;
-                    p_ujian = null;
-                    p_nilai = null;
-                    $("#p_tugas_" + i).prop("readonly", true);
-                    $("#p_ujian_" + i).prop("readonly", true);
-                } else if ($('#formNilai').find("#p_remedial_" + i).is(":checked")) {
-                    $("#p_tugas_" + i).prop("readonly", true);
-                    $("#p_ujian_" + i).prop("readonly", true);
-                    p_tugas = parseFloat($("#p_tugas_" + i).val(), 0) || 0;
-                    p_ujian = parseFloat($("#p_ujian_" + i).val(), 0) || 0;
-                    p_nilai = (p_tugas * persentase_tm / 100) + (p_ujian * persentase_um / 100);
-                } else {
-                    $("#p_tugas_" + i).prop("readonly", false);
-                    $("#p_ujian_" + i).prop("readonly", false);
-                    p_tugas = parseFloat($("#p_tugas_" + i).val(), 0) || 0;
-                    p_ujian = parseFloat($("#p_ujian_" + i).val(), 0) || 0;
-                    p_nilai = (p_tugas * persentase_tm / 100) + (p_ujian * persentase_um / 100);
-                }
-                $("#p_tugas_" + i).val(p_tugas)
-                $("#p_nilai_" + i).val(p_nilai)
-                $("#p_nilai_" + i).val(p_nilai)
+                $("#p_nilai_" + i).val(p_nilai.toFixed(2));
                 $("#p_predikat_" + i).val(checkPredikat(p_nilai));
-                if (p_nilai < kkm || p_nilai == null) {
+
+                // Tampilkan/sembunyikan remedial jika nilai di bawah KKM
+                if (p_nilai < kkm) {
                     $("#div_p_remedial_" + i).show();
                     $("#alert_p_remedial_" + i).show();
                 } else {
-                    // $("#div_p_remedial_" + i).hide();
                     $("#alert_p_remedial_" + i).hide();
-                    $("#p_remedial_1").prop('checked', false);
-
-                    $('#formNilai').find('#p_susulan_tugas_' + i).attr("disabled", false);
-                    $('#formNilai').find('#p_susulan_ujian_' + i).attr("disabled", false);
-                    $('#formNilai').find('#p_remedial_tugas_' + i).attr("disabled", false);
-                    $('#formNilai').find('#p_remedial_ujian_' + i).attr("disabled", false);
                 }
 
-                // keterampilan
-                if ($('#formNilai').find("#k_susulan_" + i).is(":checked")) {
-                    k_tugas = null;
-                    k_nilai = null;
-                    $("#k_tugas_" + i).prop("readonly", true);
-                } else if ($('#formNilai').find("#k_remedial_" + i).is(":checked")) {
-                    $("#p_tugas_" + i).prop("readonly", true);
-                    $("#p_ujian_" + i).prop("readonly", true);
-                    k_tugas = parseFloat($('#k_tugas_' + i).val(), 0) || 0;
-                    k_nilai = parseFloat($('#k_tugas_' + i).val(), 0) || 0;
-                } else {
-                    $("#k_tugas_" + i).prop("readonly", false);
-                    k_tugas = parseFloat($('#k_tugas_' + i).val(), 0) || 0;
-                    k_nilai = parseFloat($('#k_tugas_' + i).val(), 0) || 0;
-                }
-                $('#k_tugas_' + i).val(k_tugas)
-                $('#k_nilai_' + i).val(k_nilai)
-                $('#k_predikat_' + i).val(checkPredikat(k_nilai));
+                // Keterampilan
+                var k_tugas = parseFloat($("#k_tugas_" + i).val()) || 0;
+                var k_nilai = k_tugas; // Asumsi nilai keterampilan hanya dari tugas
+
+                $("#k_nilai_" + i).val(k_nilai.toFixed(2));
+                $("#k_predikat_" + i).val(checkPredikat(k_nilai));
+
                 if (k_nilai < kkm) {
-                    $('#div_k_remedial_' + i).show();
-                    $('#alert_k_remedial_' + i).show();
+                    $("#div_k_remedial_" + i).show();
+                    $("#alert_k_remedial_" + i).show();
                 } else {
-                    // $('#div_k_remedial_' + i).hide();
-                    $('#alert_k_remedial_' + i).hide();
-                    $('#k_remedial_' + i).prop('checked', false);
-
-                    $('#formNilai').find('#k_susulan_tugas_' + i).attr("disabled", false);
-                    $('#formNilai').find('#k_susulan_ujian_' + i).attr("disabled", false);
-                    $('#formNilai').find('#k_remedial_tugas_' + i).attr("disabled", false);
-                    $('#formNilai').find('#k_remedial_ujian_' + i).attr("disabled", false);
+                    $("#alert_k_remedial_" + i).hide();
                 }
             }
         }
 
-        $('.nilai-input').change(function() {
+
+        function checkPredikat(nilai) {
+            if (nilai >= 85) return 'A';
+            if (nilai >= 70) return 'B';
+            if (nilai >= 55) return 'C';
+            if (nilai >= 40) return 'D';
+            return 'E';
+        }
+
+        // Gunakan event input untuk respon lebih cepat
+        $('.nilai-input').on('input', function() {
+            // Validasi input hanya angka 0-100
+            var value = $(this).val();
+            if (value && (isNaN(value) || value < 0 || value > 100)) {
+                $(this).val('');
+                return;
+            }
             recalculate();
         });
 
@@ -583,7 +550,7 @@
                     "orderable": false,
                     "searchable": false,
                     render: function(data, type, row) {
-                        return '<a href="#" class="editRowBtn btn btn-sm btn-transparent-dark" data-wb_id="' + row.wb_id + '"><i class="fas fa-edit"></i></a>'
+                        return '<a href="#" class="editRowBtn btn btn-sm btn-transparent-dark" data-wb_id="' + row.wb_id + '">on<i class="fas fa-edit"></i></a>'
                         +'<a href="{{route("web.su.perkembangan.list")}}/'+ row.wb_id +'/'+ kelasSelected +'/'+ kmpSelected +'" target="_blank" class="btn btn-sm btn-transparent-dark lihat-perkembangan"><i class="fas fa-eye"></i></a>';
                     }
                 }
@@ -595,14 +562,25 @@
         });
 
         $('#dtNilai').on('click', '.editRowBtn', function() {
+
+
             var wb_id = $(this).data('wb_id');
+
+            // Isi nilai ke form
+            $('#wb_id').val(wb_id);
+            $('#kmp_id').val(kmpSelected);
+
+            // console.log('Setelah diisi - WB ID:', $('#wb_id').val());
+            // console.log('Setelah diisi - KMP ID:', $('#kmp_id').val());
+
+
             reset_susulan_remedial();
 
-            // console.log(wb_id, kmpSelected);
-            $('#modalNilai').modal('show');
+           // Reset form dan tampilkan loading
             $('#formNilai').trigger("reset");
-            $('#formNilai').find('#wb_id').val(null);
-            $('#formNilai').find('#kmp_id').val(null);
+            $('#formNilai').find('.is-invalid').removeClass('is-invalid');
+            $('#modalNilai').modal('show');
+    //
             $.ajax({
                 type: "POST",
                 url: "{{route('ajax.nilai.get')}}",
@@ -612,7 +590,7 @@
                     kmp_id: kmpSelected,
                 },
                 success: function(res) {
-                    console.log(res)
+                    // console.log(res)
                     if (res.data.jenis_rapor == 'lama') {
                         $('#capaian_kompetensi_wrapper').hide();
                     }
@@ -963,15 +941,24 @@
             susulan_remedial.remedial.k_ujian = [];
         }
 
-        //Submit
+        //Untuk menghitung nilai ongogin
         $('#submitNilaiBtn').on('click', function(e) {
             e.preventDefault();
-            var form = $("#formNilai");
-            // if (!checkForm(form)) {
-            //     return false;
-            // }
 
-            // $('#spinner-toast').modal('show');
+            // Ambil nilai langsung dari ID, tidak perlu melalui find()
+            var wb_id = $('#wb_id').val();
+            var kmp_id = $('#kmp_id').val();
+            var kelas_id = kelasSelected;
+
+            if (!wb_id || !kmp_id || !kelas_id) {
+                swalError({
+                    text: 'WB ID, KMP ID, dan Kelas harus diisi!'
+                });
+                return false;
+            }
+
+
+            var form = $("#formNilai");
 
             var data = {
                 "_token": "{{ csrf_token() }}",
@@ -1043,13 +1030,15 @@
                 // 'k_remedial_3': $('#formNilai').find("#k_remedial_3").is(":checked"),
             }
 
-            console.log('submit', data);
+            // console.log('data disubmit dari hitung nilai', data);
+
             $.ajax({
                 type: "POST",
+                // ongoing
                 url: "{{route('ajax.nilai.save')}}",
                 data: data,
                 success: function(res) {
-                    console.log('res', res);
+                    // console.log('res', res);
                     if (!res.error) {
                         reset_susulan_remedial();
                         $('#modalNilai').modal('hide');

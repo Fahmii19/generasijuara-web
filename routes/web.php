@@ -208,8 +208,9 @@ Route::group(['prefix' => 'su', 'middleware' => ['auth']], function () {
     Route::get('/ppdb-ulang/paud/add', [WebSu::class, 'ppdbUlangPaudAdd'])->name('web.su.ppdb_ulang.paud.add');
     Route::get('/ppdb-ulang/paud/edit/{id?}', [WebSu::class, 'ppdbUlangPaudEdit'])->name('web.su.ppdb_ulang.paud.edit');
 
-    // nilai
+    // nilai ongoing
     Route::get('/nilai/list', [WebSu::class, 'nilaiList'])->name('web.su.nilai.list');
+
     Route::get('/capaian-dimensi/list', [WebSu::class, 'capaianDimensiList'])->name('web.su.capaian_dimensi.list');
     Route::get('/nilai/export-excel', [WebSu::class, 'nilaiExportExcel'])->name('web.su.nilai.export_excel');
 
@@ -466,6 +467,8 @@ Route::group(['prefix' => 'ajax'], function () {
     Route::post('/kmp-setting/delete', [AjaxKMPSetting::class, 'delete'])->name('ajax.kmp_setting.delete');
 
     Route::post('/nilai/get', [AjaxNilai::class, 'get'])->name('ajax.nilai.get');
+
+    // ongoging
     Route::post('/nilai/save', [AjaxNilai::class, 'save'])->name('ajax.nilai.save');
     // perbaikx
     Route::post('/nilai/import-excel', [AjaxNilai::class, 'importExcel'])->name('ajax.nilai.import_excel');
