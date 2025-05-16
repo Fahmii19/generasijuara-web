@@ -315,48 +315,67 @@
                         let poin_penilaian = res.data.poin_penilaian;
                         let nilai_poin_penilaian = res.data.nilai_poin_penilaian;
                         let catatan_proses_wb = res.data.catatan_proses_wb;
-                        // Iterasi melalui data dimensi
-                        $.each(poin_penilaian, function(index, dimensi) {
-                            // Tambahkan baris untuk dimensi
+
+                                            $('head').append(
+                        '<style>' +
+                        '.penilaian-radio {' +
+                        '   cursor: pointer;' +
+                        '   transform: scale(1.3);' +
+                        '   margin: 5px;' +
+                        '}' +
+                        '</style>'
+                    );
+
+                       // Iterate through dimension data
+                        $.each(poin_penilaian, function(dimensiIndex, dimensi) {
+                            // Add row for dimension
                             $('#dynamic-table').append(
-                                '<tr class="font-size-12 text-center" style="font-weight: bold;">' +
-                                    '<td width="5%" style="padding: 2px 2px 2px 2px; border: 1px solid black;">' + (index + 1) + '</td>' +
-                                    '<td width="65%" class="text-left" style="padding: 2px 10px 2px 2px; border: 1px solid black;">' + dimensi.dimensi_name + '</td>' +
-                                    '<td width="7.5%" class="text-center" colspan="4" style="border: 1px solid black; padding: 2px 2px 2px 2px;">Penilaian</td>' +
+                                '<tr>' +
+                                    '<td rowspan="2" width="5%" class="text-center" style="padding: 2px; border: 1px solid black;">' + (dimensiIndex + 1) + '</td>' +
+                                    '<td rowspan="2" width="65%" class="text-center" style="padding: 2px 10px 2px 2px; border: 1px solid black; font-weight:bold;">' + dimensi.dimensi_name + '</td>' +
+                                    '<td width="30%" colspan="4" class="text-center" style="border: 1px solid black; padding: 2px;">Penilaian</td>' +
+                                '</tr>' +
+                                '<tr>' +
+                                    '<td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">MBb</td>' +
+                                    '<td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">SB</td>' +
+                                    '<td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">BSH</td>' +
+                                    '<td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">SAB</td>' +
                                 '</tr>'
                             );
 
-                            // Iterasi melalui data elemen di dalam dimensi
-                            $.each(dimensi.elemens, function(index, elemen) {
-                                // Tambahkan baris untuk elemen
-                                $('#dynamic-table').append(
-                                    '<tr class="font-size-12 text-center" style="font-weight: bold;">' +
-                                        '<td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>' +
-                                        '<td width="65%" class="text-left" style="border: 1px solid black; padding-left: 2px; font-weight: normal; background: #d6d3d1;">' + elemen.elemen_name + '</td>' +
-                                        '<td width="7.5%" style="border: 1px solid black; padding-left: 2px;">MB</td>' +
-                                        '<td width="7.5%" style="border: 1px solid black; padding-left: 2px;">SB</td>' +
-                                        '<td width="7.5%" style="border: 1px solid black; padding-left: 2px;">BSH</td>' +
-                                        '<td width="7.5%" style="border: 1px solid black; padding-left: 2px;">SAB</td>' +
-                                    '</tr>'
-                                );
+                            $.each(dimensi.elemens, function(elemenIndex, elemen) {
+                                    var groupName = 'penilaian_' + elemen.id;
 
-                                // Iterasi melalui data poin di dalam elemen (jika diperlukan)
-                                $.each(elemen.points, function(index, point) {
-                                    // Tambahkan baris untuk poin
+                                    // Cari nilai yang sudah tersimpan
+                                    var nilaiTersimpan = nilai_poin_penilaian.find(function(item) {
+                                        return item.point_id == elemen.id;
+                                    });
+
                                     $('#dynamic-table').append(
-                                        '<tr class="font-size-12 text-center" style="font-weight: bold;">' +
-                                            '<td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>' +
-                                            '<td width="65%" class="text-left" style="border: 1px solid black; padding-left: 2px; font-weight: normal;">' + point.point_name + '</td>' +
-                                            '<td width="7.5%" style="border: 1px solid black; padding-left: 2px;"><input type="radio" name="poin_penilaian[' + point.id + ']" data-point-id=' + point.id + ' value="mb" checked></td>' +
-                                            '<td width="7.5%" style="border: 1px solid black; padding-left: 2px;"><input type="radio" name="poin_penilaian[' + point.id + ']" data-point-id=' + point.id + ' value="sb"></td>' +
-                                            '<td width="7.5%" style="border: 1px solid black; padding-left: 2px;"><input type="radio" name="poin_penilaian[' + point.id + ']" data-point-id=' + point.id + ' value="bsh"></td>' +
-                                            '<td width="7.5%" style="border: 1px solid black; padding-left: 2px;"><input type="radio" name="poin_penilaian[' + point.id + ']" data-point-id=' + point.id + ' value="sab"></td>' +
-                                        '</tr>'
+                                        `<tr class="font-size-12 text-center" style="font-weight: bold;">
+                                            <td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>
+                                            <td width="65%" class="text-left" style="border: 1px solid black; padding-left: 2px; font-weight: normal; background: #d6d3d1;">${elemen.elemen_name}</td>
+                                            <td width="7.5%" style="border: 1px solid black; text-align: center;">
+                                                <input type="radio" name="${groupName}" value="MB" class="penilaian-radio"
+                                                    data-point-id="${elemen.id}" ${nilaiTersimpan?.point_nilai == 'MB' ? 'checked' : ''}>
+                                            </td>
+                                            <td width="7.5%" style="border: 1px solid black; text-align: center;">
+                                                <input type="radio" name="${groupName}" value="SB" class="penilaian-radio"
+                                                    data-point-id="${elemen.id}" ${nilaiTersimpan?.point_nilai == 'SB' ? 'checked' : ''}>
+                                            </td>
+                                            <td width="7.5%" style="border: 1px solid black; text-align: center;">
+                                                <input type="radio" name="${groupName}" value="BSH" class="penilaian-radio"
+                                                    data-point-id="${elemen.id}" ${nilaiTersimpan?.point_nilai == 'BSH' ? 'checked' : ''}>
+                                            </td>
+                                            <td width="7.5%" style="border: 1px solid black; text-align: center;">
+                                                <input type="radio" name="${groupName}" value="SAB" class="penilaian-radio"
+                                                    data-point-id="${elemen.id}" ${nilaiTersimpan?.point_nilai == 'SAB' ? 'checked' : ''}>
+                                            </td>
+                                        </tr>`
                                     );
                                 });
-                            });
 
-                            // Tambahkan bagian catatan proses setelah loop elemen selesai
+                            // Add process notes section
                             $('#dynamic-table').append(
                                 '<tr class="font-size-12 text-center" style="font-weight: normal;">' +
                                     '<td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>' +
@@ -490,17 +509,13 @@
         });
 
         // on change poin capaian
-        $(document).on('change', 'input[type=radio]', function() {
-            let point_nilai = $(this).val();
-            let point_id = $(this).data('point-id');
-            let kelas_wb_id = kwbId;
-
+        $(document).on('change', '.penilaian-radio', function() {
             let data = {
                 "_token": "{{ csrf_token() }}",
-                point_nilai,
-                point_id,
-                kelas_wb_id
-            }
+                point_id: $(this).data('point-id'),
+                kelas_wb_id: kwbId,
+                point_nilai: $(this).val()
+            };
 
             $.ajax({
                 type: "POST",
@@ -508,26 +523,15 @@
                 data: data,
                 success: function(res) {
                     if (!res.error) {
-                        showSuccess("Success");
-
-                    }else{
+                        showSuccess("Nilai tersimpan!");
+                    } else {
                         showError(res.message);
+                        $(this).prop('checked', false); // Reset jika gagal
                     }
-                },
-                error: function (response, xhr, error, thrown) {
-                    var res = response.responseJSON;
-
-                    switch (response.status) {
-                        case (400 || 422):
-                            break
-                        default:
-                            break
-                    }
-
-                    showError(res.message);
                 }
             });
         });
+        //
         dtEkskul = $('#dtEkskul').DataTable({
             processing: true,
             serverSide: true,
@@ -1046,5 +1050,14 @@
             });
         });
     });
+
+
+    // function to show only one checkbox checked
+    function hanyaSatu(groupName, checkbox) {
+    const checkboxes = document.getElementsByName(groupName);
+    checkboxes.forEach((cb) => {
+        if (cb !== checkbox) cb.checked = false;
+    });
+}
 </script>
 @endsection

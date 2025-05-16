@@ -21025,3 +21025,8 @@ pre[class*=language-] {
 .token.variable {
   color: #ff6666;
 }
+
+.penilaian-checkbox {
+  cursor: pointer;
+  transform: scale(1.2);
+}

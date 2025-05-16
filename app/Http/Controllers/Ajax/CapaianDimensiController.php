@@ -14,17 +14,17 @@ use Illuminate\Support\Facades\DB;
 class CapaianDimensiController extends Controller
 {
     public function saveOrUpdate(Request $request)
-    {   
+    {
         $params = $request->all();
-        
+
         DB::beginTransaction();
         try {
-            if(isset($params['id'])) {
+            if (isset($params['id'])) {
                 $point = PointModel::find($params['id']);
-                if(!$point) {
+                if (!$point) {
                     throw new \Exception("Point not found with ID: " . $params['id']);
                 }
-    
+
                 $point->update([
                     'elemen_id' => $params['elemen_id'],
                     'point_name' => $params['point_name'],
@@ -40,46 +40,47 @@ class CapaianDimensiController extends Controller
 
             DB::commit();
         } catch (\Exception $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400);
         } catch (\Throwable $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400);
         }
     }
 
+
     public function saveOrUpdateNilaiWB(Request $request)
     {
-        $params = $request->all();
-        $point_id = $params['point_id'];
-        $kelas_wb_id = $params['kelas_wb_id'];
-        $point_nilai = $params['point_nilai'];
-        
+        $validated = $request->validate([
+            'point_id' => 'required|integer',
+            'kelas_wb_id' => 'required|integer',
+            'point_nilai' => 'required|in:MB,SB,BSH,SAB' // Pastikan hanya nilai yang valid
+        ]);
+
         DB::beginTransaction();
 
-        $nilaiPoint = NilaiPointModel::where('kelas_wb_id', $kelas_wb_id)
-                                ->where('point_id', $point_id)
-                                ->first();
         try {
-            if ($nilaiPoint) {
-                $nilaiPoint->point_nilai = $point_nilai;
-                $nilaiPoint->save();
-            } else {
-                $nilaiPoint = NilaiPointModel::create([
-                    'kelas_wb_id' => $kelas_wb_id,
-                    'point_id' => $point_id,
-                    'point_nilai' => $point_nilai
-                ]);
-            }
-            // dd($nilaiPoint);
-            $data = NilaiPointModel::where('kelas_wb_id', $kelas_wb_id)
-                        ->where('point_id', $point_id)
-                        ->first();
+            $nilaiPoint = NilaiPointModel::updateOrCreate(
+                [
+                    'point_id' => $request->point_id,
+                    'kelas_wb_id' => $request->kelas_wb_id
+                ],
+                [
+                    'point_nilai' => $request->point_nilai
+                ]
+            );
 
             DB::commit();
-            return response()->json(['error' => false, 'message' => null, 'data' => $data]);
+
+            return response()->json([
+                'error' => false,
+                'message' => 'Nilai berhasil disimpan',
+                'data' => $nilaiPoint
+            ]);
         } catch (\Exception $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400); 
-        } catch (\Throwable $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400); 
+            DB::rollBack();
+            return response()->json([
+                'error' => true,
+                'message' => 'Gagal menyimpan nilai: ' . $e->getMessage()
+            ], 500);
         }
     }
 
@@ -89,12 +90,12 @@ class CapaianDimensiController extends Controller
         $dimensi_id = $params['dimensi_id'];
         $kelas_wb_id = $params['kelas_wb_id'];
         $catatan_proses = $params['catatan_proses'];
-        
+
         DB::beginTransaction();
 
         $catatanProses = CatatanProsesWBModel::where('kelas_wb_id', $kelas_wb_id)
-                                ->where('dimensi_id', $dimensi_id)
-                                ->first();
+            ->where('dimensi_id', $dimensi_id)
+            ->first();
         try {
             if ($catatanProses) {
                 $catatanProses->catatan_proses = $catatan_proses;
@@ -108,15 +109,15 @@ class CapaianDimensiController extends Controller
             }
             // dd($nilaiPoint);
             $data = CatatanProsesWBModel::where('kelas_wb_id', $kelas_wb_id)
-                        ->where('dimensi_id', $dimensi_id)
-                        ->first();
-            
+                ->where('dimensi_id', $dimensi_id)
+                ->first();
+
             DB::commit();
             return response()->json(['error' => false, 'message' => null, 'data' => $data]);
         } catch (\Exception $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400);
         } catch (\Throwable $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400);
         }
     }
 
@@ -129,11 +130,11 @@ class CapaianDimensiController extends Controller
                 'dimensi' => $dimensi,
             ];
 
-            return response()->json(['error' => false, 'message' => null, 'data' => $data], 200); 
+            return response()->json(['error' => false, 'message' => null, 'data' => $data], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400);
         } catch (\Throwable $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400);
         }
     }
 
@@ -145,11 +146,11 @@ class CapaianDimensiController extends Controller
                 'elemen' => $elemen,
             ];
 
-            return response()->json(['error' => false, 'message' => null, 'data' => $data], 200); 
+            return response()->json(['error' => false, 'message' => null, 'data' => $data], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400);
         } catch (\Throwable $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400);
         }
     }
 
@@ -168,11 +169,11 @@ class CapaianDimensiController extends Controller
                 'fase' => $fase,
             ];
 
-            return response()->json(['error' => false, 'message' => null, 'data' => $data], 200); 
+            return response()->json(['error' => false, 'message' => null, 'data' => $data], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400);
         } catch (\Throwable $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400);
         }
     }
 
@@ -182,11 +183,11 @@ class CapaianDimensiController extends Controller
             $point = PointModel::find($request->get('id'));
             $point->delete();
 
-            return response()->json(['error' => false, 'message' => null, 'data' => null], 200); 
+            return response()->json(['error' => false, 'message' => null, 'data' => null], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400);
         } catch (\Throwable $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage(), 'line' => $e->getLine()], 400);
         }
     }
 }
