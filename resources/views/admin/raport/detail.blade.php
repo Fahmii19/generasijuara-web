@@ -318,6 +318,18 @@
                         let poin_penilaian = res.data.poin_penilaian;
                         let nilai_points = res.data.kelas_wb.nilai_points;
                         let catatan_proses_wb = res.data.catatan_proses_wb;
+                        let nilai_poin_penilaian = res.data.nilai_poin_penilaian;
+
+                        let nilaiMap = {};
+                        if (nilai_poin_penilaian && nilai_poin_penilaian.length > 0) {
+                            nilai_poin_penilaian.forEach(np => {
+                                nilaiMap[np.point_id] = np.point_nilai;
+                            });
+                        }
+
+
+
+                        // console.log(res.data.nilai_poin_penilaian);
 
                         // Add radio button styling
                         $('head').append(
@@ -382,7 +394,6 @@
                                 //     name: elemen.elemen_name,
                                 //     value: nilai_point.point.point
                                 // });
-
                                 $('#dynamic-table').append(
                                     `<tr class="font-size-12 text-center" style="font-weight: bold;">
                                         <td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>
@@ -391,22 +402,23 @@
                                         </td>
                                         <td width="7.5%" style="border: 1px solid black; text-align: center;">
                                             <input type="radio" name="${groupName}" value="MB" class="penilaian-radio"
-                                                data-point-id="${elemen.id}" ${nilai_point.point.point === 'MB' ? 'checked' : ''}>
+                                                data-point-id="${elemen.id}" ${nilaiMap[elemen.id] === 'MB' ? 'checked' : ''}>
                                         </td>
                                         <td width="7.5%" style="border: 1px solid black; text-align: center;">
                                             <input type="radio" name="${groupName}" value="SB" class="penilaian-radio"
-                                                data-point-id="${elemen.id}" ${nilai_point.point.point === 'SB' ? 'checked' : ''}>
+                                                data-point-id="${elemen.id}" ${nilaiMap[elemen.id] === 'SB' ? 'checked' : ''}>
                                         </td>
                                         <td width="7.5%" style="border: 1px solid black; text-align: center;">
                                             <input type="radio" name="${groupName}" value="BSH" class="penilaian-radio"
-                                                data-point-id="${elemen.id}" ${nilai_point.point.point === 'BSH' ? 'checked' : ''}>
+                                                data-point-id="${elemen.id}" ${nilaiMap[elemen.id] === 'BSH' ? 'checked' : ''}>
                                         </td>
                                         <td width="7.5%" style="border: 1px solid black; text-align: center;">
                                             <input type="radio" name="${groupName}" value="SAB" class="penilaian-radio"
-                                                data-point-id="${elemen.id}" ${nilai_point.point.point === 'SAB' ? 'checked' : ''}>
+                                                data-point-id="${elemen.id}" ${nilaiMap[elemen.id] === 'SAB' ? 'checked' : ''}>
                                         </td>
                                     </tr>`
                                 );
+
                             });
 
                             // Add process notes section
