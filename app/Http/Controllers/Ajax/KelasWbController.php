@@ -20,41 +20,80 @@ class KelasWbController extends Controller
     {
         try {
             $id = $request->get('id');
+
+            // Ambil data utama dengan relasi yang diperlukan
             $kelas_wb = KelasWbModel::with([
-                'wb_detail',
-                'kelas_detail',
-                'nilai_points.point' => function ($query) {
-                    $query->select('id', 'elemen_id', 'point_name', 'fase', 'created_at');
+                'wb_detail:id,nama',
+                'kelas_detail:id,nama,jenis_rapor,kelas',
+                'nilai_points' => function ($query) {
+                    $query->select('id', 'point_id', 'kelas_wb_id', 'point_nilai');
                 },
-                'nilai_points.point.elemen.dimensi'
+                'nilai_points.point' => function ($query) {
+                    $query->select('id', 'elemen_id', 'point_name', 'fase')
+                        ->with(['elemen:id,dimensi_id,elemen_name']);
+                },
+                'nilai_points.point.elemen.dimensi:id,dimensi_name',
+                'catatan_proses_wb:id,dimensi_id,kelas_wb_id,catatan_proses'
             ])->findOrFail($id);
 
-            $kelas = $kelas_wb->kelas_detail->kelas;
+            // Tentukan fase berdasarkan kelas
             $fase = '';
-
             foreach (Constant::FASE_MAPPING as $key => $values) {
-                if (in_array($kelas, $values)) {
+                if (in_array($kelas_wb->kelas_detail->kelas, $values)) {
                     $fase = $key;
                     break;
                 }
             }
 
-            $poin_penilaian = DimensiModel::with(['elemens.points' => function ($query) use ($fase) {
-                $query->where('fase', $fase)
-                    ->select('id', 'elemen_id', 'point_name', 'fase', 'created_at');
-            }])->get();
+            // Ambil poin penilaian dengan struktur yang benar
+            $poin_penilaian = DimensiModel::with([
+                'elemens' => function ($query) use ($fase) {
+                    $query->select('id', 'dimensi_id', 'elemen_name')
+                        ->with(['points' => function ($q) use ($fase) {
+                            $q->where('fase', $fase)
+                                ->select('id', 'elemen_id', 'point_name', 'fase');
+                        }]);
+                }
+            ])->select('id', 'dimensi_name')->get();
 
-            $nilai_poin_penilaian = NilaiPointModel::with(['point' => function ($query) {
-                $query->select('id', 'elemen_id', 'point_name', 'fase', 'created_at');
-            }])->where('kelas_wb_id', $id)->get();
+            // Format nilai poin penilaian untuk frontend
+            $nilai_poin_penilaian = NilaiPointModel::where('kelas_wb_id', $id)
+                ->get(['id', 'point_id', 'kelas_wb_id', 'point_nilai']);
 
-            $catatan_proses_wb = CatatanProsesWBModel::where('kelas_wb_id', $id)->get();
-
+            // Format data untuk response
             $data = [
                 'kelas_wb' => $kelas_wb,
-                'poin_penilaian' => $poin_penilaian,
-                'nilai_poin_penilaian' => $nilai_poin_penilaian,
-                'catatan_proses_wb' => $catatan_proses_wb
+                'poin_penilaian' => $poin_penilaian->map(function ($dimensi) {
+                    return [
+                        'id' => $dimensi->id,
+                        'dimensi_name' => $dimensi->dimensi_name,
+                        'elemens' => $dimensi->elemens->map(function ($elemen) {
+                            return [
+                                'id' => $elemen->id,
+                                'elemen_name' => $elemen->elemen_name,
+                                'points' => $elemen->points->map(function ($point) {
+                                    return [
+                                        'id' => $point->id,
+                                        'point_name' => $point->point_name,
+                                        'fase' => $point->fase
+                                    ];
+                                })
+                            ];
+                        })
+                    ];
+                }),
+                'nilai_poin_penilaian' => $nilai_poin_penilaian->map(function ($nilai) {
+                    return [
+                        'point_id' => $nilai->point_id,
+                        'point_nilai' => $nilai->point_nilai
+                    ];
+                }),
+                'catatan_proses_wb' => $kelas_wb->catatan_proses_wb->map(function ($catatan) {
+                    return [
+                        'dimensi_id' => $catatan->dimensi_id,
+                        'catatan_proses' => $catatan->catatan_proses
+                    ];
+                })
             ];
 
             return response()->json([
@@ -65,7 +104,8 @@ class KelasWbController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
+                'line' => $e->getLine()
             ], 400);
         }
     }

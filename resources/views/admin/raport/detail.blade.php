@@ -295,8 +295,7 @@
 @section('js_extra')
 <script type="text/javascript">
     $(document).ready(function() {
-        var dtEkskul = null;
-        var dtKegiatan = null;
+        var dtEkskul = null
         var kwbId = "{{$kwb_id}}";
 
         fetchKWB();
@@ -306,20 +305,16 @@
                 url: "{{route('ajax.kelas_wb.get')}}",
                 data: {
                     "_token": "{{ csrf_token() }}",
-                    'id': kwbId,
+                    'id' : kwbId,
                 },
                 success: function(res) {
-                    console.log(res);
                     if (!res.error) {
-                        // Basic info display
                         $('#wb_name').text(res.data.kelas_wb.wb_detail.nama);
                         $('#kelas_name').text(res.data.kelas_wb.kelas_detail.nama);
-
-                        // Prepare data
+                        // poin capaian
                         let poin_penilaian = res.data.poin_penilaian;
-                        let nilai_points = res.data.kelas_wb.nilai_points;
-                        let catatan_proses_wb = res.data.catatan_proses_wb;
                         let nilai_poin_penilaian = res.data.nilai_poin_penilaian;
+                        let catatan_proses_wb = res.data.catatan_proses_wb;
 
                         let nilaiMap = {};
                         if (nilai_poin_penilaian && nilai_poin_penilaian.length > 0) {
@@ -329,73 +324,39 @@
                         }
 
 
+                                            $('head').append(
+                        '<style>' +
+                        '.penilaian-radio {' +
+                        '   cursor: pointer;' +
+                        '   transform: scale(1.3);' +
+                        '   margin: 5px;' +
+                        '}' +
+                        '</style>'
+                    );
 
-                        // console.log(res.data.nilai_poin_penilaian);
-
-                        // Add radio button styling
-                        $('head').append(
-                            '<style>.penilaian-radio{cursor:pointer;transform:scale(1.3);margin:5px;}</style>'
-                        );
-
-                        // Clear table first
-                        $('#dynamic-table').empty();
-
-                        // Create a map of nilai_points for easier lookup
-                        let nilaiPointsMap = {};
-                        nilai_points.forEach(np => {
-                            if (np.point && np.point.elemen) {
-                                nilaiPointsMap[np.point.elemen.id] = np.point.point;
-                            }
-                        });
-
-                        // Create a map of dimensions for reference
-                        let dimensiMap = {};
-                        poin_penilaian.forEach(d => {
-                            dimensiMap[d.id] = d;
-                        });
-
-                        // Group nilai_points by dimensi_id
-                        let nilaiByDimensi = {};
-                        nilai_points.forEach(np => {
-                            const dimensiId = np.point.elemen.dimensi_id;
-                            if (!nilaiByDimensi[dimensiId]) {
-                                nilaiByDimensi[dimensiId] = [];
-                            }
-                            nilaiByDimensi[dimensiId].push(np);
-                        });
-
-                        // Process each dimension that has nilai_points
-                        Object.keys(nilaiByDimensi).forEach((dimensiId, dimensiIndex) => {
-                            const dimensi = dimensiMap[dimensiId];
-                            const nilaiDimensi = nilaiByDimensi[dimensiId];
-
-                            // Add dimension header
+                       // Iterate through dimension data
+                        $.each(poin_penilaian, function(dimensiIndex, dimensi) {
+                            // Add row for dimension
                             $('#dynamic-table').append(
-                                `<tr>
-                                    <td rowspan="2" width="5%" class="text-center" style="padding: 2px; border: 1px solid black;">${dimensiIndex + 1}</td>
-                                    <td rowspan="2" width="65%" class="text-center" style="padding: 2px 10px 2px 2px; border: 1px solid black; font-weight:bold;">${dimensi.dimensi_name}</td>
-                                    <td width="30%" colspan="4" class="text-center" style="border: 1px solid black; padding: 2px;">Penilaian</td>
-                                </tr>
-                                <tr>
-                                    <td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">MBb</td>
-                                    <td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">SB</td>
-                                    <td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">BSH</td>
-                                    <td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">SAB</td>
-                                </tr>`
+                                '<tr>' +
+                                    '<td rowspan="2" width="5%" class="text-center" style="padding: 2px; border: 1px solid black;">' + (dimensiIndex + 1) + '</td>' +
+                                    '<td rowspan="2" width="65%" class="text-center" style="padding: 2px 10px 2px 2px; border: 1px solid black; font-weight:bold;">' + dimensi.dimensi_name + '</td>' +
+                                    '<td width="30%" colspan="4" class="text-center" style="border: 1px solid black; padding: 2px;">Penilaian</td>' +
+                                '</tr>' +
+                                '<tr>' +
+                                    '<td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">MBb</td>' +
+                                    '<td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">SB</td>' +
+                                    '<td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">BSH</td>' +
+                                    '<td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">SAB</td>' +
+                                '</tr>'
                             );
 
-                            // Add elements with nilai_points
-                            nilaiDimensi.forEach(nilai_point => {
-                                // console.log(nilai_point.point_nilai);
-                                const elemen = nilai_point.point.elemen;
-                                const groupName = 'penilaian_' + elemen.id;
+                            // Iterate through element data within dimension
+                            $.each(dimensi.elemens, function(elemenIndex, elemen) {
+                                // Generate unique group name for each element
+                                var groupName = 'penilaian_' + dimensiIndex + '_' + elemenIndex;
 
-                                // console.log('Processing element:', {
-                                //     id: elemen.id,
-                                //     name: elemen.elemen_name,
-                                //     value: nilai_point.point.point
-                                // });
-                                $('#dynamic-table').append(
+                               $('#dynamic-table').append(
                                     `<tr class="font-size-12 text-center" style="font-weight: bold;">
                                         <td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>
                                         <td width="65%" class="text-left" style="border: 1px solid black; padding-left: 2px; font-weight: normal; background: #d6d3d1;">
@@ -419,68 +380,91 @@
                                         </td>
                                     </tr>`
                                 );
-
                             });
 
                             // Add process notes section
                             $('#dynamic-table').append(
-                                `<tr class="font-size-12 text-center" style="font-weight: normal;">
-                                    <td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>
-                                    <td width="95%" colspan="5" class="text-center" style="border: 1px solid black; padding: 4px 0px 4px 2px;">Catatan Proses</td>
-                                </tr>
-                                <tr class="font-size-12 text-center" style="font-weight: normal;">
-                                    <td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>
-                                    <td width="95%" colspan="5" class="text-center" style="border: 1px solid black; padding-left: 2px;">
-                                        <textarea rows="4" class="catatan-proses" data-dimensi-id="${dimensi.id}" placeholder="Berikan catatan..." style="width: 100%;"></textarea>
-                                        <button class="btn btn-sm btn-light text-primary send-button mb-2" type="button">
-                                            <i class="me-1" data-feather="plus"></i>
-                                            Submit Catatan
-                                        </button>
-                                    </td>
-                                </tr>`
+                                '<tr class="font-size-12 text-center" style="font-weight: normal;">' +
+                                    '<td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>' +
+                                    '<td width="95%" colspan="5" class="text-center" style="border: 1px solid black; padding: 4px 0px 4px 2px;">Catatan Proses</td>' +
+                                '</tr>' +
+                                '<tr class="font-size-12 text-center" style="font-weight: normal;">' +
+                                    '<td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>' +
+                                    '<td width="95%" colspan="5" class="text-center" style="border: 1px solid black; padding-left: 2px;">' +
+                                        '<textarea rows="4" class="catatan-proses" data-dimensi-id="' + dimensi.id + '" placeholder="Berikan catatan..." style="width: 100%;"></textarea>' +
+                                        '<button class="btn btn-sm btn-light text-primary send-button mb-2" type="button">' +
+                                            '<i class="me-1" data-feather="plus"></i>' +
+                                            'Submit Catatan' +
+                                        '</button>' +
+                                    '</td>' +
+                                '</tr>'
                             );
                         });
 
-                        // Set catatan proses values
-                        catatan_proses_wb.forEach(cp => {
-                            $(`.catatan-proses[data-dimensi-id="${cp.dimensi_id}"]`).val(cp.catatan_proses);
+                        // check selected radio button
+                        $.each(nilai_poin_penilaian, function (index, nilai_point) {
+                            let point_id = nilai_point.point_id;
+
+                            let point_nilai = nilai_point.point_nilai;
+
+                            let radioButton = $('input[type=radio][name="poin_penilaian[' + point_id + ']"][data-point-id="' + point_id + '"][value="' + point_nilai + '"]');
+
+                            if (radioButton.length > 0) {
+                                if (!radioButton.is(':checked')) {
+                                    radioButton.prop('checked', true);
+                                }
+                            }
                         });
 
-                        // Handle attendance data
-                        $('#tbPresensi').find('#izin_detail').text(res.data.kelas_wb.izin || '-');
-                        $('#tbPresensi').find('#sakit_detail').text(res.data.kelas_wb.sakit || '-');
-                        $('#tbPresensi').find('#alpa_detail').text(res.data.kelas_wb.alpa || '-');
+                        $.each(catatan_proses_wb, function (index, cp) {
+                            let dimensi_id = cp.dimensi_id;
 
-                        // Handle report type
+                            let catatan_proses = cp.catatan_proses;
+
+                            var textarea = $('.catatan-proses[data-dimensi-id="' + dimensi_id + '"]');
+
+                            $(textarea).val(catatan_proses);
+                        });
+
+                        // data presensi
+                        $('#tbPresensi').find('#izin_detail').text(res.data.kelas_wb.izin);
+                        $('#tbPresensi').find('#sakit_detail').text(res.data.kelas_wb.sakit);
+                        $('#tbPresensi').find('#alpa_detail').text(res.data.kelas_wb.alpa);
+
                         if (res.data.kelas_wb.kelas_detail.jenis_rapor == 'lama') {
                             $('.catatan-rapor-merdeka').hide();
-                            $('.catatan-rapor-lama').show();
                         } else {
                             $('.catatan-rapor-lama').hide();
-                            $('.catatan-rapor-merdeka').show();
                         }
 
-                        // Handle old report notes
-                        $('#tbCatatan').find('#catatan_pj_rombel').text(res.data.kelas_wb.catatan_pj_rombel || '');
-                        $('#tbCatatan').find('#tanggapan_wali').text(res.data.kelas_wb.tanggapan_wali || '');
-                        $('#tbCatatan').find('#catatan').text(res.data.kelas_wb.catatan || '');
+                        // catatan rapor lama
+                        $('#tbCatatan').find('#catatan_pj_rombel').text(res.data.kelas_wb.catatan_pj_rombel);
+                        $('#tbCatatan').find('#tanggapan_wali').text(res.data.kelas_wb.tanggapan_wali);
+                        $('#tbCatatan').find('#catatan').text(res.data.kelas_wb.catatan);
 
-                        // Handle new report notes
-                        $('#tbCatatan').find('#catatan_perkembangan_profil_pelajar_detail').text(res.data.kelas_wb.catatan_perkembangan_profil_pelajar || '');
-                        $('#tbCatatan').find('#catatan_perkembangan_pemberdayaan_detail').text(res.data.kelas_wb.catatan_perkembangan_pemberdayaan || '');
-                        $('#tbCatatan').find('#catatan_perkembangan_keterampilan_detail').text(res.data.kelas_wb.catatan_perkembangan_keterampilan || '');
+                        // catatan rapor merdeka
+                        $('#tbCatatan').find('#catatan_perkembangan_profil_pelajar_detail').text(res.data.kelas_wb.catatan_perkembangan_profil_pelajar);
+                        $('#tbCatatan').find('#catatan_perkembangan_pemberdayaan_detail').text(res.data.kelas_wb.catatan_perkembangan_pemberdayaan);
+                        $('#tbCatatan').find('#catatan_perkembangan_keterampilan_detail').text(res.data.kelas_wb.catatan_perkembangan_keterampilan);
 
-                        // Initialize Feather icons
-                        if (typeof feather !== 'undefined') {
-                            feather.replace();
-                        }
-                    } else {
+                        $('#formCatatan').find('#catatan_perkembangan_profil_pelajar').text(res.data.kelas_wb.catatan_perkembangan_profil_pelajar);
+                        $('#formCatatan').find('#catatan_perkembangan_pemberdayaan').text(res.data.kelas_wb.catatan_perkembangan_pemberdayaan);
+                        $('#formCatatan').find('#catatan_perkembangan_keterampilan').text(res.data.kelas_wb.catatan_perkembangan_keterampilan);
+                    }else{
                         showError(res.message);
                     }
                 },
-                error: function(response) {
+                error: function (response, xhr, error, thrown) {
                     var res = response.responseJSON;
-                    showError(res ? res.message : 'Terjadi kesalahan saat memproses data');
+
+                    switch (response.status) {
+                        case (400 || 422):
+                            break
+                        default:
+                            break
+                    }
+
+                    showError(res.message);
                 }
             });
         }
@@ -532,13 +516,17 @@
         });
 
         // on change poin capaian
-        $(document).on('change', '.penilaian-radio', function() {
+        $(document).on('change', 'input[type=radio]', function() {
+            let point_nilai = $(this).val();
+            let point_id = $(this).data('point-id');
+            let kelas_wb_id = kwbId;
+
             let data = {
                 "_token": "{{ csrf_token() }}",
-                point_id: $(this).data('point-id'),
-                kelas_wb_id: kwbId,
-                point_nilai: $(this).val()
-            };
+                point_nilai,
+                point_id,
+                kelas_wb_id
+            }
 
             $.ajax({
                 type: "POST",
@@ -546,15 +534,26 @@
                 data: data,
                 success: function(res) {
                     if (!res.error) {
-                        showSuccess("Nilai tersimpan!");
-                    } else {
+                        showSuccess("Success");
+
+                    }else{
                         showError(res.message);
-                        $(this).prop('checked', false); // Reset jika gagal
                     }
+                },
+                error: function (response, xhr, error, thrown) {
+                    var res = response.responseJSON;
+
+                    switch (response.status) {
+                        case (400 || 422):
+                            break
+                        default:
+                            break
+                    }
+
+                    showError(res.message);
                 }
             });
         });
-        //
         dtEkskul = $('#dtEkskul').DataTable({
             processing: true,
             serverSide: true,
@@ -1077,10 +1076,10 @@
 
     // function to show only one checkbox checked
     function hanyaSatu(groupName, checkbox) {
-            const checkboxes = document.getElementsByName(groupName);
-            checkboxes.forEach((cb) => {
-                if (cb !== checkbox) cb.checked = false;
-            });
-        }
+    const checkboxes = document.getElementsByName(groupName);
+    checkboxes.forEach((cb) => {
+        if (cb !== checkbox) cb.checked = false;
+    });
+}
 </script>
 @endsection

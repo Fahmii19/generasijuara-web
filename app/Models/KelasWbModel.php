@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class KelasWbModel extends Model
 {
     use HasFactory;
+
     protected $table = "kelas_wb";
     protected $fillable = [
         'kelas_id',
@@ -26,34 +27,39 @@ class KelasWbModel extends Model
         'updated_by',
     ];
 
+    // Relasi ke kelas (ubah ke belongsTo karena kelas_id adalah foreign key)
     public function kelas_detail()
     {
-        return $this->hasOne(KelasModel::class, 'id', 'kelas_id');
+        return $this->belongsTo(KelasModel::class, 'kelas_id');
     }
 
+    // Relasi ke wb_detail (ubah ke belongsTo karena wb_id adalah foreign key)
     public function wb_detail()
     {
-        return $this->hasOne(PpdbModel::class, 'id', 'wb_id');
+        return $this->belongsTo(PpdbModel::class, 'wb_id');
     }
 
+    // Relasi ke nilai_points
     public function nilai_points()
     {
         return $this->hasMany(NilaiPointModel::class, 'kelas_wb_id')->with('point');
     }
 
-    // relasin ke tabel point
-    public function point()
+    // Tambahkan relasi ini untuk mengatasi error
+    public function catatan_proses_wb()
     {
-        return $this->hasMany(PointModel::class, 'id', 'point_id');
+        return $this->hasMany(CatatanProsesWBModel::class, 'kelas_wb_id');
     }
 
+    // Relasi ke user yang membuat
     public function created_by_detail()
     {
-        return $this->hasOne(User::class, 'id', 'created_by');
+        return $this->belongsTo(User::class, 'created_by');
     }
 
+    // Relasi ke user yang mengupdate
     public function updated_by_detail()
     {
-        return $this->hasOne(User::class, 'id', 'updated_by');
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }
