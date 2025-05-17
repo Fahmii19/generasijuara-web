@@ -19,12 +19,19 @@ class KelasWbController extends Controller
     public function get(Request $request)
     {
         try {
-            $id = !empty($request->get('id')) ? $request->get('id') : null;
-            $kelas_wb = KelasWbModel::query()
-                ->with(['wb_detail', 'kelas_detail', 'nilai_points.point.elemen.dimensi'])
-                ->find($id);
+            $id = $request->get('id');
+            $kelas_wb = KelasWbModel::with([
+                'wb_detail',
+                'kelas_detail',
+                'nilai_points.point' => function ($query) {
+                    $query->select('id', 'elemen_id', 'point_name', 'fase', 'created_at');
+                },
+                'nilai_points.point.elemen.dimensi'
+            ])->findOrFail($id);
+
             $kelas = $kelas_wb->kelas_detail->kelas;
             $fase = '';
+
             foreach (Constant::FASE_MAPPING as $key => $values) {
                 if (in_array($kelas, $values)) {
                     $fase = $key;
@@ -32,12 +39,15 @@ class KelasWbController extends Controller
                 }
             }
 
-            // $poin_penilaian = PointModel::with('elemen')->where('fase', strtolower($fase))->get();
             $poin_penilaian = DimensiModel::with(['elemens.points' => function ($query) use ($fase) {
-                $query->where('fase', $fase);
+                $query->where('fase', $fase)
+                    ->select('id', 'elemen_id', 'point_name', 'fase', 'created_at');
             }])->get();
 
-            $nilai_poin_penilaian = NilaiPointModel::where('kelas_wb_id', $id)->get();
+            $nilai_poin_penilaian = NilaiPointModel::with(['point' => function ($query) {
+                $query->select('id', 'elemen_id', 'point_name', 'fase', 'created_at');
+            }])->where('kelas_wb_id', $id)->get();
+
             $catatan_proses_wb = CatatanProsesWBModel::where('kelas_wb_id', $id)->get();
 
             $data = [
@@ -47,11 +57,16 @@ class KelasWbController extends Controller
                 'catatan_proses_wb' => $catatan_proses_wb
             ];
 
-            return response()->json(['error' => false, 'message' => null, 'data' => $data], 200);
+            return response()->json([
+                'error' => false,
+                'message' => null,
+                'data' => $data
+            ], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
-        } catch (\Throwable $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], 400);
         }
     }
 

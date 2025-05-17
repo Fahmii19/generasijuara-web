@@ -38,7 +38,7 @@ class KelasWbModel extends Model
 
     public function nilai_points()
     {
-        return $this->hasMany(NilaiPointModel::class, 'kelas_wb_id');
+        return $this->hasMany(NilaiPointModel::class, 'kelas_wb_id')->with('point');
     }
 
     // relasin ke tabel point
