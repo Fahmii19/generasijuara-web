@@ -41,6 +41,12 @@ class KelasWbModel extends Model
         return $this->hasMany(NilaiPointModel::class, 'kelas_wb_id');
     }
 
+    // relasin ke tabel point
+    public function point()
+    {
+        return $this->hasMany(PointModel::class, 'id', 'point_id');
+    }
+
     public function created_by_detail()
     {
         return $this->hasOne(User::class, 'id', 'created_by');

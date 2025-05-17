@@ -21,7 +21,7 @@ class KelasWbController extends Controller
         try {
             $id = !empty($request->get('id')) ? $request->get('id') : null;
             $kelas_wb = KelasWbModel::query()
-                ->with(['wb_detail', 'kelas_detail', 'nilai_points'])
+                ->with(['wb_detail', 'kelas_detail', 'nilai_points.point.elemen.dimensi'])
                 ->find($id);
             $kelas = $kelas_wb->kelas_detail->kelas;
             $fase = '';
@@ -31,7 +31,7 @@ class KelasWbController extends Controller
                     break;
                 }
             }
-            
+
             // $poin_penilaian = PointModel::with('elemen')->where('fase', strtolower($fase))->get();
             $poin_penilaian = DimensiModel::with(['elemens.points' => function ($query) use ($fase) {
                 $query->where('fase', $fase);
@@ -46,12 +46,12 @@ class KelasWbController extends Controller
                 'nilai_poin_penilaian' => $nilai_poin_penilaian,
                 'catatan_proses_wb' => $catatan_proses_wb
             ];
-            
-            return response()->json(['error' => false, 'message' => null, 'data' => $data ], 200); 
+
+            return response()->json(['error' => false, 'message' => null, 'data' => $data], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 400); 
-        }catch (\Throwable $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
+        } catch (\Throwable $e) {
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
         }
     }
 
@@ -59,11 +59,11 @@ class KelasWbController extends Controller
     {
         try {
             $kelas_wb = KelasWbModel::get();
-            return response()->json(['error' => false, 'message' => null, 'data' => $kelas_wb ], 200); 
+            return response()->json(['error' => false, 'message' => null, 'data' => $kelas_wb], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 400); 
-        }catch (\Throwable $e) {
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
+        } catch (\Throwable $e) {
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
         }
     }
 
@@ -74,13 +74,13 @@ class KelasWbController extends Controller
             $id = !empty($request->get('id')) ? $request->get('id') : null;
             $kelas_wb = KelasWbModel::find($id);
             if (empty($kelas_wb)) {
-                return response()->json(['error' => true, 'message' => 'Kelas WB tidak ditemukan'], 400); 
+                return response()->json(['error' => true, 'message' => 'Kelas WB tidak ditemukan'], 400);
             }
-            
+
             // Cek rombel
             $rombel = RombelModel::where('ppdb_id', $kelas_wb->wb_id)
-                        ->where('tahun_akademik_id', $kelas_wb->kelas_detail->tahun_akademik_id)
-                        ->first();
+                ->where('tahun_akademik_id', $kelas_wb->kelas_detail->tahun_akademik_id)
+                ->first();
 
             if (!empty($rombel)) {
                 $rombel->delete();
@@ -88,15 +88,15 @@ class KelasWbController extends Controller
 
             // Delete kelas wb
             $kelas_wb->delete();
-            
+
             DB::commit();
-            return response()->json(['error' => false, 'message' => null, 'data' => [] ], 200); 
+            return response()->json(['error' => false, 'message' => null, 'data' => []], 200);
         } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 400); 
-        }catch (\Throwable $e) {
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
+        } catch (\Throwable $e) {
             DB::rollback();
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
         }
     }
 
@@ -108,7 +108,7 @@ class KelasWbController extends Controller
             $old_wb_id = !empty($request->get('old_wb_id')) ? $request->get('old_wb_id') : null;
             $wb_id = !empty($request->get('wb_id')) ? $request->get('wb_id') : null;
             $kelas_id = !empty($request->get('kelas_id')) ? $request->get('kelas_id') : null;
-            
+
             $kelas_wb = KelasWbModel::find($id);
             $kelas_detail = KelasModel::find($kelas_id);
             $params = [
@@ -120,7 +120,7 @@ class KelasWbController extends Controller
                 ->where('kelas_id', $kelas_id)
                 ->first();
             if (!empty($checkDuplicateData)) {
-                return response()->json(['error' => true, 'message' => "Warga Belajar sudah terdaftar sebelumnya"], 400); 
+                return response()->json(['error' => true, 'message' => "Warga Belajar sudah terdaftar sebelumnya"], 400);
             }
 
             if (!empty($kelas_wb)) {
@@ -134,7 +134,7 @@ class KelasWbController extends Controller
                         'kelas_id' => $kelas_id,
                         'ppdb_id' => $wb_id,
                     ]);
-            }else{
+            } else {
                 // new
                 $kelas_wb = KelasWbModel::create($params);
 
@@ -154,13 +154,13 @@ class KelasWbController extends Controller
                 }
             }
             DB::commit();
-            return response()->json(['error' => false, 'message' => null, 'data' => $kelas_wb ], 200); 
+            return response()->json(['error' => false, 'message' => null, 'data' => $kelas_wb], 200);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 400); 
-        }catch (\Throwable $e) {
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
+        } catch (\Throwable $e) {
             DB::rollBack();
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
         }
     }
 
@@ -176,11 +176,11 @@ class KelasWbController extends Controller
             $catatan_perkembangan_profil_pelajar = !empty($request->get('catatan_perkembangan_profil_pelajar')) ? $request->get('catatan_perkembangan_profil_pelajar') : null;
             $catatan_perkembangan_pemberdayaan = !empty($request->get('catatan_perkembangan_pemberdayaan')) ? $request->get('catatan_perkembangan_pemberdayaan') : null;
             $catatan_perkembangan_keterampilan = !empty($request->get('catatan_perkembangan_keterampilan')) ? $request->get('catatan_perkembangan_keterampilan') : null;
-            
+
             $kelas_wb = KelasWbModel::find($id);
 
             if (empty($kelas_wb)) {
-                return response()->json(['error' => true, 'message' => 'Kelas WB tidak ditemukan'], 400); 
+                return response()->json(['error' => true, 'message' => 'Kelas WB tidak ditemukan'], 400);
             }
 
             $params = [
@@ -196,13 +196,13 @@ class KelasWbController extends Controller
             $kelas_wb->update($params);
             // dd($kelas_wb);
             DB::commit();
-            return response()->json(['error' => false, 'message' => null, 'data' => $kelas_wb ], 200); 
+            return response()->json(['error' => false, 'message' => null, 'data' => $kelas_wb], 200);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 400); 
-        }catch (\Throwable $e) {
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
+        } catch (\Throwable $e) {
             DB::rollBack();
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
         }
     }
 
@@ -214,11 +214,11 @@ class KelasWbController extends Controller
             $izin = !empty($request->get('izin')) ? $request->get('izin') : 0;
             $sakit = !empty($request->get('sakit')) ? $request->get('sakit') : 0;
             $alpa = !empty($request->get('alpa')) ? $request->get('alpa') : 0;
-            
+
             $kelas_wb = KelasWbModel::find($id);
 
             if (empty($kelas_wb)) {
-                return response()->json(['error' => true, 'message' => 'Kelas WB tidak ditemukan'], 400); 
+                return response()->json(['error' => true, 'message' => 'Kelas WB tidak ditemukan'], 400);
             }
 
             $params = [
@@ -230,13 +230,13 @@ class KelasWbController extends Controller
             $kelas_wb->update($params);
             // dd($kelas_wb);
             DB::commit();
-            return response()->json(['error' => false, 'message' => null, 'data' => $kelas_wb ], 200); 
+            return response()->json(['error' => false, 'message' => null, 'data' => $kelas_wb], 200);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 400); 
-        }catch (\Throwable $e) {
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
+        } catch (\Throwable $e) {
             DB::rollBack();
-            return response()->json(['error' => true, 'message' => $e->getMessage()], 400); 
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
         }
     }
 }
