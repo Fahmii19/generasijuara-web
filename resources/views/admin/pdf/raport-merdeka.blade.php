@@ -850,6 +850,15 @@
         </tr>
     </table>
 
+    @foreach($nilai_point as $item)
+    <p>
+        Point ID: {{ $item->point_id }} <br>
+        Kelas WB ID: {{ $item->kelas_wb_id }} <br>
+        Nilai: {{ $item->point_nilai }}
+    </p>
+@endforeach
+
+
     <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
         <!-- Header -->
         <tr>

@@ -324,15 +324,36 @@
                         }
 
 
-                                            $('head').append(
-                        '<style>' +
-                        '.penilaian-radio {' +
-                        '   cursor: pointer;' +
-                        '   transform: scale(1.3);' +
-                        '   margin: 5px;' +
-                        '}' +
-                        '</style>'
-                    );
+                                                $('head').append(
+                            '<style>' +
+                            '.penilaian-checkbox {' +
+                            '   cursor: pointer;' +
+                            '   transform: scale(1.3);' +
+                            '   margin: 5px;' +
+                            '}' +
+                            '.checkbox-container {' +
+                            '   display: flex;' +
+                            '   justify-content: center;' +
+                            '   align-items: center;' +
+                            '   height: 100%;' +
+                            '}' +
+                            '</style>'
+                        );
+
+                        // Clear existing table rows
+                        $('#dynamic-table').empty();
+
+                        // Add header row
+                        $('#dynamic-table').append(
+                            '<tr>' +
+                                '<th width="5%" class="text-center" style="border: 1px solid black; padding: 2px;">No</th>' +
+                                '<th width="65%" class="text-center" style="border: 1px solid black; padding: 2px;">Dimensi</th>' +
+                                '<th width="7.5%" class="text-center" style="border: 1px solid black; padding: 2px;">MB</th>' +
+                                '<th width="7.5%" class="text-center" style="border: 1px solid black; padding: 2px;">SB</th>' +
+                                '<th width="7.5%" class="text-center" style="border: 1px solid black; padding: 2px;">BSH</th>' +
+                                '<th width="7.5%" class="text-center" style="border: 1px solid black; padding: 2px;">SAB</th>' +
+                            '</tr>'
+                        );
 
                        // Iterate through dimension data
                         $.each(poin_penilaian, function(dimensiIndex, dimensi) {
@@ -344,7 +365,7 @@
                                     '<td width="30%" colspan="4" class="text-center" style="border: 1px solid black; padding: 2px;">Penilaian</td>' +
                                 '</tr>' +
                                 '<tr>' +
-                                    '<td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">MBb</td>' +
+                                    '<td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">MB</td>' +
                                     '<td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">SB</td>' +
                                     '<td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">BSH</td>' +
                                     '<td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">SAB</td>' +
@@ -352,31 +373,39 @@
                             );
 
                             // Iterate through element data within dimension
+                            // Ganti bagian ini di loop elemen
                             $.each(dimensi.elemens, function(elemenIndex, elemen) {
-                                // Generate unique group name for each element
                                 var groupName = 'penilaian_' + dimensiIndex + '_' + elemenIndex;
 
-                               $('#dynamic-table').append(
+                                $('#dynamic-table').append(
                                     `<tr class="font-size-12 text-center" style="font-weight: bold;">
                                         <td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>
                                         <td width="65%" class="text-left" style="border: 1px solid black; padding-left: 2px; font-weight: normal; background: #d6d3d1;">
                                             ${elemen.elemen_name}
                                         </td>
-                                        <td width="7.5%" style="border: 1px solid black; text-align: center;">
-                                            <input type="radio" name="${groupName}" value="MB" class="penilaian-radio"
-                                                data-point-id="${elemen.id}" ${nilaiMap[elemen.id] === 'MB' ? 'checked' : ''}>
+                                        <td width="7.5%" style="border: 1px solid black;">
+                                            <div class="checkbox-container">
+                                                <input type="checkbox" name="${groupName}" value="MB" class="penilaian-checkbox"
+                                                    data-point-id="${elemen.id}" ${nilaiMap[elemen.id] === 'MB' ? 'checked' : ''}>
+                                            </div>
                                         </td>
-                                        <td width="7.5%" style="border: 1px solid black; text-align: center;">
-                                            <input type="radio" name="${groupName}" value="SB" class="penilaian-radio"
-                                                data-point-id="${elemen.id}" ${nilaiMap[elemen.id] === 'SB' ? 'checked' : ''}>
+                                        <td width="7.5%" style="border: 1px solid black;">
+                                            <div class="checkbox-container">
+                                                <input type="checkbox" name="${groupName}" value="SB" class="penilaian-checkbox"
+                                                    data-point-id="${elemen.id}" ${nilaiMap[elemen.id] === 'SB' ? 'checked' : ''}>
+                                            </div>
                                         </td>
-                                        <td width="7.5%" style="border: 1px solid black; text-align: center;">
-                                            <input type="radio" name="${groupName}" value="BSH" class="penilaian-radio"
-                                                data-point-id="${elemen.id}" ${nilaiMap[elemen.id] === 'BSH' ? 'checked' : ''}>
+                                        <td width="7.5%" style="border: 1px solid black;">
+                                            <div class="checkbox-container">
+                                                <input type="checkbox" name="${groupName}" value="BSH" class="penilaian-checkbox"
+                                                    data-point-id="${elemen.id}" ${nilaiMap[elemen.id] === 'BSH' ? 'checked' : ''}>
+                                            </div>
                                         </td>
-                                        <td width="7.5%" style="border: 1px solid black; text-align: center;">
-                                            <input type="radio" name="${groupName}" value="SAB" class="penilaian-radio"
-                                                data-point-id="${elemen.id}" ${nilaiMap[elemen.id] === 'SAB' ? 'checked' : ''}>
+                                        <td width="7.5%" style="border: 1px solid black;">
+                                            <div class="checkbox-container">
+                                                <input type="checkbox" name="${groupName}" value="SAB" class="penilaian-checkbox"
+                                                    data-point-id="${elemen.id}" ${nilaiMap[elemen.id] === 'SAB' ? 'checked' : ''}>
+                                            </div>
                                         </td>
                                     </tr>`
                                 );
@@ -516,14 +545,19 @@
         });
 
         // on change poin capaian
-        $(document).on('change', 'input[type=radio]', function() {
-            let point_nilai = $(this).val();
+        // Ganti event handler change radio dengan ini
+        $(document).on('change', 'input[type=checkbox]', function() {
+            let point_nilai = $(this).is(':checked') ? $(this).val() : null;
             let point_id = $(this).data('point-id');
             let kelas_wb_id = kwbId;
 
+            // Uncheck lainnya dalam grup yang sama
+            let groupName = $(this).attr('name');
+            $(`input[name="${groupName}"]`).not(this).prop('checked', false);
+
             let data = {
                 "_token": "{{ csrf_token() }}",
-                point_nilai,
+                point_nilai: point_nilai, // Bisa null jika diuncheck
                 point_id,
                 kelas_wb_id
             }
@@ -535,25 +569,17 @@
                 success: function(res) {
                     if (!res.error) {
                         showSuccess("Success");
-
-                    }else{
+                    } else {
                         showError(res.message);
                     }
                 },
-                error: function (response, xhr, error, thrown) {
+                error: function(response) {
                     var res = response.responseJSON;
-
-                    switch (response.status) {
-                        case (400 || 422):
-                            break
-                        default:
-                            break
-                    }
-
-                    showError(res.message);
+                    showError(res.message || "Terjadi kesalahan");
                 }
             });
         });
+
         dtEkskul = $('#dtEkskul').DataTable({
             processing: true,
             serverSide: true,

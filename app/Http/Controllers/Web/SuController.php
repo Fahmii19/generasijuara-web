@@ -411,6 +411,7 @@ class SuController extends Controller
 
         // dd($data);
 
+
         if (!$data) {
             dd('data tidak ditemukan');
         }
