@@ -60,6 +60,9 @@ class KelasWbController extends Controller
             $nilai_poin_penilaian = NilaiPointModel::where('kelas_wb_id', $id)
                 ->get(['id', 'point_id', 'kelas_wb_id', 'point_nilai']);
 
+            // Mengambil data di point model tanpa kecuali
+            $point_ids = PointModel::with('elemen')->get();
+
             // Format data untuk response
             $data = [
                 'kelas_wb' => $kelas_wb,
@@ -93,7 +96,8 @@ class KelasWbController extends Controller
                         'dimensi_id' => $catatan->dimensi_id,
                         'catatan_proses' => $catatan->catatan_proses
                     ];
-                })
+                }),
+                'point_ids' => $point_ids,
             ];
 
             return response()->json([
