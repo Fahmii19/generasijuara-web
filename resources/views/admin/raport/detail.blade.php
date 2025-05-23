@@ -324,12 +324,8 @@
                         let nilai_poin_penilaian = res.data.nilai_poin_penilaian;
                         let point_ids = res.data.point_ids;
 
+                        console.log(nilai_points);
 
-                        // 1. Add radio button styling
-                        $('head').append('<style>.penilaian-radio{cursor:pointer;transform:scale(1.3);margin:5px;}</style>');
-
-                        // 2. Clear the table
-                        $('#dynamic-table').empty();
 
                         // Debug log for points data
                         // console.log("═════════ DATA POINT YANG DIPROSES ═════════");
@@ -344,87 +340,119 @@
                         //     console.log('----------------------------------------');
                         // });
 
-                        // 3. Group points by dimensi_id
-                        let nilaiByDimensi = {};
-                        point_ids.forEach(point => {
-                            if (point.elemen) {
-                                const dimensiId = point.elemen.dimensi_id;
-                                if (!nilaiByDimensi[dimensiId]) {
-                                    nilaiByDimensi[dimensiId] = {
-                                        points: [],
-                                        dimensi_name: point.elemen.dimensi_name || `Dimensi ${dimensiId}`
-                                    };
-                                }
-                                nilaiByDimensi[dimensiId].points.push(point);
-                            }
-                        });
+                        // 1. Create a map of existing nilai poin penilaian
+let nilaiMap = {};
+if (nilai_poin_penilaian && nilai_poin_penilaian.length > 0) {
+    nilai_poin_penilaian.forEach(np => {
+        nilaiMap[np.point_id] = np.point_nilai;
+    });
+}
 
-                        // 4. Process each dimension group
-                        Object.entries(nilaiByDimensi).forEach(([dimensiId, dimensiData], dimensiIndex) => {
-                            const { points: pointsInDimensi, dimensi_name } = dimensiData;
+let nilaiPointsMap = {};
+if (nilai_points && nilai_points.length > 0) {
+    nilai_points.forEach(np => {
+        if (np.point && np.point.elemen) {
+            nilaiPointsMap[np.point.elemen.id] = {
+                point_nilai: np.point_nilai,
+                dimensi_name: np.point.elemen.dimensi?.dimensi_name || `Dimensi ${np.point.elemen.dimensi_id}`
+            };
+        }
+    });
+}
 
-                            // Add dimension header
-                            $('#dynamic-table').append(`
-                                <tr>
-                                    <td rowspan="2" width="5%" class="text-center" style="padding: 2px; border: 1px solid black;">${dimensiIndex + 1}</td>
-                                    <td rowspan="2" width="65%" class="text-center" style="padding: 2px 10px 2px 2px; border: 1px solid black; font-weight:bold;">${dimensi_name}</td>
-                                    <td width="30%" colspan="4" class="text-center" style="border: 1px solid black; padding: 2px;">Penilaian</td>
-                                </tr>
-                                <tr>
-                                    <td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">MBb</td>
-                                    <td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">SB</td>
-                                    <td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">BSH</td>
-                                    <td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">SAB</td>
-                                </tr>
-                            `);
+// 2. Add radio button styling
+$('head').append('<style>.penilaian-radio{cursor:pointer;transform:scale(1.3);margin:5px;}</style>');
 
-                            // Add points for this dimension
-                            pointsInDimensi.forEach(point => {
-                                if (!point.elemen) return;
+// 3. Clear the table
+$('#dynamic-table').empty();
 
-                                const groupName = `penilaian_${point.id}`;
+// 4. Group points by dimensi_id
+let nilaiByDimensi = {};
+point_ids.forEach(point => {
+    if (point.elemen) {
+        const dimensiId = point.elemen.dimensi_id;
+        if (!nilaiByDimensi[dimensiId]) {
+            // Get dimensi_name from nilaiPointsMap if available
+            const dimensiData = nilaiPointsMap[point.elemen.id];
+            nilaiByDimensi[dimensiId] = {
+                points: [],
+                dimensi_name: dimensiData?.dimensi_name || point.elemen.dimensi?.dimensi_name || `Dimensi ${dimensiId}`
+            };
+        }
+        nilaiByDimensi[dimensiId].points.push(point);
+    }
+});
 
-                                $('#dynamic-table').append(`
-                                    <tr class="font-size-12 text-center" style="font-weight: bold;">
-                                        <td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>
-                                        <td width="65%" class="text-left" style="border: 1px solid black; padding-left: 2px; font-weight: normal; background: #d6d3d1;">
-                                            ${point.elemen.elemen_name}
-                                        </td>
-                                        <td width="7.5%" style="border: 1px solid black; text-align: center;">
-                                            <input type="radio" name="${groupName}" value="MB" class="penilaian-radio" data-point-id="${point.id}">
-                                        </td>
-                                        <td width="7.5%" style="border: 1px solid black; text-align: center;">
-                                            <input type="radio" name="${groupName}" value="SB" class="penilaian-radio" data-point-id="${point.id}">
-                                        </td>
-                                        <td width="7.5%" style="border: 1px solid black; text-align: center;">
-                                            <input type="radio" name="${groupName}" value="BSH" class="penilaian-radio" data-point-id="${point.id}">
-                                        </td>
-                                        <td width="7.5%" style="border: 1px solid black; text-align: center;">
-                                            <input type="radio" name="${groupName}" value="SAB" class="penilaian-radio" data-point-id="${point.id}">
-                                        </td>
-                                    </tr>
-                                `);
-                            });
+// 5. Process each dimension group
+Object.entries(nilaiByDimensi).forEach(([dimensiId, dimensiData], dimensiIndex) => {
+    const { points: pointsInDimensi, dimensi_name } = dimensiData;
 
-                            // Add process notes section
-                            $('#dynamic-table').append(`
-                                <tr class="font-size-12 text-center" style="font-weight: normal;">
-                                    <td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>
-                                    <td width="95%" colspan="5" class="text-center" style="border: 1px solid black; padding: 4px 0px 4px 2px;">Catatan Proses</td>
-                                </tr>
-                                <tr class="font-size-12 text-center" style="font-weight: normal;">
-                                    <td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>
-                                    <td width="95%" colspan="5" class="text-center" style="border: 1px solid black; padding-left: 2px;">
-                                        <textarea rows="4" class="catatan-proses" data-dimensi-id="${dimensiId}" placeholder="Berikan catatan..." style="width: 100%;"></textarea>
-                                        <button class="btn btn-sm btn-light text-primary send-button mb-2" type="button">
-                                            <i class="me-1" data-feather="plus"></i>
-                                            Submit Catatan
-                                        </button>
-                                    </td>
-                                </tr>
-                            `);
-                        });
+    // Add dimension header
+    $('#dynamic-table').append(`
+        <tr>
+            <td rowspan="2" width="5%" class="text-center" style="padding: 2px; border: 1px solid black;">${dimensiIndex + 1}</td>
+            <td rowspan="2" width="65%" class="text-center" style="padding: 2px 10px 2px 2px; border: 1px solid black; font-weight:bold;">${dimensi_name}</td>
+            <td width="30%" colspan="4" class="text-center" style="border: 1px solid black; padding: 2px;">Penilaian</td>
+        </tr>
+        <tr>
+            <td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">MBb</td>
+            <td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">SB</td>
+            <td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">BSH</td>
+            <td width="7.5%" style="border: 1px solid black; text-align: center; padding: 2px;">SAB</td>
+        </tr>
+    `);
 
+    // Add points for this dimension
+    pointsInDimensi.forEach(point => {
+        if (!point.elemen) return;
+
+        const groupName = `penilaian_${point.id}`;
+        const existingValue = nilaiMap[point.id]; // Get saved value if exists
+
+        $('#dynamic-table').append(`
+            <tr class="font-size-12 text-center" style="font-weight: bold;">
+                <td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>
+                <td width="65%" class="text-left" style="border: 1px solid black; padding-left: 2px; font-weight: normal; background: #d6d3d1;">
+                    ${point.elemen.elemen_name}
+                </td>
+                <td width="7.5%" style="border: 1px solid black; text-align: center;">
+                    <input type="radio" name="${groupName}" value="MB" class="penilaian-radio"
+                        data-point-id="${point.id}" ${existingValue === 'MB' ? 'checked' : ''}>
+                </td>
+                <td width="7.5%" style="border: 1px solid black; text-align: center;">
+                    <input type="radio" name="${groupName}" value="SB" class="penilaian-radio"
+                        data-point-id="${point.id}" ${existingValue === 'SB' ? 'checked' : ''}>
+                </td>
+                <td width="7.5%" style="border: 1px solid black; text-align: center;">
+                    <input type="radio" name="${groupName}" value="BSH" class="penilaian-radio"
+                        data-point-id="${point.id}" ${existingValue === 'BSH' ? 'checked' : ''}>
+                </td>
+                <td width="7.5%" style="border: 1px solid black; text-align: center;">
+                    <input type="radio" name="${groupName}" value="SAB" class="penilaian-radio"
+                        data-point-id="${point.id}" ${existingValue === 'SAB' ? 'checked' : ''}>
+                </td>
+            </tr>
+        `);
+    });
+
+    // Add process notes section
+    $('#dynamic-table').append(`
+        <tr class="font-size-12 text-center" style="font-weight: normal;">
+            <td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>
+            <td width="95%" colspan="5" class="text-center" style="border: 1px solid black; padding: 4px 0px 4px 2px;">Catatan Proses</td>
+        </tr>
+        <tr class="font-size-12 text-center" style="font-weight: normal;">
+            <td width="5%" style="border: 1px solid black; padding-left: 2px;"></td>
+            <td width="95%" colspan="5" class="text-center" style="border: 1px solid black; padding-left: 2px;">
+                <textarea rows="4" class="catatan-proses" data-dimensi-id="${dimensiId}" placeholder="Berikan catatan..." style="width: 100%;"></textarea>
+                <button class="btn btn-sm btn-light text-primary send-button mb-2" type="button">
+                    <i class="me-1" data-feather="plus"></i>
+                    Submit Catatan
+                </button>
+            </td>
+        </tr>
+    `);
+});
 
 
                         // Set catatan proses values
