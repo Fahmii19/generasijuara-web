@@ -931,6 +931,31 @@
         </tr>
     </table>
 
+    <div class="font-size-12" style="margin-top: 16px;">
+        <p style="font-weight: bold; margin: 0px;">Keterangan:</p>
+        <p style="margin: 5px 0 10px 0;">Dimensi, elemen dan subelemen yang dinilai adalah yang dilakukan pada program pemberdayaan dan/atau keterampilan berbasis profil pelajar Pancasila.</p>
+
+        <p style="margin: 0 0 5px 0; font-weight: bold;">Centang pada kolom, jika pada subelemen:</p>
+
+        <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 5px;">
+            <tr>
+                <td style="width: 10%; vertical-align: top; padding: 2px 0;"><b>MB</b></td>
+                <td style="padding: 2px 0;">(Mulai Berkembang), bila peserta didik melakukannya harus dengan bimbingan atau dicontohkan oleh guru.</td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top; padding: 2px 0;"><b>SB</b></td>
+                <td style="padding: 2px 0;">(Sedang Berkembang), bila peserta didik melakukannya masih harus diingatkan atau dibantu oleh guru.</td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top; padding: 2px 0;"><b>BSH</b></td>
+                <td style="padding: 2px 0;">(Berkembang Sesuai Harapan), bila peserta didik sudah dapat melakukannya secara mandiri dan konsisten tanpa harus diingatkan atau dicontohkan oleh guru.</td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top; padding: 2px 0;"><b>SAB</b></td>
+                <td style="padding: 2px 0;">(Sangat Berkembang), bila peserta didik sudah dapat melakukannya secara mandiri dan sudah dapat membantu temannya yang belum mencapai kemampuan sesuai dengan indikator yang diharapkan.</td>
+            </tr>
+        </table>
+    </div>
 
 
 
@@ -939,30 +964,13 @@
     @include('includes.components.ttd_pj_raport_merdeka')
 
     {{-- PAGE BREAK --}}
-	<div class="new-page"></div>
+	{{-- <div class="new-page"></div> --}}
 
     <!-- Keterangan Penilaian -->
-    <div class="font-size-12" style="margin-top: 16px;">
-        <p style="font-weight: bold; margin: 0px;">Keterangan:</p>
-        <p style="margin: 0px;">Dimensi, elemen dan subelemen yang dinilai adalah yang dilakukan pada program pemberdayaan dan
-            atau keterampilan berbasis profil pelajar Pancasila.
-        </p>
-        <p style="margin: 0px; margin-top: 12px;">Centang pada kolom, jika pada subelemen: </p>
-        <p style="margin: 0px; margin-top: 4px;"><b>MB (Mulai Berkembang)</b>, bila peserta didik melakukannya harus dengan bimbingan atau
-            dicontohkan oleh guru.
-        </p>
-        <p style="margin: 0px; margin-top: 4px;"><b>SB (Sedang Berkembang)</b>, bila peserta didik melakukannya masih harus diingatkan atau
-        dibantu oleh guru.</p>
-        <p style="margin: 0px; margin-top: 4px;"><b>BSH (Berkembang Sesuai Harapan)</b>, bila peserta didik sudah dapat melakukannya secara
-            mandiri dapat konsisten tanpa harus diingatkan atau dicontohkan oleh guru.</p>
-        <p style="margin: 0px; margin-top: 4px;"><b>SAB (Sangat Berkembang)</b>, bila peserta didik sudah dapat melakukannya secara mandiri dan
-            sudah dapat membantu temannya yang belum mencapai kemampuan sesuai dengan indikator
-            yang diharapkan.
-        </p>
-    </div>
+
 
     {{-- PAGE BREAK --}}
-	<div class="new-page"></div>
+	{{-- <div class="new-page"></div> --}}
 
     @include('includes.components.data_siswa_raport_merdeka')
 
