@@ -850,79 +850,86 @@
         </tr>
     </table>
 
-<table style="width: 100%; border-collapse: collapse; font-size: 12px;">
-    <!-- Header -->
-    <tr>
-        <td rowspan="2" style="border: 1px solid black; width: 4%;  text-align: center; font-weight: bold; ">No</td>
-        <td rowspan="2" style="border: 1px solid black; width: 63%; text-align: center;  font-weight: bold;">Point Penilaian Setiap Elemen</td>
-        <td colspan="4" style="border: 1px solid black; text-align: center; font-weight: bold;">
-            Penilaian
-        </td>
-    </tr>
-    <!-- Evaluation Sub-header -->
-    <tr>
-        <td style="border: 1px solid black; text-align: center; font-weight: bold;">MB</td>
-        <td style="border: 1px solid black; text-align: center; font-weight: bold;">SB</td>
-        <td style="border: 1px solid black; text-align: center; font-weight: bold;">BSH</td>
-        <td style="border: 1px solid black; text-align: center; font-weight: bold;">SAB</td>
-    </tr>
-
-    @php
-        $counter = 1;
-        $nilaiPoints = isset($nilai_point) ? $nilai_point : (isset($data['nilai_point']) ? $data['nilai_point'] : []);
-        $groupedData = [];
-        foreach ($nilaiPoints as $item) {
-            $dimensiName = is_array($item)
-                ? ($item['point']['elemen']['dimensi']['dimensi_name'] ?? 'Tanpa Dimensi')
-                : ($item->point->elemen->dimensi->dimensi_name ?? 'Tanpa Dimensi');
-            $groupedData[$dimensiName][] = $item;
-        }
-    @endphp
-
-    @foreach($groupedData as $dimensiName => $items)
-        <!-- Dimensi -->
+    <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+        <!-- Header -->
         <tr>
-            <td colspan="6" style="border: 1px solid black; background-color: #f2f2f2; font-weight: bold; padding-bottom: 4px; padding-left: 4px;">
-                {{ $dimensiName }}
+            <td rowspan="2" style="border: 1px solid black; width: 4%;  text-align: center; font-weight: bold; ">No</td>
+            <td rowspan="2" style="border: 1px solid black; width: 63%; text-align: center;  font-weight: bold;">Point Penilaian Setiap Elemen</td>
+            <td colspan="4" style="border: 1px solid black; text-align: center; font-weight: bold;">
+                Penilaian
             </td>
         </tr>
-
-        @foreach($items as $item)
-        <!-- Elemen -->
+        <!-- Evaluation Sub-header -->
         <tr>
-            <td style="border-left: 1px solid black; border-bottom: 1px solid black; text-align: center;">
-                {{ $counter++ }}
-            </td>
-            <td style="border: 1px solid black;">
-                @if(is_array($item))
-                    {{ $item['point']['elemen']['elemen_name'] ?? '-' }}
-                @else
-                    {{ $item->point->elemen->elemen_name ?? '-' }}
-                @endif
-            </td>
-            <td style="border: 1px solid black; text-align: center;">
-                @if((is_array($item) && $item['point_nilai'] == 'MB') || (!is_array($item) && $item->point_nilai == 'MB')) ✓ @endif
-            </td>
-            <td style="border: 1px solid black; text-align: center;">
-                @if((is_array($item) && $item['point_nilai'] == 'SB') || (!is_array($item) && $item->point_nilai == 'SB')) ✓ @endif
-            </td>
-            <td style="border: 1px solid black; text-align: center;">
-                @if((is_array($item) && $item['point_nilai'] == 'BSH') || (!is_array($item) && $item->point_nilai == 'BSH')) ✓ @endif
-            </td>
-            <td style="border: 1px solid black; text-align: center;">
-                @if((is_array($item) && $item['point_nilai'] == 'SAB') || (!is_array($item) && $item->point_nilai == 'SAB')) ✓ @endif
-            </td>
+            <td style="border: 1px solid black; text-align: center; font-weight: bold;">MB</td>
+            <td style="border: 1px solid black; text-align: center; font-weight: bold;">SB</td>
+            <td style="border: 1px solid black; text-align: center; font-weight: bold;">BSH</td>
+            <td style="border: 1px solid black; text-align: center; font-weight: bold;">SAB</td>
         </tr>
+
+        @php
+            $counter = 1;
+            $nilaiPoints = isset($nilai_point) ? $nilai_point : (isset($data['nilai_point']) ? $data['nilai_point'] : []);
+            $groupedData = [];
+            foreach ($nilaiPoints as $item) {
+                $dimensiName = is_array($item)
+                    ? ($item['point']['elemen']['dimensi']['dimensi_name'] ?? 'Tanpa Dimensi')
+                    : ($item->point->elemen->dimensi->dimensi_name ?? 'Tanpa Dimensi');
+                $groupedData[$dimensiName][] = $item;
+            }
+        @endphp
+
+        @foreach($groupedData as $dimensiName => $items)
+            <!-- Dimensi -->
+            <tr>
+                <td colspan="6" style="border: 1px solid black; background-color: #f2f2f2; font-weight: bold; padding-bottom: 4px; padding-left: 4px;">
+                    {{ $dimensiName }}
+                </td>
+            </tr>
+
+            @foreach($items as $item)
+            <!-- Elemen -->
+            <tr>
+                <td style="border-left: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                    {{ $counter++ }}
+                </td>
+                <td style="border: 1px solid black;">
+                    @if(is_array($item))
+                        {{ $item['point']['elemen']['elemen_name'] ?? '-' }}
+                    @else
+                        {{ $item->point->elemen->elemen_name ?? '-' }}
+                    @endif
+                </td>
+                <td style="border: 1px solid black; text-align: center;">
+                    @if((is_array($item) && $item['point_nilai'] == 'MB') || (!is_array($item) && $item->point_nilai == 'MB')) ✓ @endif
+                </td>
+                <td style="border: 1px solid black; text-align: center;">
+                    @if((is_array($item) && $item['point_nilai'] == 'SB') || (!is_array($item) && $item->point_nilai == 'SB')) ✓ @endif
+                </td>
+                <td style="border: 1px solid black; text-align: center;">
+                    @if((is_array($item) && $item['point_nilai'] == 'BSH') || (!is_array($item) && $item->point_nilai == 'BSH')) ✓ @endif
+                </td>
+                <td style="border: 1px solid black; text-align: center;">
+                    @if((is_array($item) && $item['point_nilai'] == 'SAB') || (!is_array($item) && $item->point_nilai == 'SAB')) ✓ @endif
+                </td>
+            </tr>
+            @endforeach
         @endforeach
-    @endforeach
 
-    <!-- Catatan Proses -->
-    <tr>
-        <td colspan="6" style="border: 1px solid black; text-align: center; padding: 6px;">
-            <strong>Catatan Proses</strong>
-        </td>
-    </tr>
-</table>
+        <!-- Catatan Proses -->
+        <tr>
+            <td colspan="6" style="border: 1px solid black; text-align: left; padding: 5px;">
+                <div style="font-weight: bold; text-align: center;">CATATAN PROSES</div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6" style="border: 1px solid black; text-align: left; padding: 2px;">
+                <div style="min-height: 80px; padding: 4px;">
+                    Catatan perkembangan peserta didik selama proses pembelajaran
+                </div>
+            </td>
+        </tr>
+    </table>
 
 
 
