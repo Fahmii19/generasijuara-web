@@ -612,7 +612,11 @@ class RaportService
             'fase' => $this->getFase($kelasInfo['kelas']),
             'dimensis' => $this->getDimensiData($kelas_wb->id, $kelasInfo['kelas']),
             'catatan_proses' => CatatanProsesWBModel::where('kelas_wb_id', $kelas_wb->id)->get(),
-            'nilai_point' => NilaiPointModel::where('kelas_wb_id', $kelas_wb->id)->get(),
+            'nilai_point' => NilaiPointModel::with([
+                'point:id,point_name,elemen_id',
+                'point.elemen:id,elemen_name,dimensi_id',
+                'point.elemen.dimensi:id,dimensi_name'
+            ])->where('kelas_wb_id', $kelas_wb->id)->get(),
             'presensi' => KelasWbModel::find($kelas_wb->id)->first(['izin', 'sakit', 'alpa'])->toArray()
         ];
 

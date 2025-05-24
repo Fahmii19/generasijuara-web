@@ -850,83 +850,79 @@
         </tr>
     </table>
 
-    @foreach($nilai_point as $item)
-    <p>
-        Point ID: {{ $item->point_id }} <br>
-        Kelas WB ID: {{ $item->kelas_wb_id }} <br>
-        Nilai: {{ $item->point_nilai }}
-    </p>
-@endforeach
+<table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+    <!-- Header -->
+    <tr>
+        <td rowspan="2" style="border: 1px solid black; width: 4%;  text-align: center; font-weight: bold; ">No</td>
+        <td rowspan="2" style="border: 1px solid black; width: 63%; text-align: center;  font-weight: bold;">Point Penilaian Setiap Elemen</td>
+        <td colspan="4" style="border: 1px solid black; text-align: center; font-weight: bold;">
+            Penilaian
+        </td>
+    </tr>
+    <!-- Evaluation Sub-header -->
+    <tr>
+        <td style="border: 1px solid black; text-align: center; font-weight: bold;">MB</td>
+        <td style="border: 1px solid black; text-align: center; font-weight: bold;">SB</td>
+        <td style="border: 1px solid black; text-align: center; font-weight: bold;">BSH</td>
+        <td style="border: 1px solid black; text-align: center; font-weight: bold;">SAB</td>
+    </tr>
 
+    @php
+        $counter = 1;
+        $nilaiPoints = isset($nilai_point) ? $nilai_point : (isset($data['nilai_point']) ? $data['nilai_point'] : []);
+        $groupedData = [];
+        foreach ($nilaiPoints as $item) {
+            $dimensiName = is_array($item)
+                ? ($item['point']['elemen']['dimensi']['dimensi_name'] ?? 'Tanpa Dimensi')
+                : ($item->point->elemen->dimensi->dimensi_name ?? 'Tanpa Dimensi');
+            $groupedData[$dimensiName][] = $item;
+        }
+    @endphp
 
-    <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
-        <!-- Header -->
+    @foreach($groupedData as $dimensiName => $items)
+        <!-- Dimensi -->
         <tr>
-            <td style="border: 1px solid black; width: 3%; text-align: center;">1</td>
-            <td style="border: 1px solid black; width: 60%; font-weight: bold;">
-                Dimensi Beriman, Bertaqwa kepada Tuhan Yang Maha Esa, dan Berakhlak Mulia
+            <td colspan="6" style="border: 1px solid black; background-color: #f2f2f2; font-weight: bold; padding-bottom: 4px; padding-left: 4px;">
+                {{ $dimensiName }}
             </td>
-            <td colspan="4" style="border: 1px solid black; text-align: center; font-weight: bold;">
-                Penilaian
-            </td>
-
         </tr>
 
+        @foreach($items as $item)
         <!-- Elemen -->
         <tr>
-            <td colspan="2" style="border: 1px solid black; background-color: #f2f2f2; font-weight: bold;">
-                Elemen akhlak beragama
+            <td style="border-left: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                {{ $counter++ }}
             </td>
-            <td style="border: 1px solid black; text-align: center; font-weight: bold;">MB</td>
-            <td style="border: 1px solid black; text-align: center; font-weight: bold;">SB</td>
-            <td style="border: 1px solid black; text-align: center; font-weight: bold;">BSH</td>
-            <td style="border: 1px solid black; text-align: center; font-weight: bold;">SAB</td>
-        </tr>
-
-        <!-- Baris Isi 1 -->
-        <tr>
-            <td style="border-left: 1px solid black; border-bottom: 1px solid black;"></td>
             <td style="border: 1px solid black;">
-                Mengenal sifat-sifat utama Tuhan Yang Maha Esa bahwa Dia adalah Sang Pencipta yang Maha Pengasih dan Maha Penyayang dan mengenali kebaikan dirinya sebagai cerminan sifat Tuhan.
+                @if(is_array($item))
+                    {{ $item['point']['elemen']['elemen_name'] ?? '-' }}
+                @else
+                    {{ $item->point->elemen->elemen_name ?? '-' }}
+                @endif
             </td>
-            <td style="border: 1px solid black;"></td>
-            <td style="border: 1px solid black;"></td>
-            <td style="border: 1px solid black;"></td>
-            <td style="border: 1px solid black;"></td>
-        </tr>
-
-        <!-- Baris Isi 2 -->
-        <tr>
-            <td style="border-left: 1px solid black; border-bottom: 1px solid black;"></td>
-            <td style="border: 1px solid black;">
-                Mengenal unsur-unsur utama agama/kepercayaan (ajaran, ritual keagamaan, kitab suci, dan orang suci/utusan Tuhan YME).
+            <td style="border: 1px solid black; text-align: center;">
+                @if((is_array($item) && $item['point_nilai'] == 'MB') || (!is_array($item) && $item->point_nilai == 'MB')) ✓ @endif
             </td>
-            <td style="border: 1px solid black;"></td>
-            <td style="border: 1px solid black;"></td>
-            <td style="border: 1px solid black;"></td>
-            <td style="border: 1px solid black;"></td>
-        </tr>
-
-        <!-- Baris Isi 3 -->
-        <tr>
-            <td style="border-left: 1px solid black; border-bottom: 1px solid black;"></td>
-            <td style="border: 1px solid black;">
-                Terbiasa melaksanakan ibadah sesuai ajaran agama/kepercayaannya.
+            <td style="border: 1px solid black; text-align: center;">
+                @if((is_array($item) && $item['point_nilai'] == 'SB') || (!is_array($item) && $item->point_nilai == 'SB')) ✓ @endif
             </td>
-            <td style="border: 1px solid black;"></td>
-            <td style="border: 1px solid black;"></td>
-            <td style="border: 1px solid black;"></td>
-            <td style="border: 1px solid black;"></td>
-        </tr>
-
-        <!-- Catatan Proses -->
-        <tr>
-            <td colspan="6" style="border: 1px solid black; text-align: center; padding: 6px;">
-                <strong>Catatan Proses</strong>
+            <td style="border: 1px solid black; text-align: center;">
+                @if((is_array($item) && $item['point_nilai'] == 'BSH') || (!is_array($item) && $item->point_nilai == 'BSH')) ✓ @endif
+            </td>
+            <td style="border: 1px solid black; text-align: center;">
+                @if((is_array($item) && $item['point_nilai'] == 'SAB') || (!is_array($item) && $item->point_nilai == 'SAB')) ✓ @endif
             </td>
         </tr>
-    </table>
+        @endforeach
+    @endforeach
 
+    <!-- Catatan Proses -->
+    <tr>
+        <td colspan="6" style="border: 1px solid black; text-align: center; padding: 6px;">
+            <strong>Catatan Proses</strong>
+        </td>
+    </tr>
+</table>
 
 
 

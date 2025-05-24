@@ -409,7 +409,7 @@ class SuController extends Controller
         $raportService = new RaportService();
         $data = $raportService->getData(['kelas_wb_id' => $request->kelas_wb]);
 
-        // dd($data);
+        // dd(($data['nilai_point']->toArray()));
 
 
         if (!$data) {
