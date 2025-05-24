@@ -901,16 +901,16 @@
                     @endif
                 </td>
                 <td style="border: 1px solid black; text-align: center;">
-                    @if((is_array($item) && $item['point_nilai'] == 'MB') || (!is_array($item) && $item->point_nilai == 'MB')) ✓ @endif
+                    @if((is_array($item) && $item['point_nilai'] == 'MB') || (!is_array($item) && $item->point_nilai == 'MB'))  	<img src="{{ public_path('/images/check.png') }}" style="height: 25px;"> @endif
                 </td>
                 <td style="border: 1px solid black; text-align: center;">
-                    @if((is_array($item) && $item['point_nilai'] == 'SB') || (!is_array($item) && $item->point_nilai == 'SB')) ✓ @endif
+                    @if((is_array($item) && $item['point_nilai'] == 'SB') || (!is_array($item) && $item->point_nilai == 'SB'))  	<img src="{{ public_path('/images/check.png') }}" style="height: 25px;"> @endif
                 </td>
                 <td style="border: 1px solid black; text-align: center;">
-                    @if((is_array($item) && $item['point_nilai'] == 'BSH') || (!is_array($item) && $item->point_nilai == 'BSH')) ✓ @endif
+                    @if((is_array($item) && $item['point_nilai'] == 'BSH') || (!is_array($item) && $item->point_nilai == 'BSH'))  	<img src="{{ public_path('/images/check.png') }}" style="height: 25px;"> @endif
                 </td>
                 <td style="border: 1px solid black; text-align: center;">
-                    @if((is_array($item) && $item['point_nilai'] == 'SAB') || (!is_array($item) && $item->point_nilai == 'SAB')) ✓ @endif
+                    @if((is_array($item) && $item['point_nilai'] == 'SAB') || (!is_array($item) && $item->point_nilai == 'SAB'))  	<img src="{{ public_path('/images/check.png') }}" style="height: 25px;"> @endif
                 </td>
             </tr>
             @endforeach
