@@ -1,7 +1,7 @@
 <table width="98%" class="table-collapse table-nilai font-size-12" style="margin-top: 24px;">
     <tr style="">
         <td width="27%">
-            
+
         </td>
         <td>
         </td>
@@ -21,12 +21,19 @@
         <td>
         </td>
         <td >
-            @if ($data_ttd && isset($data_ttd['url_ttd_pj']) && $data_ttd['url_ttd_pj'] != '' && filter_var($data_ttd['url_ttd_pj'], FILTER_VALIDATE_URL) !== false)
-                <img src="{{'data:image/png;base64,' . base64_encode(file_get_contents(@$data_ttd['url_ttd_pj']))}}" alt="image" style="height: 100px;"> <br>
+            @php
+            $defaultTtdPath = public_path('images/white.png');
+            $relativePath = isset($data_ttd['url_ttd_pj']) ? str_replace(url('/'), '', $data_ttd['url_ttd_pj']) : null;
+            $fullPath = $relativePath ? public_path($relativePath) : $defaultTtdPath;
+            @endphp
+
+            @if ($relativePath && file_exists($fullPath))
+                <img src="{{ 'data:image/png;base64,' . base64_encode(file_get_contents($fullPath)) }}" alt="image" style="height: 100px;"> <br>
             @else
-                <img src="{{ public_path($data_ttd['url_ttd_pj'] ?? '/images/white.png') }}" style="height: 100px;">
+                <img src="{{ asset('images/white.png') }}" alt="placeholder" style="height: 100px;">
             @endif
             <br>
+
             <span class="letter-spacing-sm">
                 {{ $data_ttd->nama_pj_rombel ?? '-' }}
             </span>
@@ -36,4 +43,4 @@
             </span>
         </td>
     </tr>
-</table> 
+</table>

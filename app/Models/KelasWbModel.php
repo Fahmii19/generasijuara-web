@@ -62,4 +62,9 @@ class KelasWbModel extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+
+    public function tahun_akademik()
+    {
+        return $this->belongsTo(TahunAkademikModel::class, 'tahun_akademik_id');
+    }
 }

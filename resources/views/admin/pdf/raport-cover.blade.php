@@ -65,14 +65,14 @@
 			text-align: justify;
 		}
 	</style>
-	
+
 </head>
 <body style="padding-top: 0; margin-top:0;">
 
 	<div class="text-center">
 		<p class="font-bold" style="font-size: 60px; margin-top: 140px; margin-bottom: 0px; color: #1f497d">RAPOR</p>
 		<p class="font-bold" style="font-size: 32px; margin-top: 0px; color: #4f81bd">
-			{{$kelas_wb->wb_detail->paket_kelas->nama}}
+			{{$kelas_wb->kelas_detail->paket_kelas->nama ?? '-'}}
 		</p>
 	</div>
 
@@ -92,7 +92,7 @@
 		<div class="font-size-14">NIS/NISN:</div>
 		<div style="margin: auto; width: 60%; background: #c5d9f1; border-top-style: solid; border-top-color: #000; padding: 10px; text-align: center;">
 			<strong>
-				{{$kelas_wb->wb_detail->nis}} / {{$kelas_wb->wb_detail->nisn}}									
+				{{$kelas_wb->wb_detail->nis}} / {{$kelas_wb->wb_detail->nisn}}
 			</strong>
 		</div>
 	</div>
@@ -114,7 +114,7 @@
 
 	<div class="text-center" style="margin-top: 50px; margin-bottom: 50px;">
 		<h3 class="mb-0">RAPOR</h3>
-		<p style="margin-top: 5px;">{{$kelas_wb->wb_detail->paket_kelas->nama}}</p>
+		{{ $kelas_wb->kelas_detail->paket_kelas->nama ?? '-' }}
 	</div>
 
 	<div style="margin-left: 70px; margin-right: 80px;">
@@ -133,7 +133,7 @@
 					P9970355
 				</td>
 			</tr>
-	
+
 			<tr>
 				<td class="font-size-12" style="padding: 10px 10px 10px;">Alamat Satuan Pendidikan </td>
 				<td class="font-size-12" width="5%">: </td>
@@ -152,7 +152,7 @@
 				<td class="font-size-12" width="5%">: </td>
 				<td class="font-size-12 border-bottom-sm" style="border-bottom:solid 1px rgb(161, 161, 161); padding: 15px 15px 15px 0;"></td>
 			</tr>
-	
+
 			<tr>
 				<td class="font-size-12" style="padding: 10px 10px 10px;">Telepon </td>
 				<td class="font-size-12" width="5%">: </td>
@@ -250,7 +250,7 @@
 
 	<div style="margin: auto; margin-top: 80px; background: #ffc000; height: 35px; width: 80%;"></div>
 
-	
+
 	{{-- PAGE BREAK --}}
 	<div class="new-page"></div>
 
@@ -491,7 +491,7 @@
 					{{ ucwords($kelas_wb->wb_detail->pekerjaan_wali) ?? '-' }}
 				</td>
 			</tr>
-			
+
 		</table>
 
 
@@ -532,7 +532,7 @@
 		</table>
 	</div>
 
-	
+
 	{{-- PAGE BREAK --}}
 	<div class="new-page"></div>
 

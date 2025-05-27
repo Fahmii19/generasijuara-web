@@ -34,6 +34,7 @@ use Carbon\Carbon;
 use Constant;
 use DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Log;
 
 class SuController extends Controller
 {
@@ -406,41 +407,53 @@ class SuController extends Controller
     // debugx
     public function raportPrint(Request $request)
     {
-        // dd($request->all());
-        $raportService = new RaportService();
-        $data = $raportService->getData(['kelas_wb_id' => $request->kelas_wb]);
 
-        if (!$data) {
-            dd('data tidak ditemukan');
+        set_time_limit(300);
+
+
+        try {
+            $raportService = new RaportService();
+            $data = $raportService->getData(['kelas_wb_id' => $request->kelas_wb]);
+
+            // dd($data['kelas_wb']);
+
+            if (!$data) {
+                return redirect()->back()->with('error', 'Data raport tidak ditemukan');
+            }
+
+            // dd($data);
+
+            // Tentukan view berdasarkan jenis rapor
+            $view = $data['kelas_wb']->kelas_detail->jenis_rapor == 'merdeka'
+                ? 'admin.pdf.raport-merdeka'
+                : 'admin.pdf.raport';
+
+            // Generate PDF dengan konfigurasi optimal
+            $pdf = PDF::loadView($view, $data)
+                ->setOptions([
+                    'margin-bottom' => '10',
+                    'margin-top' => '10',
+                    'isRemoteEnabled' => true,
+                    'tempDir' => public_path(),
+                    'chroot' => public_path(''),
+                    'enable-smart-shrinking' => true,
+                    'dpi' => 96,
+                    'no-outline' => true
+                ]);
+
+            return $pdf->stream('Raport_' . $data['kelas_wb']->wb_detail->nama . '.pdf');
+        } catch (\Exception $e) {
+            Log::error('Error generating PDF: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat membuat raport');
         }
-
-        $headerHtml = null;
-        $footerHtml = null;
-
-        $view = 'admin.pdf.raport';
-        if ($data['kelas_wb']->kelas_detail->jenis_rapor == 'merdeka') {
-            $view = 'admin.pdf.raport-merdeka';
-        }
-        // dd($data);
-        $pdf = PDF::loadView($view, $data);
-
-        $pdf->setOptions([
-            'header-html' => $headerHtml,
-            'footer-html' => $footerHtml,
-            'margin-bottom' => '10',
-            'margin-top' => '10',
-            'isRemoteEnabled' => true,
-            'tempDir' => public_path(),
-            'chroot'  => public_path(''),
-        ]);
-
-        return $pdf->stream('Raport.pdf');
     }
 
     public function raportCoverPrint(Request $request)
     {
         $raportService = new RaportService();
         $data = $raportService->getData(['kelas_wb_id' => $request->kelas_wb]);
+
+        // dd($data['kelas_wb']);
 
         if (!$data) {
             dd('data tidak ditemukan');

@@ -14,9 +14,11 @@ use App\Models\DimensiModel;
 use App\Models\CatatanProsesWBModel;
 use App\Models\NilaiPointModel;
 use App\Utils\Misc;
-use DB;
+use Illuminate\Support\Facades\DB;
+
 use Constant;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class RaportService
 {
@@ -67,15 +69,17 @@ class RaportService
 
     public function getData(array $data): ?array
     {
+        set_time_limit(300); // Set timeout 5 menit khusus untuk proses ini
+
         try {
-            // Cari data kelas warga belajar
+            // 1. Ambil data kelas warga belajar dengan eager loading
             $kelas_wb = $this->getKelasWbData($data);
             if (!$kelas_wb) {
                 Log::error('Kelas WB tidak ditemukan', ['data' => $data]);
                 return null;
             }
 
-            // Konversi info kelas
+            // 2. Konversi info kelas
             $kelasInfo = $this->konversiKelasInfo(
                 $kelas_wb->kelas_detail->kelas,
                 $kelas_wb->kelas_detail->semester
@@ -85,26 +89,43 @@ class RaportService
                 return null;
             }
 
-            // Data kelas pertama siswa
+            // 3. Data kelas pertama siswa dengan optimasi query
             $kelasPertama = $this->getKelasPertamaSiswa($kelas_wb->wb_detail->id);
             if (!$kelasPertama) {
-                Log::error('Kelas pertama tidak ditemukan', ['wb_id' => $kelas_wb->wb_detail->id]);
-                return null;
+                Log::warning('Kelas pertama tidak ditemukan', ['wb_id' => $kelas_wb->wb_detail->id]);
+                // Tidak return null karena mungkin tidak critical
             }
 
-            // Kumpulkan data nilai
-            $nilaiData = $this->kumpulkanDataNilai($kelas_wb);
+            // 4. Kumpulkan data nilai dengan chunking
+            $nilaiData = $this->kumpulkanDataNilaiDenganChunking($kelas_wb);
 
-            // Hitung modul
-            $modulData = $this->hitungDataModul($kelasInfo['kelas'], $kelasInfo['semester']);
+            // 5. Hitung modul dengan caching
+            $modulData = Cache::remember(
+                "modul-{$kelasInfo['kelas']}-{$kelasInfo['semester']}",
+                now()->addDay(),
+                function () use ($kelasInfo) {
+                    return $this->hitungDataModul($kelasInfo['kelas'], $kelasInfo['semester']);
+                }
+            );
 
-            // Catatan untuk semester genap
-            $catatan = $this->generateCatatan($kelasInfo['kelas'], $kelasInfo['semester'], $kelas_wb->wb_detail->nama, $kelasInfo['paket_kompetensi']);
+            // 6. Generate catatan
+            $catatan = $this->generateCatatan(
+                $kelasInfo['kelas'],
+                $kelasInfo['semester'],
+                $kelas_wb->wb_detail->nama,
+                $kelasInfo['paket_kompetensi']
+            );
 
-            // Data TTD Raport
-            $data_ttd = $this->getDataTtd($kelas_wb->kelas_id);
+            // 7. Data TTD dengan caching
+            $data_ttd = Cache::remember(
+                "ttd-{$kelas_wb->kelas_id}",
+                now()->addHours(6),
+                function () use ($kelas_wb) {
+                    return $this->getDataTtd($kelas_wb->kelas_id);
+                }
+            );
 
-            // Siapkan data akhir
+            // 8. Siapkan data akhir
             return $this->prepareFinalData(
                 $kelas_wb,
                 $kelasInfo,
@@ -123,16 +144,22 @@ class RaportService
         }
     }
 
-    // Fungsi-fungsi helper privat
     private function getKelasWbData(array $data): ?KelasWbModel
     {
+        $query = KelasWbModel::with([
+            'wb_detail:id,nama',
+            'kelas_detail:id,kelas,semester,jenis_rapor,tahun_akademik_id,paket_kelas_id',
+            'kelas_detail.paket_kelas:id,nama',
+            'kelas_detail.tahun_akademik:id,id,tgl_raport' // tambahkan ini!
+        ]);
+
         if (!empty($data['kelas_wb_id'])) {
-            return KelasWbModel::with(['wb_detail', 'kelas_detail', 'kelas_detail.paket_kelas'])
+            return $query->select(['id', 'kelas_id', 'wb_id'])
                 ->find($data['kelas_wb_id']);
         }
 
         if (!empty($data['ppdb_id']) && !empty($data['kelas_id'])) {
-            return KelasWbModel::with(['wb_detail', 'kelas_detail', 'kelas_detail.paket_kelas'])
+            return $query->select(['id', 'kelas_id', 'wb_id'])
                 ->where('wb_id', $data['ppdb_id'])
                 ->where('kelas_id', $data['kelas_id'])
                 ->first();
@@ -144,31 +171,91 @@ class RaportService
     private function getKelasPertamaSiswa(int $ppdbId): ?object
     {
         $rombel = RombelModel::where('ppdb_id', $ppdbId)
-            ->leftJoin('kelas', 'kelas.id', '=', 'rombel.kelas_id')
-            ->orderBy('rombel.tahun_akademik_id', 'ASC')
-            ->first(['kelas.kelas']);
+            ->select(['kelas_id', 'tahun_akademik_id'])
+            ->with(['kelas:id,kelas'])
+            ->orderBy('tahun_akademik_id', 'ASC')
+            ->first();
 
-        if (!$rombel) {
+        if (!$rombel || !$rombel->kelas) {
             return null;
         }
 
         return (object) [
-            'kelas' => $rombel->kelas,
-            'romawi' => Misc::integerToRoman($rombel->kelas),
-            'tingkatan' => $this->getTingkatan($rombel->kelas)
+            'kelas' => $rombel->kelas->kelas,
+            'romawi' => Misc::integerToRoman($rombel->kelas->kelas),
+            'tingkatan' => $this->getTingkatan($rombel->kelas->kelas)
         ];
     }
 
-    private function kumpulkanDataNilai(KelasWbModel $kelas_wb): array
+    private function kumpulkanDataNilaiDenganChunking(KelasWbModel $kelas_wb): array
     {
-        $ekstrakurikuler = EkstrakurikulerModel::where('kwb_id', $kelas_wb->id)
+        $nilaiData = [
+            'ekstrakurikuler' => [],
+            'nilai_kegiatan' => [],
+            'kmp' => [],
+            'nilai' => [
+                'sikap' => [
+                    'spiritual' => null,
+                    'spiritual_desc' => null,
+                    'sosial' => null,
+                    'sosial_desc' => null,
+                ],
+                'pengetahuan' => [
+                    'kelompok_umum' => [],
+                    'mia' => [],
+                    'iis' => [],
+                    'kelompok_khusus' => [
+                        'pemberdayaan' => [],
+                        'keterampilan_wajib' => [],
+                        'keterampilan_pilihan' => [],
+                    ]
+                ],
+                'keterampilan' => [
+                    'kelompok_umum' => [],
+                    'mia' => [],
+                    'iis' => [],
+                    'kelompok_khusus' => [
+                        'pemberdayaan' => [],
+                        'keterampilan_wajib' => [],
+                        'keterampilan_pilihan' => [],
+                    ]
+                ]
+            ]
+        ];
+
+        // Proses ekstrakurikuler
+        $nilaiData['ekstrakurikuler'] = $this->prosesEkstrakurikuler($kelas_wb);
+        $nilaiData['nilai_kegiatan'] = $this->getNilaiKegiatan($kelas_wb->id);
+
+        // Proses mata pelajaran dengan chunking
+        $this->prosesMataPelajaranDenganChunking($kelas_wb, $nilaiData);
+
+        return $nilaiData;
+    }
+
+    private function prosesEkstrakurikuler(KelasWbModel $kelas_wb): array
+    {
+        return EkstrakurikulerModel::where('kwb_id', $kelas_wb->id)
             ->select(['kegiatan', 'predikat', 'deskripsi'])
             ->get()
             ->toArray();
+    }
 
-        $nilai_kegiatan = NilaiKegiatanModel::where('kwb_id', $kelas_wb->id)->get();
+    private function getNilaiKegiatan(int $kelas_wb_id)
+    {
+        return NilaiKegiatanModel::where('kwb_id', $kelas_wb_id)
+            ->select(['jenis_kegiatan', 'prestasi'])
+            ->get();
+    }
 
-        $kmp = KelasMataPelajaranModel::from('kelas_mata_pelajaran as kmp')
+
+    private function prosesMataPelajaranDenganChunking(KelasWbModel $kelas_wb, array &$nilaiData): void
+    {
+        $countMK = 0;
+        $sumAVG = 0;
+        $chunkSize = 200; // Sesuaikan dengan kebutuhan
+
+        KelasMataPelajaranModel::from('kelas_mata_pelajaran as kmp')
             ->select(DB::raw($this->getNilaiSelectColumns()))
             ->with(['kmp_setting', 'mata_pelajaran_detail'])
             ->leftJoin('nilai', function ($join) use ($kelas_wb) {
@@ -177,17 +264,19 @@ class RaportService
                     ->where('nilai.wb_id', '=', $kelas_wb->wb_id);
             })
             ->where('kmp.kelas_id', $kelas_wb->kelas_id)
-            ->get();
+            ->orderBy('kmp.id', 'asc') //
+            ->chunk($chunkSize, function ($kmpChunk) use (&$nilaiData, &$countMK, &$sumAVG, $kelas_wb) {
+                foreach ($kmpChunk as $mp) {
+                    $this->prosesMataPelajaran($mp, $kelas_wb, $nilaiData, $countMK, $sumAVG);
+                }
+            });
 
-        $nilai = $this->prosesDataNilai($kmp, $kelas_wb);
-        $final_ekskul = $this->prosesEkstrakurikuler($kmp, $kelas_wb, $ekstrakurikuler);
 
-        return [
-            'ekstrakurikuler' => $final_ekskul,
-            'nilai_kegiatan' => $nilai_kegiatan,
-            'kmp' => $kmp,
-            'nilai' => $nilai
-        ];
+        // Hitung total rata-rata dengan pengecekan pembagian nol
+        $totalAVG = $countMK > 0 ? $sumAVG / $countMK : 0;
+
+        // Tambahkan catatan berdasarkan totalAVG
+        $nilaiData['nilai']['catatan_pj_rombel'] = $this->getCatatanPjRombel($totalAVG, $kelas_wb->wb_detail->nama);
     }
 
     private function getNilaiSelectColumns(): string
@@ -209,56 +298,6 @@ class RaportService
             nilai.k_remedial_1, nilai.k_remedial_2, nilai.k_remedial_3';
     }
 
-    private function prosesDataNilai($kmp, KelasWbModel $kelas_wb): array
-    {
-        $nilai = [
-            'sikap' => [
-                'spiritual' => null,
-                'spiritual_desc' => null,
-                'sosial' => null,
-                'sosial_desc' => null,
-            ],
-            'pengetahuan' => [
-                'kelompok_umum' => [],
-                'mia' => [],
-                'iis' => [],
-                'kelompok_khusus' => [
-                    'pemberdayaan' => [],
-                    'keterampilan_wajib' => [],
-                    'keterampilan_pilihan' => [],
-                ]
-            ],
-            'keterampilan' => [
-                'kelompok_umum' => [],
-                'mia' => [],
-                'iis' => [],
-                'kelompok_khusus' => [
-                    'pemberdayaan' => [],
-                    'keterampilan_wajib' => [],
-                    'keterampilan_pilihan' => [],
-                ]
-            ]
-        ];
-
-        $countMK = 0;
-        $sumAVG = 0;
-
-        foreach ($kmp as $mp) {
-            $this->prosesMataPelajaran($mp, $kelas_wb, $nilai, $countMK, $sumAVG);
-        }
-
-        // Hitung total rata-rata dengan pengecekan pembagian nol
-        $totalAVG = $countMK > 0 ? $sumAVG / $countMK : 0;
-
-        // Tambahkan catatan berdasarkan totalAVG
-        $nilai['catatan_pj_rombel'] = $this->getCatatanPjRombel($totalAVG, $kelas_wb->wb_detail->nama);
-
-        // Proses nilai keterampilan wajib dengan pengecekan
-        $this->prosesNilaiKeterampilanWajib($nilai);
-
-        return $nilai;
-    }
-
     private function prosesMataPelajaran($mp, KelasWbModel $kelas_wb, array &$nilai, int &$countMK, float &$sumAVG): void
     {
         $jumlah_modul = $mp->kmp_setting->jumlah_modul ?? 3;
@@ -272,12 +311,15 @@ class RaportService
         $nk = $this->formatNilaiKeterampilan($mp, $kelasNum, $semester, $jumlah_modul);
 
         // Proses sikap
-        $this->prosesSikap($mp, $kelas_wb, $nilai);
+        $this->prosesSikap($mp, $kelas_wb, $nilai['nilai']);
 
         // Kelompokkan mata pelajaran
         if ($mp->mata_pelajaran_detail) {
-            $this->kelompokkanMataPelajaran($mp, $np, $nk, $nilai, $countMK, $sumAVG);
+            $this->kelompokkanMataPelajaran($mp, $np, $nk, $nilai['nilai'], $countMK, $sumAVG);
         }
+
+        // Tambahkan ke data kmp
+        $nilai['kmp'][] = $mp;
     }
 
     private function formatNilaiPengetahuan($mp, int $kelasNum, int $semester, int $jumlah_modul): array
@@ -446,27 +488,6 @@ class RaportService
         return $nilai;
     }
 
-    private function prosesEkstrakurikuler($kmp, KelasWbModel $kelas_wb, array $ekstrakurikuler): array
-    {
-        $final_ekskul = [];
-
-        foreach ($kmp as $mp) {
-            if (
-                $kelas_wb->kelas_detail->jenis_rapor == 'merdeka' &&
-                $mp->mata_pelajaran_detail &&
-                $mp->mata_pelajaran_detail->is_mapel_ekskul
-            ) {
-                $final_ekskul[] = [
-                    'kegiatan' => $mp->mata_pelajaran_detail->nama,
-                    'predikat' => $mp->p_predikat_1,
-                    'deskripsi' => $mp->capaian_kompetensi
-                ];
-            }
-        }
-
-        return array_merge($final_ekskul, $ekstrakurikuler);
-    }
-
     private function getCatatanPjRombel(float $totalAVG, string $nama): string
     {
         if ($totalAVG <= 70) {
@@ -476,49 +497,6 @@ class RaportService
         } else {
             return "Pertahankan prestasimu yang sudah baik, namun tetaplah belajar hingga meraih prestasi yang lebih tinggi";
         }
-    }
-
-    private function prosesNilaiKeterampilanWajib(array &$nilai): void
-    {
-        $this->prosesKelompokKhusus($nilai['pengetahuan']['kelompok_khusus']['keterampilan_wajib'], 'pengetahuan');
-        $this->prosesKelompokKhusus($nilai['keterampilan']['kelompok_khusus']['keterampilan_wajib'], 'keterampilan');
-    }
-
-    private function prosesKelompokKhusus(array &$kelompok, string $jenis): void
-    {
-        $nilaiWajib = 0;
-        $countWajib = count($kelompok);
-        $kkm = 70;
-        $skk = 0;
-
-        if ($countWajib === 0) {
-            $kelompok = [
-                'kkm' => 0,
-                'skk' => 0,
-                'jumlah_modul' => 0,
-                'nilai' => 0,
-                'predikat' => '-',
-                'avg' => 0,
-            ];
-            return;
-        }
-
-        foreach ($kelompok as $n) {
-            $kkm = $n['kkm'] ?? $kkm;
-            $skk += $n['skk'] ?? 0;
-            $nilaiWajib += $n['nilai_1'] ?? 0;
-        }
-
-        $avg = $nilaiWajib / $countWajib;
-
-        $kelompok = [
-            'kkm' => $kkm,
-            'skk' => $skk,
-            'jumlah_modul' => 1,
-            'nilai' => number_format((float) $avg, 2),
-            'predikat' => Misc::checkPredikat($avg),
-            'avg' => number_format($avg, 2),
-        ];
     }
 
     private function hitungDataModul(int $kelasNum, int $semester): array
@@ -587,7 +565,7 @@ class RaportService
     private function prepareFinalData(
         KelasWbModel $kelas_wb,
         array $kelasInfo,
-        object $kelasPertama,
+        ?object $kelasPertama,
         array $nilaiData,
         array $modulData,
         ?string $catatan,
@@ -599,7 +577,7 @@ class RaportService
             'catatan_perkembangan_keterampilan' => $kelas_wb->catatan_perkembangan_keterampilan ?? '',
         ];
 
-        $data = [
+        return [
             'kelas_wb' => $kelas_wb,
             'kmp' => $nilaiData['kmp'],
             'kelas_num' => $kelasInfo['kelas'],
@@ -607,8 +585,8 @@ class RaportService
             'semester' => $kelasInfo['semester'],
             'tingkatan' => $kelasInfo['tingkatan'],
             'kompetensi' => $kelasInfo['paket_kompetensi'],
-            'kelas_diterima' => $kelasPertama->romawi,
-            'tingkatan_diterima' => $kelasPertama->tingkatan,
+            'kelas_diterima' => $kelasPertama->romawi ?? null,
+            'tingkatan_diterima' => $kelasPertama->tingkatan ?? null,
             'data_modul' => $modulData,
             'nilai' => $nilaiData['nilai'],
             'total_avg' => $nilaiData['nilai']['total_avg'] ?? 0,
@@ -628,8 +606,6 @@ class RaportService
             ])->where('kelas_wb_id', $kelas_wb->id)->get(),
             'presensi' => KelasWbModel::find($kelas_wb->id)->first(['izin', 'sakit', 'alpa'])->toArray()
         ];
-
-        return $data;
     }
 
     private function getFase(int $kelasNum): ?string
