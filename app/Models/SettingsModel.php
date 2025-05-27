@@ -20,4 +20,10 @@ class SettingsModel extends Model
         $setting = self::where('key', $key)->first();
         return !empty($setting) ? $setting->value : null;
     }
+
+    public static function getValue($key, $default = null)
+    {
+        $setting = self::where('key', $key)->first();
+        return $setting ? $setting->value : $default;
+    }
 }

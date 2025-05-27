@@ -406,11 +406,9 @@ class SuController extends Controller
     // debugx
     public function raportPrint(Request $request)
     {
+        // dd($request->all());
         $raportService = new RaportService();
         $data = $raportService->getData(['kelas_wb_id' => $request->kelas_wb]);
-
-        // dd(($data['catatan_proses']->toArray()));
-        // dd($data);
 
         if (!$data) {
             dd('data tidak ditemukan');

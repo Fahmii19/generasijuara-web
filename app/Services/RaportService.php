@@ -567,10 +567,19 @@ class RaportService
 
     private function getDataTtd(int $kelas_id): array
     {
-        $data_ttd = RaportSettingModel::where('kelas_id', $kelas_id)->first() ?? [];
+        // Cari data spesifik kelas dulu
+        $raportSetting = RaportSettingModel::where('kelas_id', $kelas_id)->first();
 
-        $data_ttd['nip_ketua_pkbm'] = SettingsModel::where('key', 'nip_kepala_pkbm')->first()->value ?? '';
-        $data_ttd['url_ttd_ketua'] = SettingsModel::where('key', 'ttd_kepala_pkbm')->first()->value ?? '';
+        // Jika tidak ditemukan, cari data dengan kelas_id NULL
+        if (!$raportSetting) {
+            $raportSetting = RaportSettingModel::whereNull('kelas_id')->first();
+        }
+
+        $data_ttd = $raportSetting ? $raportSetting->toArray() : [];
+
+        // Tambahkan data dari SettingsModel
+        $data_ttd['nip_ketua_pkbm'] = SettingsModel::getValue('nip_kepala_pkbm', '');
+        $data_ttd['url_ttd_ketua'] = SettingsModel::getValue('ttd_kepala_pkbm', '');
 
         return $data_ttd;
     }
