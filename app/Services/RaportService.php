@@ -147,7 +147,7 @@ class RaportService
     private function getKelasWbData(array $data): ?KelasWbModel
     {
         $query = KelasWbModel::with([
-            'wb_detail:id,nama',
+            'wb_detail:id,nama,nama_ibu,nama_ayah,nama_wali',
             'kelas_detail:id,kelas,semester,jenis_rapor,tahun_akademik_id,paket_kelas_id',
             'kelas_detail.paket_kelas:id,nama',
             'kelas_detail.tahun_akademik:id,id,tgl_raport' // tambahkan ini!

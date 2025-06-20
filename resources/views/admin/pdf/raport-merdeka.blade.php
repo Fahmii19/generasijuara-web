@@ -958,19 +958,17 @@
     </div>
 
 
-
-
     <!-- TTD PJ -->
     @include('includes.components.ttd_pj_raport_merdeka')
 
+
     {{-- PAGE BREAK --}}
-	{{-- <div class="new-page"></div> --}}
 
     <!-- Keterangan Penilaian -->
 
 
     {{-- PAGE BREAK --}}
-	{{-- <div class="new-page"></div> --}}
+	<div class="new-page"></div>
 
     @include('includes.components.data_siswa_raport_merdeka')
 
