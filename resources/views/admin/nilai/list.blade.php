@@ -550,7 +550,7 @@
                     "orderable": false,
                     "searchable": false,
                     render: function(data, type, row) {
-                        return '<a href="#" class="editRowBtn btn btn-sm btn-transparent-dark" data-wb_id="' + row.wb_id + '">on<i class="fas fa-edit"></i></a>'
+                        return '<a href="#" class="editRowBtn btn btn-sm btn-transparent-dark" data-wb_id="' + row.wb_id + '"><i class="fas fa-edit"></i></a>'
                         +'<a href="{{route("web.su.perkembangan.list")}}/'+ row.wb_id +'/'+ kelasSelected +'/'+ kmpSelected +'" target="_blank" class="btn btn-sm btn-transparent-dark lihat-perkembangan"><i class="fas fa-eye"></i></a>';
                     }
                 }

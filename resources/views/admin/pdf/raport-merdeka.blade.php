@@ -633,15 +633,13 @@
             <td class="text-left" width="3%" style="border: 1px solid black; padding-left: 2px;">
                 No
             </td>
-            <td width="40%" style="border: 1px solid black;">
+            <td width="36%" style="border: 1px solid black;">
                 <span>Mata Pelajaran/Program</span>
-                <br>
-                <span>Pemberdayaan dan Keterampilan</span>
             </td>
-            <td width="7%" style="border: 1px solid black;">
-                Nilai Akhir
+            <td width="15%" style="border: 1px solid black;">
+                Nilai Akhirr
             </td>
-            <td width="40%" style="border: 1px solid black;">
+            <td width="36%" style="border: 1px solid black;">
                 Capaian Kompetensi
             </td>
         </tr>
