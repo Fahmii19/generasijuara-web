@@ -33,7 +33,7 @@ class SialumController extends Controller
 
         try {
             Mail::to($request->email)
-                ->cc('fahmitb70@gmail.com')
+                ->cc('rahmat@generasijuara.sch.id')
                 ->send(new KirimEmail($validated));
 
             return response()->json([

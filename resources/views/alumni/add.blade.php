@@ -22,7 +22,7 @@
             <div class="card-body">
                 <form id="formAlumni">
                     @csrf
-                    <input class="form-control" id="id" type="text" />
+                    <input class="form-control" id="id" type="hidden" />
                     <div class="row gx-3">
                         <div class="mb-3 col-md-4">
                             <label class="small mb-1" for="nis">NIS</label>
