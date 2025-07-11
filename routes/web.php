@@ -113,6 +113,11 @@ use App\Http\Controllers\Ajax\WBController as AjaxWb;
 
 use Illuminate\Support\Facades\Request;
 
+// Email
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TestMail;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -269,8 +274,10 @@ Route::group(['prefix' => 'sirego', 'middleware' => ['auth']], function () {
 });
 
 Route::group(['prefix' => 'sialum'], function () {
-    // Route::get('/', [WebSialum::class, 'home'])->name('web.sialum.home');
     Route::get('/add', [WebSialum::class, 'add'])->name('web.sialum.alumni.add');
+    Route::get('/edit/{id}', [WebSialum::class, 'add'])->name('web.sialum.alumni.edit');
+    Route::post('/store', [WebSialum::class, 'store'])->name('web.sialum.alumni.store');
+    Route::post('/update/{id}', [WebSialum::class, 'update'])->name('web.sialum.alumni.update');
 });
 
 Route::group(['prefix' => 'siab', 'middleware' => ['auth']], function () {
@@ -556,3 +563,37 @@ Route::group(['prefix' => 'dashboard'], function () {
 });
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Route::get('/test-email', function () {
+//     try {
+//         Mail::to('fahmitb70@gmail.com')->send(new TestMail());
+//         return 'Email berhasil dikirim!';
+//     } catch (\Swift_TransportException $e) {
+//         return 'Error transport: ' . $e->getMessage();
+//     } catch (\Exception $e) {
+//         return 'Error: ' . $e->getMessage();
+//     }
+// });
+
+
+// routes/web.php
+// Route::get('/test-email', function () {
+//     try {
+//         Mail::to('fahmitb70@gmail.com')->send(new \App\Mail\KirimEmail([
+//             'nis' => '123',
+//             'nisn' => '456',
+//             'nama' => 'Test Name',
+//             'jenis_kelamin' => 'l',
+//             'no_hp' => '08123456789',
+//             'email' => 'test@example.com',
+//             'paket' => 'a',
+//             'lanjut_kuliah' => true,
+//             'nama_sekolah' => 'Universitas Test',
+//             'prodi' => 'Teknik Informatika'
+//         ]));
+
+//         return "Email test sent successfully!";
+//     } catch (\Exception $e) {
+//         return "Failed to send email: " . $e->getMessage();
+//     }
+// });

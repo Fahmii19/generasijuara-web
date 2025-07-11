@@ -19,8 +19,8 @@ class AlumniController extends Controller
             if ($request->hasFile('import_file_alumni')) {
                 Excel::import(new AlumniImport(), $request->file('import_file_alumni'));
             }
-            return response()->json([], 200); 
-        } catch(\Exception $e) {
+            return response()->json([], 200);
+        } catch (\Exception $e) {
             return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
         }
     }
@@ -32,9 +32,8 @@ class AlumniController extends Controller
             $params = $request->validated();
             $alumni = AlumniModel::create($params);
             DB::commit();
-
             return response()->json(['error' => false, 'message' => null, 'data' => $alumni], 200);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
         } catch (\Throwable $e) {
@@ -54,7 +53,7 @@ class AlumniController extends Controller
             DB::commit();
 
             return response()->json(['error' => false, 'message' => null, 'data' => $alumni], 200);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
         } catch (\Throwable $e) {
@@ -64,14 +63,14 @@ class AlumniController extends Controller
 
     public function delete(Request $request)
     {
-        try{
+        try {
             $id = !empty($request->get('id')) ? $request->get('id') : null;
             $alumni = AlumniModel::find($id);
             if (empty($alumni)) {
                 return response()->json(['error' => true, 'message' => 'Alumni tidak ditemukan'], 400);
             }
             $alumni->delete();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
         } catch (\Throwable $e) {
             return response()->json(['error' => true, 'message' => $e->getMessage()], 400);
