@@ -25,60 +25,57 @@
                     <input class="form-control" id="id" type="hidden" />
                     <div class="row gx-3">
                         <div class="mb-3 col-md-4">
-                            <label class="small mb-1" for="nis">NIS</label>
-                            <input class="form-control" id="nis" name="nis" type="text" placeholder="" value="" />
+                            <label class="small mb-1" for="nis">NIS <span class="text-danger">*</span></label>
+                            <input class="form-control" id="nis" name="nis" type="text" placeholder="" value="" required />
+                            <div class="invalid-feedback">NIS wajib diisi</div>
                         </div>
                         <div class="mb-3 col-md-4">
-                            <label class="small mb-1" for="nisn">NISN</label>
-                            <input class="form-control" id="nisn" name="nisn" placeholder="" value="" />
+                            <label class="small mb-1" for="nisn">NISN <span class="text-danger">*</span></label>
+                            <input class="form-control" id="nisn" name="nisn" placeholder="" value="" required />
+                            <div class="invalid-feedback">NISN wajib diisi</div>
                         </div>
                         <div class="mb-3 col-md-4">
-                            <label class="small mb-1" for="jenis_kelamin">Jenis Kelamin</label>
-                            <select class="form-control" id="jenis_kelamin" name="jenis_kelamin">
-                                <option value="">-- Pilih Jenis Kelamin --</option>
-                                <option value="l">Laki-laki</option>
-                                <option value="p">Perempuan</option>
-                            </select>
+                            <label class="small mb-1" for="jenis_kelamin">Jenis Kelamin <span class="text-danger">*</span></label>
+                            <select class="form-control" id="jenis_kelamin" name="jenis_kelamin" required></select>
+                            <div class="invalid-feedback">Jenis kelamin wajib dipilih</div>
                         </div>
                     </div>
                     <div class="row gx-3">
                         <div class="mb-3 col-md-4">
-                            <label class="small mb-1" for="nama">Nama Alumni (sesuai AKTE)</label>
-                            <input class="form-control" id="nama" name="nama" type="text" placeholder="" value="" />
+                            <label class="small mb-1" for="nama">Nama Alumni (sesuai AKTE) <span class="text-danger">*</span></label>
+                            <input class="form-control" id="nama" name="nama" type="text" placeholder="" value="" required />
+                            <div class="invalid-feedback">Nama wajib diisi</div>
                         </div>
                         <div class="mb-3 col-md-4">
-                            <label class="small mb-1" for="no_hp">HP Alumni (WA Aktif)</label>
-                            <input class="form-control" id="no_hp" name="no_hp" type="text" placeholder="" value="" />
+                            <label class="small mb-1" for="no_hp">HP Alumni (WA Aktif) <span class="text-danger">*</span></label>
+                            <input class="form-control" id="no_hp" name="no_hp" type="text" placeholder="" value="" required />
+                            <div class="invalid-feedback">Nomor HP wajib diisi</div>
                         </div>
                         <div class="mb-3 col-md-4">
                             <label class="small mb-1" for="email">Email</label>
-                            <input class="form-control" id="email" name="email" placeholder="" value="" />
+                            <input class="form-control" id="email" name="email" placeholder="" value="" type="email" />
                         </div>
                     </div>
                     <div class="row gx-3">
                         <div class="mb-3 col-md-4">
-                            <label class="small mb-1" for="paket">Paket</label>
-                            <select class="form-control" id="paket" name="paket">
-                                <option value="a">PAKET A</option>
-                                <option value="b">PAKET B</option>
-                                <option value="c">PAKET C</option>
-                            </select>
+                            <label class="small mb-1" for="paket">Paket <span class="text-danger">*</span></label>
+                            <select class="form-control" id="paket" name="paket" required></select>
+                            <div class="invalid-feedback">Paket wajib dipilih</div>
                         </div>
                         <div class="col-md-4">
-                            <label class="mb-1" for="tahun_akademik">Tahun Akademik</label>
-                            <select class="form-control" id="tahun_akademik" style="width: 100%;" name="tahun_akademik_id">
+                            <label class="mb-1" for="tahun_akademik">Tahun Akademik <span class="text-danger">*</span></label>
+                            <select class="form-control" id="tahun_akademik" style="width: 100%;" name="tahun_akademik_id" required>
                             </select>
+                            <div class="invalid-feedback">Tahun akademik wajib dipilih</div>
                         </div>
                     </div>
                     <hr>
                     <h1>Kegiatan Sekarang</h1>
                     <div class="row gx-3">
                         <div class="mb-3 col-md-4">
-                            <label class="small mb-1" for="lanjut_kuliah">Lanjut</label>
-                            <select class="form-control" id="lanjut_kuliah" name="lanjut_kuliah">
-                                <option value="1">Ya</option>
-                                <option value="0">Tidak</option>
-                            </select>
+                            <label class="small mb-1" for="lanjut_kuliah">Lanjut <span class="text-danger">*</span></label>
+                            <select class="form-control" id="lanjut_kuliah" name="lanjut_kuliah" required></select>
+                            <div class="invalid-feedback">Status lanjut wajib dipilih</div>
                         </div>
                         <div class="mb-3 col-md-4">
                             <label class="small mb-1" for="nama_sekolah">Nama Sekolah/Perguruan Tinggi</label>
@@ -129,107 +126,227 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.js"></script>
 
 <script>
+    // Form Reset Functionality
     $('#resetFormBtn').on('click', function(e){
         resetForm();
     });
 
     function resetForm() {
         $('#formAlumni').trigger("reset");
+        // Reset select2 values
+        $('#jenis_kelamin').val('').trigger('change');
+        $('#paket').val('a').trigger('change');
+        $('#tahun_akademik').val('').trigger('change');
+        $('#lanjut_kuliah').val('').trigger('change'); // Diubah dari '0' ke ''
+        // Remove validation classes
+        $('.is-invalid').removeClass('is-invalid');
     }
 
-    getTahunAkademik();
-function getTahunAkademik() {
-    $.ajax({
-        type: "POST",
-        url: "{{route('ajax.tahun_akademik.list')}}",
-        data: {
-            "_token": "{{ csrf_token() }}",
-        },
-        success: function(res) {
-            var opt_for_filter = "<option value=''>-- Pilih Tahun Akademik --</option>";
-            var opt_for_input = "<option value=''>-- Pilih Salah Satu --</option>";
+   // Initialize Select2 Elements
+    function initializeSelect2Elements() {
+        // Initialize Jenis Kelamin
+        $('#jenis_kelamin').select2({
+            theme: 'bootstrap4',
+            data: [
+                {id: '', text: '-- Pilih Jenis Kelamin --'},
+                {id: 'l', text: 'Laki-laki'},
+                {id: 'p', text: 'Perempuan'}
+            ]
+        });
 
-            $.each(res.data, function (i, row) {
-                opt_for_filter += "<option value='"+row.id+"'>"+row.kode+" - "+row.keterangan+"</option>";
-                opt_for_input += "<option value='"+row.id+"'>"+row.kode+" - "+row.keterangan+"</option>";
-            });
+        // Initialize Lanjut Kuliah - Diubah
+        $('#lanjut_kuliah').select2({
+            theme: 'bootstrap4',
+            data: [
+                {id: '', text: '-- Pilih Lanjut --'},
+                {id: '1', text: 'Ya'},
+                {id: '0', text: 'Tidak'}
+            ]
+        });
 
-            $('#tahun_akademik').html(opt_for_filter);
-            $('#tahun_akademik_id').html(opt_for_input);
-            $('#tahun_akademik_source').html(opt_for_input);
-            $('#tahun_akademik_destination').html(opt_for_input);
+        // Initialize Paket
+        $('#paket').select2({
+            theme: 'bootstrap4',
+            data: [
+                {id: '', text: '-- Pilih Paket --'},
+                {id: 'a', text: 'PAKET A'},
+                {id: 'b', text: 'PAKET B'},
+                {id: 'c', text: 'PAKET C'}
+            ]
+        });
 
-            @if(isset($alumni) && $alumni)
-                $('#id').val("{{ $alumni->id ?? '' }}");
-                $('#nis').val("{{ $alumni->nis ?? '' }}");
-                $('#nisn').val("{{ $alumni->nisn ?? '' }}");
-                $('#jenis_kelamin').val("{{ $alumni->jenis_kelamin ?? '' }}");
-                $('#nama').val("{{ $alumni->nama ?? '' }}");
-                $('#no_hp').val("{{ $alumni->no_hp ?? '' }}");
-                $('#email').val("{{ $alumni->email ?? '' }}");
-                $('#tahun_akademik').val("{{ $alumni->tahun_akademik_id ?? '' }}").trigger('change');
-                $('#lanjut_kuliah').val("{{ $alumni->lanjut_kuliah ?? '' }}");
-                $('#nama_sekolah').val("{{ $alumni->nama_sekolah ?? '' }}");
-                $('#surat_penerimaan').val("{{ $alumni->surat_penerimaan ?? '' }}");
-                $('#prodi').val("{{ $alumni->prodi ?? '' }}");
-                $('#usaha').val("{{ $alumni->usaha ?? '' }}");
-                $('#sertifikat').val("{{ $alumni->sertifikat ?? '' }}");
-            @endif
-        }
-    });
-}
+        // Initialize Tahun Akademik
+        $('#tahun_akademik').select2({
+            theme: 'bootstrap4'
+        });
+    }
 
-    $("#tahun_akademik").select2({
-        theme: 'bootstrap4'
-    });
+    // Get Tahun Akademik Data
+    function getTahunAkademik() {
+        $.ajax({
+            type: "POST",
+            url: "{{ route('ajax.tahun_akademik.list') }}",
+            data: {
+                "_token": "{{ csrf_token() }}",
+            },
+            success: function(res) {
+                console.log('Response data:', res);
 
-    $("#tahun_akademik_id").select2({
-        theme: 'bootstrap4',
-        dropdownParent: $("#modalKuisioner")
-    });
+                if (!res.data || !Array.isArray(res.data)) {
+                    console.error('Invalid response format');
+                    $('#tahun_akademik').html('<option value="">Gagal memuat data</option>');
+                    return;
+                }
 
-    $("#tahun_akademik_source, #tahun_akademik_destination").select2({
-        theme: 'bootstrap4',
-        dropdownParent: $("#modalDuplicate")
-    });
+                // Prepare options
+                var options = res.data.map(row =>
+                    `<option value="${row.id}">${row.kode} - ${row.keterangan}</option>`
+                ).join('');
 
-    let tahunAkademikSelected = null;
-    $("#tahun_akademik").on("change", function(e) {
-        tahunAkademikSelected = $("#tahun_akademik").val();
-        console.log($("#tahun_akademik").val());
-    });
+                // Set options
+                $('#tahun_akademik').html('<option value="">-- Pilih Tahun Akademik --</option>' + options);
 
+                // Set default value (newest year)
+                if (res.data.length > 0) {
+                    res.data.sort((a, b) => b.kode.localeCompare(a.kode));
+                    const defaultId = res.data[0].id;
+                    $('#tahun_akademik').val(defaultId).trigger('change');
+                }
 
-    $('#submitAlumniBtn').on('click', function(e){
-    e.preventDefault();
-
-    var form = $("#formAlumni");
-    enableLoadingButton("#submitAlumniBtn");
-
-    // Gunakan route store yang benar
-    $.ajax({
-        type: "POST",
-        url: "{{ route('web.sialum.alumni.store') }}",
-        data: form.serialize(), // atau new FormData() jika ada upload file
-        success: function(res) {
-            disableLoadingButton("#submitAlumniBtn");
-            if (res.success) {
-                swalSuccess({
-                    text: res.message,
-                    withConfirmButton: true,
-                    withRedirect: true,
-                    redirectUrl: '{{ route("web.sialum.alumni.add") }}'
-                });
-            } else {
-                swalError({text: res.message});
+                // Set form values if alumni data exists
+                setFormValues();
+            },
+            error: function(xhr) {
+                console.error('Error:', xhr.responseText);
+                $('#tahun_akademik').html('<option value="">Gagal memuat data</option>');
             }
-        },
-        error: function(response) {
-            disableLoadingButton("#submitAlumniBtn");
-            ajaxCallbackError(response);
-        }
-    });
-});
+        });
+    }
 
+    // Set Form Values from Alumni Data
+    function setFormValues() {
+        @if(isset($alumni) && $alumni)
+            // Set select values
+            $('#jenis_kelamin').val("{{ $alumni->jenis_kelamin ?? '' }}").trigger('change');
+            $('#paket').val("{{ $alumni->paket ?? 'a' }}").trigger('change');
+            $('#tahun_akademik').val("{{ $alumni->tahun_akademik_id ?? '' }}").trigger('change');
+            $('#lanjut_kuliah').val("{{ $alumni->lanjut_kuliah ?? '' }}").trigger('change');
+
+            // Set input values
+            $('#id').val("{{ $alumni->id ?? '' }}");
+            $('#nis').val("{{ $alumni->nis ?? '' }}");
+            $('#nisn').val("{{ $alumni->nisn ?? '' }}");
+            $('#nama').val("{{ $alumni->nama ?? '' }}");
+            $('#no_hp').val("{{ $alumni->no_hp ?? '' }}");
+            $('#email').val("{{ $alumni->email ?? '' }}");
+            $('#nama_sekolah').val("{{ $alumni->nama_sekolah ?? '' }}");
+            $('#surat_penerimaan').val("{{ $alumni->surat_penerimaan ?? '' }}");
+            $('#prodi').val("{{ $alumni->prodi ?? '' }}");
+            $('#usaha').val("{{ $alumni->usaha ?? '' }}");
+            $('#sertifikat').val("{{ $alumni->sertifikat ?? '' }}");
+        @else
+            // Set default values for new form
+            $('#jenis_kelamin').val('').trigger('change');
+            $('#paket').val('a').trigger('change');
+            $('#lanjut_kuliah').val('').trigger('change');
+        @endif
+    }
+
+    // Validate Form
+    function validateForm() {
+        let isValid = true;
+
+        // Check required fields
+        const requiredFields = [
+            'nis', 'nisn', 'nama', 'no_hp', 'jenis_kelamin',
+            'paket', 'tahun_akademik_id', 'lanjut_kuliah'
+        ];
+
+        requiredFields.forEach(field => {
+            const element = $(`[name="${field}"]`);
+            const value = element.val();
+
+            // Special handling for select2
+            if (element.hasClass('select2-hidden-accessible')) {
+                if (value === null || value === '') {
+                    element.addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    element.removeClass('is-invalid');
+                }
+            } else {
+                if (!value) {
+                    element.addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    element.removeClass('is-invalid');
+                }
+            }
+        });
+
+        return isValid;
+    }
+
+    // Form Submission
+    $('#submitAlumniBtn').on('click', function(e){
+        e.preventDefault();
+
+        // Validate form first
+        if (!validateForm()) {
+            swalError({text: 'Harap lengkapi semua field yang wajib diisi'});
+            return;
+        }
+
+        var form = $("#formAlumni");
+        enableLoadingButton("#submitAlumniBtn");
+
+        $.ajax({
+            type: "POST",
+            url: "{{ route('web.sialum.alumni.store') }}",
+            data: form.serialize(),
+            success: function(res) {
+                disableLoadingButton("#submitAlumniBtn");
+                if (res.success) {
+                    swalSuccess({
+                        text: res.message,
+                        withConfirmButton: true,
+                        withRedirect: true,
+                        redirectUrl: '{{ route("web.sialum.alumni.add") }}'
+                    });
+                } else {
+                    swalError({text: res.message});
+                }
+            },
+            error: function(response) {
+                disableLoadingButton("#submitAlumniBtn");
+                ajaxCallbackError(response);
+            }
+        });
+    });
+
+    // Document Ready
+    $(document).ready(function() {
+        initializeSelect2Elements();
+        getTahunAkademik();
+
+        // Add validation on blur for required fields
+        $('[required]').on('blur', function() {
+            if (!$(this).val()) {
+                $(this).addClass('is-invalid');
+            } else {
+                $(this).removeClass('is-invalid');
+            }
+        });
+
+        // Special handling for select2 elements
+        $('.select2').on('change', function() {
+            if (!$(this).val()) {
+                $(this).addClass('is-invalid');
+            } else {
+                $(this).removeClass('is-invalid');
+            }
+        });
+    });
 </script>
+
 @endsection
