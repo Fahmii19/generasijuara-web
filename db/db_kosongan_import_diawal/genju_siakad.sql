@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 12 Bulan Mei 2025 pada 03.49
+-- Waktu pembuatan: 12 Jul 2025 pada 15.31
 -- Versi server: 5.7.33
 -- Versi PHP: 7.4.19
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `siakad_generasijuara_baru`
+-- Database: `genju_siakad`
 --
 
 -- --------------------------------------------------------
@@ -46,14 +46,6 @@ CREATE TABLE `alumni` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data untuk tabel `alumni`
---
-
-INSERT INTO `alumni` (`id`, `nis`, `nisn`, `email`, `jenis_kelamin`, `nama`, `no_hp`, `tahun_akademik_id`, `paket`, `lanjut_kuliah`, `nama_sekolah`, `surat_penerimaan`, `prodi`, `usaha`, `sertifikat`, `created_at`, `updated_at`) VALUES
-(1, '2002254554', '548848487', 'datux@outlook.com', 'l', 'Ramadhani', '08587879797979', 10, 'c', 1, 'Chung Yuan ChristianUniversity', 'ada', 'Manajemen bisnis', 'kuliah', 'ada deh', '2024-06-22 13:30:07', '2024-06-22 13:30:07'),
-(2, '202102112', '0129713138', 'heri.guntoro@gmail.com', 'p', 'Azalia Nada Hibatullah', '08111555105/082112815981', 10, 'a', 1, 'Pesantren Al Ma\'tuq', 'Ada', NULL, NULL, NULL, '2024-06-24 01:30:28', '2024-06-24 01:30:28');
 
 -- --------------------------------------------------------
 
@@ -101,6 +93,14 @@ CREATE TABLE `catatan_proses_wb` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data untuk tabel `catatan_proses_wb`
+--
+
+INSERT INTO `catatan_proses_wb` (`id`, `dimensi_id`, `kelas_wb_id`, `catatan_proses`, `created_at`, `updated_at`) VALUES
+(1, 2, 7421, 'dimensi Kreativitas', '2025-05-14 02:40:46', '2025-05-14 02:40:46'),
+(2, 1, 7421, 'Oke', '2025-05-14 02:42:19', '2025-05-27 01:02:07');
+
 -- --------------------------------------------------------
 
 --
@@ -113,6 +113,31 @@ CREATE TABLE `dimensi` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data untuk tabel `dimensi`
+--
+
+INSERT INTO `dimensi` (`id`, `dimensi_name`, `created_at`, `updated_at`) VALUES
+(1, 'Elemen akhlak beragama', '2025-05-12 09:45:52', '2025-05-12 09:45:52'),
+(2, 'Elemen akhlak pribadi', '2025-05-12 09:45:52', '2025-05-12 09:45:52'),
+(3, 'Elemen akhlak kepada manusia', NULL, NULL),
+(4, 'Elemen akhlak kepada alam', NULL, NULL),
+(5, 'Elemen akhlak kepada negara', NULL, NULL),
+(6, 'Elemen mengenal dan menghargai budaya', NULL, NULL),
+(7, 'Elemen komunikasi dan interaksi antar budaya', NULL, NULL),
+(8, 'Elemen refleksi dan bertanggung jawab terhadap pengalaman\r\nkebinekaan', NULL, NULL),
+(9, 'Elemen kolaborasi', NULL, NULL),
+(10, 'Elemen kepedulian', NULL, NULL),
+(11, 'Elemen berbagi', NULL, NULL),
+(12, 'Elemen pemahaman diri dan situasi yang dihadapi', NULL, NULL),
+(13, 'Elemen regulasi diri', NULL, NULL),
+(14, 'Elemen memperoleh dan memproses informasi dan gagasan', NULL, NULL),
+(15, 'Elemen menganalisis dan mengevaluasi penalaran dan prosedurnya', NULL, NULL),
+(16, 'Elemen refleksi pemikiran dan proses berpikir', NULL, NULL),
+(17, 'Elemen menghasilkan karya dan tindakan yang orisinal', NULL, NULL),
+(18, 'Elemen memiliki keluwesan berpikir dalam mencari alternatif solusi\r\npermasalahan', NULL, NULL),
+(19, 'Elemen menghasilkan gagasan yang orisinal', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -570,7 +595,8 @@ INSERT INTO `ekstrakurikuler` (`id`, `kwb_id`, `kegiatan`, `predikat`, `deskrips
 (235, NULL, 'Robotic Basic', 'A', 'Sangat Baik', 1, 1, '2024-06-25 03:03:57', '2024-06-25 03:03:57'),
 (236, NULL, 'Robotic Basic', 'A', 'Sangat Baik', 1, 1, '2024-06-25 03:04:59', '2024-06-25 03:04:59'),
 (237, NULL, 'Robotic Programing', 'A', 'Sangat Baik', 1, 1, '2024-06-25 03:05:49', '2024-06-25 03:05:49'),
-(238, NULL, 'IT Dasar', 'A', 'Sangat Baik', 1, 1, '2024-06-25 03:07:34', '2024-06-25 03:07:34');
+(238, NULL, 'IT Dasar', 'A', 'Sangat Baik', 1, 1, '2024-06-25 03:07:34', '2024-06-25 03:07:34'),
+(239, 7421, 'Basket', 'A', 'Berkembang', 2727, 2727, '2025-05-12 09:00:48', '2025-05-12 09:00:48');
 
 -- --------------------------------------------------------
 
@@ -585,6 +611,54 @@ CREATE TABLE `elemen` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data untuk tabel `elemen`
+--
+
+INSERT INTO `elemen` (`id`, `dimensi_id`, `elemen_name`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Mengenal sifat-sifat utama Tuhan Yang Maha Esa bahwa Dia adalah\nSang Pencipta yang Maha Pengasih dan Maha Penyayang dan\nmengenali kebaikan dirinya sebagai cerminan sifat Tuhan.', '2025-05-12 09:45:52', '2025-05-12 09:45:52'),
+(2, 1, 'Mengenal unsur-unsur utama agama/kepercayaan (ajaran, ritual\nkeagamaan, kitab suci, dan orang suci/utusan Tuhan YME).', '2025-05-12 09:45:52', '2025-05-12 09:45:52'),
+(3, 1, 'Terbiasa melaksanakan ibadah sesuai ajaran agama/kepercayaannya.', '2025-05-12 09:45:52', '2025-05-12 09:45:52'),
+(4, 2, 'Membiasakan bersikap jujur terhadap diri sendiri dan orang lain dan\r\nberani menyampaikan kebenaran atau fakta.', NULL, NULL),
+(5, 2, 'Memiliki rutinitas sederhana yang diatur secara mandiri dan\r\ndijalankan sehari-hari serta menjaga kesehatan dan\r\nkeselamatan/keamanan diri dalam semua aktivitas kesehariannya.', NULL, NULL),
+(6, 3, 'Mengenali hal-hal yang sama dan berbeda yang dimiliki diri dan\r\ntemannya dalam berbagai hal, serta memberikan respons secara\r\npositif.', NULL, NULL),
+(7, 3, 'Mengidentifikasi emosi, minat, dan kebutuhan orang-orang terdekat\r\ndan meresponsnya secara positif.', NULL, NULL),
+(8, 4, 'Mengidentifikasi berbagai ciptaan Tuhan.', NULL, NULL),
+(9, 4, 'Membiasakan bersyukur atas lingkungan alam sekitar dan berlatih\r\nuntuk menjaganya.', NULL, NULL),
+(10, 5, 'Mengidentifikasi hak dan tanggung jawabnya di rumah, sekolah, dan\nlingkungan sekitar serta kaitannya dengan keimanan kepada Tuhan\nYME', NULL, NULL),
+(11, 6, 'Mengidentifikasi dan mendeskripsikan ide-ide tentang dirinya dan\r\nbeberapa kelompok di lingkungan sekitarnya', NULL, NULL),
+(12, 6, 'Mendeskripsikan pengalaman dan pemahaman hidup bersama-sama\ndalam kemajemukanMengidentifikasi dan mendeskripsikan praktik keseharian diri dan\nbudayanya', NULL, NULL),
+(13, 6, 'Mendeskripsikan pengalaman dan pemahaman hidup bersama-sama\r\ndalam kemajemukan.', NULL, NULL),
+(14, 7, 'Mengenali bahwa diri dan orang lain menggunakan kata, gambar,\r\ndan bahasa tubuh yang dapat memiliki makna yang berbeda di\r\nlingkungan sekitarnya', NULL, NULL),
+(15, 7, 'Mengekspresikan pandangannya terhadap topik yang umum dan\nmendengarkan sudut pandang orang lain yang berbeda dari dirinya\ndalam lingkungan keluarga dan sekolah.', NULL, NULL),
+(16, 8, 'Menyebutkan apa yang telah dipelajari tentang orang lain dari\r\ninteraksinya dengan kemajemukan budaya di lingkungan sekolah\r\ndan rumah.', NULL, NULL),
+(17, 8, 'Mengenali perbedaan tiap orang atau kelompok dan menyikapinya\nsebagai kewajaran.', NULL, NULL),
+(18, 8, 'Mengidentifikasi perbedaan budaya yang konkret di lingkungan\r\nsekitar.', NULL, NULL),
+(19, 8, 'Menjalin pertemanan tanpa memandang perbedaan agama, suku,\r\nras, jenis kelamin, dan perbedaan lainnya, dan mengenal masalahmasalah sosial, ekonomi, dan lingkungan di lingkungan sekitarnya.', NULL, NULL),
+(20, 8, 'Mengidentifikasi pilihan-pilihan berdasarkan kebutuhan dirinya dan\r\norang lain ketika membuat keputusan.', NULL, NULL),
+(21, 8, 'Mengidentifikasi peran, hak dan kewajiban warga dalam masyarakat\r\ndemokratis.\r\nMen', NULL, NULL),
+(22, 9, 'Menerima dan melaksanakan tugas serta peran yang diberikan\r\nkelompok dalam sebuah kegiatan bersama.', NULL, NULL),
+(23, 9, 'Memahami informasi sederhana dari orang lain dan menyampaikan\r\ninformasi sederhana kepada orang lain menggunakan kata-katanya\r\nsendiri.', NULL, NULL),
+(24, 9, 'Mengenali kebutuhan-kebutuhan diri sendiri yang memerlukan\r\norang lain dalam pemenuhannya.', NULL, NULL),
+(25, 9, 'Melaksanakan aktivitas kelompok sesuai dengan kesepakatan\nbersama dengan bimbingan, dan saling mengingatkan adanya\nkesepakatan tersebut', NULL, NULL),
+(27, 10, 'Peka dan mengapresiasi orang-orang di lingkungan sekitar,\r\nkemudian melakukan tindakan sederhana untuk\r\nmengungkapkannya', NULL, NULL),
+(28, 10, 'Mengenali berbagai reaksi orang lain di lingkungan sekitar dan\r\npenyebabnya.', NULL, NULL),
+(29, 11, 'Memberi dan menerima hal yang dianggap berharga dan penting\nkepada/dari orang-orang di lingkungan sekitar.', NULL, NULL),
+(30, 12, 'Mengidentifikasi perbedaan emosi yang dirasakannya dan situasisituasi yang menyebabkannya; serta mengekspresikan secara wajar.', NULL, NULL),
+(31, 12, 'Melakukan refleksi untuk mengidentifikasi kekuatan dan kelemahan,\nserta prestasi dirinya.', NULL, NULL),
+(32, 13, 'Mengidentifikasi perbedaan emosi yang dirasakannya dan situasisituasi yang menyebabkannya; serta mengekspresikan secara wajar.', NULL, NULL),
+(35, 13, 'Menetapkan target belajar dan merencanakan waktu dan tindakan\r\nbelajar yang akan dilakukannya.', NULL, NULL),
+(36, 13, 'Berinisiatif untuk mengerjakan tugas-tugas rutin secara mandiri di\r\nbawah pengawasan dan dukungan orang dewasa.', NULL, NULL),
+(37, 13, 'Melaksanakan kegiatan belajar di kelas dan menyelesaikan tugastugas dalam waktu yang telah disepakati.', NULL, NULL),
+(38, 13, 'Berani mencoba dan adaptif menghadapi situasi baru serta bertahan\r\nmengerjakan tugas-tugas yang disepakati hingga tuntas.', NULL, NULL),
+(39, 14, 'Mengajukan pertanyaan untuk menjawab keingintahuannya dan untuk mengidentifikasi suatu permasalahan mengenai dirinya dan lingkungan sekitarnya.', NULL, NULL),
+(40, 14, 'Mengidentifikasi dan mengolah informasi dan gagasan.', NULL, NULL),
+(41, 15, 'Melakukan penalaran konkret dan memberikan alasan dalam menyelesaikan masalah dan mengambil keputusan.', NULL, NULL),
+(42, 16, 'Menyampaikan apa yang sedang dipikirkan secara terperinci.', NULL, NULL),
+(43, 19, 'Menggabungkan beberapa gagasan menjadi ide atau gagasan\r\nimajinatif yang bermakna untuk mengekspresikan pikiran dan/atau\r\nperasaannya.', NULL, NULL),
+(44, 17, 'Mengeksplorasi dan mengekspresikan pikiran dan/atau perasaannya\r\ndalam bentuk karya dan/atau tindakan serta mengapresiasi karya\r\ndan tindakan yang dihasilkan.', NULL, NULL),
+(45, 18, 'Mengidentifikasi gagasan-gagasan kreatif untuk menghadapi situasi\r\ndan permasalahan.', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -649,7 +723,8 @@ INSERT INTO `failed_jobs` (`id`, `uuid`, `connection`, `queue`, `payload`, `exce
 INSERT INTO `failed_jobs` (`id`, `uuid`, `connection`, `queue`, `payload`, `exception`, `failed_at`) VALUES
 (31, 'a581c56a-c861-4c0f-84a7-c6a107aa3579', 'database', 'default', '{\"uuid\":\"a581c56a-c861-4c0f-84a7-c6a107aa3579\",\"displayName\":\"App\\\\Jobs\\\\SendSiabResetPassword\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"App\\\\Jobs\\\\SendSiabResetPassword\",\"command\":\"O:30:\\\"App\\\\Jobs\\\\SendSiabResetPassword\\\":12:{s:9:\\\"\\u0000*\\u0000params\\\";a:3:{s:3:\\\"nis\\\";s:9:\\\"202301076\\\";s:5:\\\"email\\\";s:53:\\\"k1bobbyfisher@gmail.com\\/ririoctahandayani10@gmail.com\\\";s:5:\\\"token\\\";s:64:\\\"5TzTfT0mtbvccYiV6zVXAskNq5mgAixSSk5Z6J6SgoI3TTtyGPEm4xDm9DCIS2U8\\\";}s:11:\\\"\\u0000*\\u0000receiver\\\";a:2:{s:5:\\\"email\\\";s:53:\\\"k1bobbyfisher@gmail.com\\/ririoctahandayani10@gmail.com\\\";s:4:\\\"name\\\";s:29:\\\"Muhammad Alif Ibrahim Buchari\\\";}s:3:\\\"job\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}}\"}}', 'Swift_RfcComplianceException: Address in mailbox given [k1bobbyfisher@gmail.com/ririoctahandayani10@gmail.com] does not comply with RFC 2822, 3.6.2. in /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/Headers/MailboxHeader.php:355\nStack trace:\n#0 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/Headers/MailboxHeader.php(272): Swift_Mime_Headers_MailboxHeader->assertValidAddress(\'k1bobbyfisher@g...\')\n#1 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/Headers/MailboxHeader.php(117): Swift_Mime_Headers_MailboxHeader->normalizeMailboxes(Array)\n#2 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/Headers/MailboxHeader.php(74): Swift_Mime_Headers_MailboxHeader->setNameAddresses(Array)\n#3 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/SimpleHeaderFactory.php(61): Swift_Mime_Headers_MailboxHeader->setFieldBodyModel(Array)\n#4 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/SimpleHeaderSet.php(71): Swift_Mime_SimpleHeaderFactory->createMailboxHeader(\'To\', Array)\n#5 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/SimpleMessage.php(323): Swift_Mime_SimpleHeaderSet->addMailboxHeader(\'To\', Array)\n#6 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/SimpleMessage.php(299): Swift_Mime_SimpleMessage->setTo(Array)\n#7 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Message.php(164): Swift_Mime_SimpleMessage->addTo(\'k1bobbyfisher@g...\', NULL)\n#8 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Message.php(98): Illuminate\\Mail\\Message->addAddresses(\'k1bobbyfisher@g...\', NULL, \'To\')\n#9 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailable.php(376): Illuminate\\Mail\\Message->to(\'k1bobbyfisher@g...\', NULL)\n#10 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailable.php(183): Illuminate\\Mail\\Mailable->buildRecipients(Object(Illuminate\\Mail\\Message))\n#11 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailer.php(271): Illuminate\\Mail\\Mailable->Illuminate\\Mail\\{closure}(Object(Illuminate\\Mail\\Message))\n#12 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailable.php(187): Illuminate\\Mail\\Mailer->send(\'mails.siab_rese...\', Array, Object(Closure))\n#13 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Support/Traits/Localizable.php(19): Illuminate\\Mail\\Mailable->Illuminate\\Mail\\{closure}()\n#14 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailable.php(188): Illuminate\\Mail\\Mailable->withLocale(NULL, Object(Closure))\n#15 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailer.php(304): Illuminate\\Mail\\Mailable->send(Object(Illuminate\\Mail\\Mailer))\n#16 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailer.php(258): Illuminate\\Mail\\Mailer->sendMailable(Object(App\\Mail\\SendEmailSiabResetPassword))\n#17 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/PendingMail.php(121): Illuminate\\Mail\\Mailer->send(Object(App\\Mail\\SendEmailSiabResetPassword))\n#18 /home/u7823344/public_html/v2/generasijuara-web/app/Jobs/SendSiabResetPassword.php(43): Illuminate\\Mail\\PendingMail->send(Object(App\\Mail\\SendEmailSiabResetPassword))\n#19 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): App\\Jobs\\SendSiabResetPassword->handle()\n#20 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/Util.php(40): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()\n#21 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))\n#22 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))\n#23 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/Container.php(651): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)\n#24 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Bus/Dispatcher.php(128): Illuminate\\Container\\Container->call(Array)\n#25 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(128): Illuminate\\Bus\\Dispatcher->Illuminate\\Bus\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#26 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#27 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Bus/Dispatcher.php(132): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))\n#28 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/CallQueuedHandler.php(120): Illuminate\\Bus\\Dispatcher->dispatchNow(Object(App\\Jobs\\SendSiabResetPassword), false)\n#29 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(128): Illuminate\\Queue\\CallQueuedHandler->Illuminate\\Queue\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#30 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#31 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/CallQueuedHandler.php(122): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))\n#32 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/CallQueuedHandler.php(70): Illuminate\\Queue\\CallQueuedHandler->dispatchThroughMiddleware(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Object(App\\Jobs\\SendSiabResetPassword))\n#33 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Jobs/Job.php(98): Illuminate\\Queue\\CallQueuedHandler->call(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Array)\n#34 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Worker.php(428): Illuminate\\Queue\\Jobs\\Job->fire()\n#35 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Worker.php(378): Illuminate\\Queue\\Worker->process(\'database\', Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Object(Illuminate\\Queue\\WorkerOptions))\n#36 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Worker.php(172): Illuminate\\Queue\\Worker->runJob(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), \'database\', Object(Illuminate\\Queue\\WorkerOptions))\n#37 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Console/WorkCommand.php(117): Illuminate\\Queue\\Worker->daemon(\'database\', \'default\', Object(Illuminate\\Queue\\WorkerOptions))\n#38 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Console/WorkCommand.php(101): Illuminate\\Queue\\Console\\WorkCommand->runWorker(\'database\', \'default\')\n#39 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Queue\\Console\\WorkCommand->handle()\n#40 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/Util.php(40): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()\n#41 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))\n#42 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))\n#43 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/Container.php(651): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)\n#44 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Console/Command.php(136): Illuminate\\Container\\Container->call(Array)\n#45 /home/u7823344/public_html/v2/generasijuara-web/vendor/symfony/console/Command/Command.php(299): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))\n#46 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Console/Command.php(121): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))\n#47 /home/u7823344/public_html/v2/generasijuara-web/vendor/symfony/console/Application.php(978): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#48 /home/u7823344/public_html/v2/generasijuara-web/vendor/symfony/console/Application.php(295): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Queue\\Console\\WorkCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#49 /home/u7823344/public_html/v2/generasijuara-web/vendor/symfony/console/Application.php(167): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#50 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Console/Application.php(92): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#51 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#52 /home/u7823344/public_html/v2/generasijuara-web/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#53 {main}', '2024-06-13 03:28:29'),
 (32, '9ffbcd9b-85a5-4e87-8eeb-1b34decc1a6e', 'database', 'default', '{\"uuid\":\"9ffbcd9b-85a5-4e87-8eeb-1b34decc1a6e\",\"displayName\":\"App\\\\Jobs\\\\SendSiabResetPassword\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"App\\\\Jobs\\\\SendSiabResetPassword\",\"command\":\"O:30:\\\"App\\\\Jobs\\\\SendSiabResetPassword\\\":12:{s:9:\\\"\\u0000*\\u0000params\\\";a:3:{s:3:\\\"nis\\\";s:9:\\\"202301076\\\";s:5:\\\"email\\\";s:53:\\\"k1bobbyfisher@gmail.com\\/ririoctahandayani10@gmail.com\\\";s:5:\\\"token\\\";s:64:\\\"FoRkS3pD1oa9TFN2hzf3wgBI6jngHnLraOwUD262jCgUK0q5ahbZaRKbHY2PMu0L\\\";}s:11:\\\"\\u0000*\\u0000receiver\\\";a:2:{s:5:\\\"email\\\";s:53:\\\"k1bobbyfisher@gmail.com\\/ririoctahandayani10@gmail.com\\\";s:4:\\\"name\\\";s:29:\\\"Muhammad Alif Ibrahim Buchari\\\";}s:3:\\\"job\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}}\"}}', 'Swift_RfcComplianceException: Address in mailbox given [k1bobbyfisher@gmail.com/ririoctahandayani10@gmail.com] does not comply with RFC 2822, 3.6.2. in /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/Headers/MailboxHeader.php:355\nStack trace:\n#0 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/Headers/MailboxHeader.php(272): Swift_Mime_Headers_MailboxHeader->assertValidAddress(\'k1bobbyfisher@g...\')\n#1 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/Headers/MailboxHeader.php(117): Swift_Mime_Headers_MailboxHeader->normalizeMailboxes(Array)\n#2 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/Headers/MailboxHeader.php(74): Swift_Mime_Headers_MailboxHeader->setNameAddresses(Array)\n#3 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/SimpleHeaderFactory.php(61): Swift_Mime_Headers_MailboxHeader->setFieldBodyModel(Array)\n#4 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/SimpleHeaderSet.php(71): Swift_Mime_SimpleHeaderFactory->createMailboxHeader(\'To\', Array)\n#5 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/SimpleMessage.php(323): Swift_Mime_SimpleHeaderSet->addMailboxHeader(\'To\', Array)\n#6 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/SimpleMessage.php(299): Swift_Mime_SimpleMessage->setTo(Array)\n#7 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Message.php(164): Swift_Mime_SimpleMessage->addTo(\'k1bobbyfisher@g...\', NULL)\n#8 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Message.php(98): Illuminate\\Mail\\Message->addAddresses(\'k1bobbyfisher@g...\', NULL, \'To\')\n#9 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailable.php(376): Illuminate\\Mail\\Message->to(\'k1bobbyfisher@g...\', NULL)\n#10 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailable.php(183): Illuminate\\Mail\\Mailable->buildRecipients(Object(Illuminate\\Mail\\Message))\n#11 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailer.php(271): Illuminate\\Mail\\Mailable->Illuminate\\Mail\\{closure}(Object(Illuminate\\Mail\\Message))\n#12 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailable.php(187): Illuminate\\Mail\\Mailer->send(\'mails.siab_rese...\', Array, Object(Closure))\n#13 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Support/Traits/Localizable.php(19): Illuminate\\Mail\\Mailable->Illuminate\\Mail\\{closure}()\n#14 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailable.php(188): Illuminate\\Mail\\Mailable->withLocale(NULL, Object(Closure))\n#15 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailer.php(304): Illuminate\\Mail\\Mailable->send(Object(Illuminate\\Mail\\Mailer))\n#16 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailer.php(258): Illuminate\\Mail\\Mailer->sendMailable(Object(App\\Mail\\SendEmailSiabResetPassword))\n#17 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/PendingMail.php(121): Illuminate\\Mail\\Mailer->send(Object(App\\Mail\\SendEmailSiabResetPassword))\n#18 /home/u7823344/public_html/v2/generasijuara-web/app/Jobs/SendSiabResetPassword.php(43): Illuminate\\Mail\\PendingMail->send(Object(App\\Mail\\SendEmailSiabResetPassword))\n#19 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): App\\Jobs\\SendSiabResetPassword->handle()\n#20 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/Util.php(40): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()\n#21 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))\n#22 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))\n#23 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/Container.php(651): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)\n#24 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Bus/Dispatcher.php(128): Illuminate\\Container\\Container->call(Array)\n#25 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(128): Illuminate\\Bus\\Dispatcher->Illuminate\\Bus\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#26 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#27 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Bus/Dispatcher.php(132): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))\n#28 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/CallQueuedHandler.php(120): Illuminate\\Bus\\Dispatcher->dispatchNow(Object(App\\Jobs\\SendSiabResetPassword), false)\n#29 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(128): Illuminate\\Queue\\CallQueuedHandler->Illuminate\\Queue\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#30 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#31 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/CallQueuedHandler.php(122): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))\n#32 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/CallQueuedHandler.php(70): Illuminate\\Queue\\CallQueuedHandler->dispatchThroughMiddleware(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Object(App\\Jobs\\SendSiabResetPassword))\n#33 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Jobs/Job.php(98): Illuminate\\Queue\\CallQueuedHandler->call(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Array)\n#34 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Worker.php(428): Illuminate\\Queue\\Jobs\\Job->fire()\n#35 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Worker.php(378): Illuminate\\Queue\\Worker->process(\'database\', Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Object(Illuminate\\Queue\\WorkerOptions))\n#36 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Worker.php(172): Illuminate\\Queue\\Worker->runJob(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), \'database\', Object(Illuminate\\Queue\\WorkerOptions))\n#37 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Console/WorkCommand.php(117): Illuminate\\Queue\\Worker->daemon(\'database\', \'default\', Object(Illuminate\\Queue\\WorkerOptions))\n#38 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Console/WorkCommand.php(101): Illuminate\\Queue\\Console\\WorkCommand->runWorker(\'database\', \'default\')\n#39 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Queue\\Console\\WorkCommand->handle()\n#40 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/Util.php(40): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()\n#41 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))\n#42 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))\n#43 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/Container.php(651): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)\n#44 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Console/Command.php(136): Illuminate\\Container\\Container->call(Array)\n#45 /home/u7823344/public_html/v2/generasijuara-web/vendor/symfony/console/Command/Command.php(299): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))\n#46 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Console/Command.php(121): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))\n#47 /home/u7823344/public_html/v2/generasijuara-web/vendor/symfony/console/Application.php(978): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#48 /home/u7823344/public_html/v2/generasijuara-web/vendor/symfony/console/Application.php(295): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Queue\\Console\\WorkCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#49 /home/u7823344/public_html/v2/generasijuara-web/vendor/symfony/console/Application.php(167): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#50 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Console/Application.php(92): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#51 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#52 /home/u7823344/public_html/v2/generasijuara-web/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#53 {main}', '2024-06-13 03:29:32'),
-(33, '7080cde0-2072-4260-835a-02ef69942961', 'database', 'default', '{\"uuid\":\"7080cde0-2072-4260-835a-02ef69942961\",\"displayName\":\"App\\\\Jobs\\\\SendSiabResetPassword\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"App\\\\Jobs\\\\SendSiabResetPassword\",\"command\":\"O:30:\\\"App\\\\Jobs\\\\SendSiabResetPassword\\\":12:{s:9:\\\"\\u0000*\\u0000params\\\";a:3:{s:3:\\\"nis\\\";s:9:\\\"202301076\\\";s:5:\\\"email\\\";s:53:\\\"k1bobbyfisher@gmail.com\\/ririoctahandayani10@gmail.com\\\";s:5:\\\"token\\\";s:64:\\\"BWhvqZHDSPRT486hgTf5I5CC7ruV48sfww1gWT06sLCHbF7sWsQYB9DpR9TURR3m\\\";}s:11:\\\"\\u0000*\\u0000receiver\\\";a:2:{s:5:\\\"email\\\";s:53:\\\"k1bobbyfisher@gmail.com\\/ririoctahandayani10@gmail.com\\\";s:4:\\\"name\\\";s:29:\\\"Muhammad Alif Ibrahim Buchari\\\";}s:3:\\\"job\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}}\"}}', 'Swift_RfcComplianceException: Address in mailbox given [k1bobbyfisher@gmail.com/ririoctahandayani10@gmail.com] does not comply with RFC 2822, 3.6.2. in /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/Headers/MailboxHeader.php:355\nStack trace:\n#0 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/Headers/MailboxHeader.php(272): Swift_Mime_Headers_MailboxHeader->assertValidAddress(\'k1bobbyfisher@g...\')\n#1 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/Headers/MailboxHeader.php(117): Swift_Mime_Headers_MailboxHeader->normalizeMailboxes(Array)\n#2 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/Headers/MailboxHeader.php(74): Swift_Mime_Headers_MailboxHeader->setNameAddresses(Array)\n#3 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/SimpleHeaderFactory.php(61): Swift_Mime_Headers_MailboxHeader->setFieldBodyModel(Array)\n#4 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/SimpleHeaderSet.php(71): Swift_Mime_SimpleHeaderFactory->createMailboxHeader(\'To\', Array)\n#5 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/SimpleMessage.php(323): Swift_Mime_SimpleHeaderSet->addMailboxHeader(\'To\', Array)\n#6 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/SimpleMessage.php(299): Swift_Mime_SimpleMessage->setTo(Array)\n#7 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Message.php(164): Swift_Mime_SimpleMessage->addTo(\'k1bobbyfisher@g...\', NULL)\n#8 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Message.php(98): Illuminate\\Mail\\Message->addAddresses(\'k1bobbyfisher@g...\', NULL, \'To\')\n#9 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailable.php(376): Illuminate\\Mail\\Message->to(\'k1bobbyfisher@g...\', NULL)\n#10 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailable.php(183): Illuminate\\Mail\\Mailable->buildRecipients(Object(Illuminate\\Mail\\Message))\n#11 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailer.php(271): Illuminate\\Mail\\Mailable->Illuminate\\Mail\\{closure}(Object(Illuminate\\Mail\\Message))\n#12 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailable.php(187): Illuminate\\Mail\\Mailer->send(\'mails.siab_rese...\', Array, Object(Closure))\n#13 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Support/Traits/Localizable.php(19): Illuminate\\Mail\\Mailable->Illuminate\\Mail\\{closure}()\n#14 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailable.php(188): Illuminate\\Mail\\Mailable->withLocale(NULL, Object(Closure))\n#15 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailer.php(304): Illuminate\\Mail\\Mailable->send(Object(Illuminate\\Mail\\Mailer))\n#16 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailer.php(258): Illuminate\\Mail\\Mailer->sendMailable(Object(App\\Mail\\SendEmailSiabResetPassword))\n#17 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/PendingMail.php(121): Illuminate\\Mail\\Mailer->send(Object(App\\Mail\\SendEmailSiabResetPassword))\n#18 /home/u7823344/public_html/v2/generasijuara-web/app/Jobs/SendSiabResetPassword.php(43): Illuminate\\Mail\\PendingMail->send(Object(App\\Mail\\SendEmailSiabResetPassword))\n#19 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): App\\Jobs\\SendSiabResetPassword->handle()\n#20 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/Util.php(40): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()\n#21 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))\n#22 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))\n#23 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/Container.php(651): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)\n#24 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Bus/Dispatcher.php(128): Illuminate\\Container\\Container->call(Array)\n#25 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(128): Illuminate\\Bus\\Dispatcher->Illuminate\\Bus\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#26 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#27 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Bus/Dispatcher.php(132): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))\n#28 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/CallQueuedHandler.php(120): Illuminate\\Bus\\Dispatcher->dispatchNow(Object(App\\Jobs\\SendSiabResetPassword), false)\n#29 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(128): Illuminate\\Queue\\CallQueuedHandler->Illuminate\\Queue\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#30 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#31 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/CallQueuedHandler.php(122): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))\n#32 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/CallQueuedHandler.php(70): Illuminate\\Queue\\CallQueuedHandler->dispatchThroughMiddleware(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Object(App\\Jobs\\SendSiabResetPassword))\n#33 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Jobs/Job.php(98): Illuminate\\Queue\\CallQueuedHandler->call(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Array)\n#34 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Worker.php(428): Illuminate\\Queue\\Jobs\\Job->fire()\n#35 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Worker.php(378): Illuminate\\Queue\\Worker->process(\'database\', Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Object(Illuminate\\Queue\\WorkerOptions))\n#36 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Worker.php(172): Illuminate\\Queue\\Worker->runJob(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), \'database\', Object(Illuminate\\Queue\\WorkerOptions))\n#37 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Console/WorkCommand.php(117): Illuminate\\Queue\\Worker->daemon(\'database\', \'default\', Object(Illuminate\\Queue\\WorkerOptions))\n#38 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Console/WorkCommand.php(101): Illuminate\\Queue\\Console\\WorkCommand->runWorker(\'database\', \'default\')\n#39 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Queue\\Console\\WorkCommand->handle()\n#40 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/Util.php(40): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()\n#41 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))\n#42 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))\n#43 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/Container.php(651): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)\n#44 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Console/Command.php(136): Illuminate\\Container\\Container->call(Array)\n#45 /home/u7823344/public_html/v2/generasijuara-web/vendor/symfony/console/Command/Command.php(299): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))\n#46 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Console/Command.php(121): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))\n#47 /home/u7823344/public_html/v2/generasijuara-web/vendor/symfony/console/Application.php(978): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#48 /home/u7823344/public_html/v2/generasijuara-web/vendor/symfony/console/Application.php(295): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Queue\\Console\\WorkCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#49 /home/u7823344/public_html/v2/generasijuara-web/vendor/symfony/console/Application.php(167): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#50 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Console/Application.php(92): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#51 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#52 /home/u7823344/public_html/v2/generasijuara-web/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#53 {main}', '2024-06-13 07:54:03');
+(33, '7080cde0-2072-4260-835a-02ef69942961', 'database', 'default', '{\"uuid\":\"7080cde0-2072-4260-835a-02ef69942961\",\"displayName\":\"App\\\\Jobs\\\\SendSiabResetPassword\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"App\\\\Jobs\\\\SendSiabResetPassword\",\"command\":\"O:30:\\\"App\\\\Jobs\\\\SendSiabResetPassword\\\":12:{s:9:\\\"\\u0000*\\u0000params\\\";a:3:{s:3:\\\"nis\\\";s:9:\\\"202301076\\\";s:5:\\\"email\\\";s:53:\\\"k1bobbyfisher@gmail.com\\/ririoctahandayani10@gmail.com\\\";s:5:\\\"token\\\";s:64:\\\"BWhvqZHDSPRT486hgTf5I5CC7ruV48sfww1gWT06sLCHbF7sWsQYB9DpR9TURR3m\\\";}s:11:\\\"\\u0000*\\u0000receiver\\\";a:2:{s:5:\\\"email\\\";s:53:\\\"k1bobbyfisher@gmail.com\\/ririoctahandayani10@gmail.com\\\";s:4:\\\"name\\\";s:29:\\\"Muhammad Alif Ibrahim Buchari\\\";}s:3:\\\"job\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}}\"}}', 'Swift_RfcComplianceException: Address in mailbox given [k1bobbyfisher@gmail.com/ririoctahandayani10@gmail.com] does not comply with RFC 2822, 3.6.2. in /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/Headers/MailboxHeader.php:355\nStack trace:\n#0 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/Headers/MailboxHeader.php(272): Swift_Mime_Headers_MailboxHeader->assertValidAddress(\'k1bobbyfisher@g...\')\n#1 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/Headers/MailboxHeader.php(117): Swift_Mime_Headers_MailboxHeader->normalizeMailboxes(Array)\n#2 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/Headers/MailboxHeader.php(74): Swift_Mime_Headers_MailboxHeader->setNameAddresses(Array)\n#3 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/SimpleHeaderFactory.php(61): Swift_Mime_Headers_MailboxHeader->setFieldBodyModel(Array)\n#4 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/SimpleHeaderSet.php(71): Swift_Mime_SimpleHeaderFactory->createMailboxHeader(\'To\', Array)\n#5 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/SimpleMessage.php(323): Swift_Mime_SimpleHeaderSet->addMailboxHeader(\'To\', Array)\n#6 /home/u7823344/public_html/v2/generasijuara-web/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/SimpleMessage.php(299): Swift_Mime_SimpleMessage->setTo(Array)\n#7 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Message.php(164): Swift_Mime_SimpleMessage->addTo(\'k1bobbyfisher@g...\', NULL)\n#8 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Message.php(98): Illuminate\\Mail\\Message->addAddresses(\'k1bobbyfisher@g...\', NULL, \'To\')\n#9 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailable.php(376): Illuminate\\Mail\\Message->to(\'k1bobbyfisher@g...\', NULL)\n#10 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailable.php(183): Illuminate\\Mail\\Mailable->buildRecipients(Object(Illuminate\\Mail\\Message))\n#11 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailer.php(271): Illuminate\\Mail\\Mailable->Illuminate\\Mail\\{closure}(Object(Illuminate\\Mail\\Message))\n#12 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailable.php(187): Illuminate\\Mail\\Mailer->send(\'mails.siab_rese...\', Array, Object(Closure))\n#13 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Support/Traits/Localizable.php(19): Illuminate\\Mail\\Mailable->Illuminate\\Mail\\{closure}()\n#14 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailable.php(188): Illuminate\\Mail\\Mailable->withLocale(NULL, Object(Closure))\n#15 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailer.php(304): Illuminate\\Mail\\Mailable->send(Object(Illuminate\\Mail\\Mailer))\n#16 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/Mailer.php(258): Illuminate\\Mail\\Mailer->sendMailable(Object(App\\Mail\\SendEmailSiabResetPassword))\n#17 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Mail/PendingMail.php(121): Illuminate\\Mail\\Mailer->send(Object(App\\Mail\\SendEmailSiabResetPassword))\n#18 /home/u7823344/public_html/v2/generasijuara-web/app/Jobs/SendSiabResetPassword.php(43): Illuminate\\Mail\\PendingMail->send(Object(App\\Mail\\SendEmailSiabResetPassword))\n#19 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): App\\Jobs\\SendSiabResetPassword->handle()\n#20 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/Util.php(40): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()\n#21 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))\n#22 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))\n#23 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/Container.php(651): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)\n#24 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Bus/Dispatcher.php(128): Illuminate\\Container\\Container->call(Array)\n#25 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(128): Illuminate\\Bus\\Dispatcher->Illuminate\\Bus\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#26 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#27 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Bus/Dispatcher.php(132): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))\n#28 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/CallQueuedHandler.php(120): Illuminate\\Bus\\Dispatcher->dispatchNow(Object(App\\Jobs\\SendSiabResetPassword), false)\n#29 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(128): Illuminate\\Queue\\CallQueuedHandler->Illuminate\\Queue\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#30 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(103): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#31 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/CallQueuedHandler.php(122): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))\n#32 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/CallQueuedHandler.php(70): Illuminate\\Queue\\CallQueuedHandler->dispatchThroughMiddleware(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Object(App\\Jobs\\SendSiabResetPassword))\n#33 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Jobs/Job.php(98): Illuminate\\Queue\\CallQueuedHandler->call(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Array)\n#34 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Worker.php(428): Illuminate\\Queue\\Jobs\\Job->fire()\n#35 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Worker.php(378): Illuminate\\Queue\\Worker->process(\'database\', Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Object(Illuminate\\Queue\\WorkerOptions))\n#36 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Worker.php(172): Illuminate\\Queue\\Worker->runJob(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), \'database\', Object(Illuminate\\Queue\\WorkerOptions))\n#37 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Console/WorkCommand.php(117): Illuminate\\Queue\\Worker->daemon(\'database\', \'default\', Object(Illuminate\\Queue\\WorkerOptions))\n#38 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Queue/Console/WorkCommand.php(101): Illuminate\\Queue\\Console\\WorkCommand->runWorker(\'database\', \'default\')\n#39 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Queue\\Console\\WorkCommand->handle()\n#40 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/Util.php(40): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()\n#41 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))\n#42 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))\n#43 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Container/Container.php(651): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)\n#44 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Console/Command.php(136): Illuminate\\Container\\Container->call(Array)\n#45 /home/u7823344/public_html/v2/generasijuara-web/vendor/symfony/console/Command/Command.php(299): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))\n#46 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Console/Command.php(121): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))\n#47 /home/u7823344/public_html/v2/generasijuara-web/vendor/symfony/console/Application.php(978): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#48 /home/u7823344/public_html/v2/generasijuara-web/vendor/symfony/console/Application.php(295): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Queue\\Console\\WorkCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#49 /home/u7823344/public_html/v2/generasijuara-web/vendor/symfony/console/Application.php(167): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#50 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Console/Application.php(92): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#51 /home/u7823344/public_html/v2/generasijuara-web/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#52 /home/u7823344/public_html/v2/generasijuara-web/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#53 {main}', '2024-06-13 07:54:03'),
+(34, '0a84cb9f-5038-49f5-b465-c6396e7f80f8', 'database', 'default', '{\"uuid\":\"0a84cb9f-5038-49f5-b465-c6396e7f80f8\",\"displayName\":\"App\\\\Jobs\\\\SendSiabResetPassword\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"App\\\\Jobs\\\\SendSiabResetPassword\",\"command\":\"O:30:\\\"App\\\\Jobs\\\\SendSiabResetPassword\\\":12:{s:9:\\\"\\u0000*\\u0000params\\\";a:3:{s:3:\\\"nis\\\";s:9:\\\"202106068\\\";s:5:\\\"email\\\";s:19:\\\"ay.taon90@gmail.com\\\";s:5:\\\"token\\\";s:64:\\\"Pnx8BxOnGFerOvlpRxdTEok85iVHRxEwDmxrnZduE1KSPwEW1JAR7KDUEUqSRir5\\\";}s:11:\\\"\\u0000*\\u0000receiver\\\";a:2:{s:5:\\\"email\\\";s:19:\\\"ay.taon90@gmail.com\\\";s:4:\\\"name\\\";s:22:\\\"Adzkira Shezan Fahrial\\\";}s:3:\\\"job\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}}\"}}', 'Swift_TransportException: Connection could not be established with host localhost :stream_socket_client(): unable to connect to ssl://localhost:465 (No connection could be made because the target machine actively refused it.\r\n) in C:\\laragon\\www\\generasijuara-web\\vendor\\swiftmailer\\swiftmailer\\lib\\classes\\Swift\\Transport\\StreamBuffer.php:261\nStack trace:\n#0 [internal function]: Swift_Transport_StreamBuffer->{closure}(2, \'stream_socket_c...\', \'C:\\\\laragon\\\\www\\\\...\', 264, Array)\n#1 C:\\laragon\\www\\generasijuara-web\\vendor\\swiftmailer\\swiftmailer\\lib\\classes\\Swift\\Transport\\StreamBuffer.php(264): stream_socket_client(\'ssl://localhost...\', 10061, \'No connection c...\', 30, 4, Resource id #821)\n#2 C:\\laragon\\www\\generasijuara-web\\vendor\\swiftmailer\\swiftmailer\\lib\\classes\\Swift\\Transport\\StreamBuffer.php(58): Swift_Transport_StreamBuffer->establishSocketConnection()\n#3 C:\\laragon\\www\\generasijuara-web\\vendor\\swiftmailer\\swiftmailer\\lib\\classes\\Swift\\Transport\\AbstractSmtpTransport.php(143): Swift_Transport_StreamBuffer->initialize(Array)\n#4 C:\\laragon\\www\\generasijuara-web\\vendor\\swiftmailer\\swiftmailer\\lib\\classes\\Swift\\Mailer.php(65): Swift_Transport_AbstractSmtpTransport->start()\n#5 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Mail\\Mailer.php(521): Swift_Mailer->send(Object(Swift_Message), Array)\n#6 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Mail\\Mailer.php(288): Illuminate\\Mail\\Mailer->sendSwiftMessage(Object(Swift_Message))\n#7 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Mail\\Mailable.php(187): Illuminate\\Mail\\Mailer->send(\'mails.siab_rese...\', Array, Object(Closure))\n#8 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Traits\\Localizable.php(19): Illuminate\\Mail\\Mailable->Illuminate\\Mail\\{closure}()\n#9 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Mail\\Mailable.php(188): Illuminate\\Mail\\Mailable->withLocale(NULL, Object(Closure))\n#10 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Mail\\Mailer.php(304): Illuminate\\Mail\\Mailable->send(Object(Illuminate\\Mail\\Mailer))\n#11 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Mail\\Mailer.php(258): Illuminate\\Mail\\Mailer->sendMailable(Object(App\\Mail\\SendEmailSiabResetPassword))\n#12 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Mail\\PendingMail.php(121): Illuminate\\Mail\\Mailer->send(Object(App\\Mail\\SendEmailSiabResetPassword))\n#13 C:\\laragon\\www\\generasijuara-web\\app\\Jobs\\SendSiabResetPassword.php(43): Illuminate\\Mail\\PendingMail->send(Object(App\\Mail\\SendEmailSiabResetPassword))\n#14 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): App\\Jobs\\SendSiabResetPassword->handle()\n#15 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(40): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()\n#16 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))\n#17 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))\n#18 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(651): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)\n#19 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Bus\\Dispatcher.php(128): Illuminate\\Container\\Container->call(Array)\n#20 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(128): Illuminate\\Bus\\Dispatcher->Illuminate\\Bus\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#21 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(103): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#22 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Bus\\Dispatcher.php(132): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))\n#23 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\CallQueuedHandler.php(120): Illuminate\\Bus\\Dispatcher->dispatchNow(Object(App\\Jobs\\SendSiabResetPassword), false)\n#24 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(128): Illuminate\\Queue\\CallQueuedHandler->Illuminate\\Queue\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#25 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(103): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(App\\Jobs\\SendSiabResetPassword))\n#26 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\CallQueuedHandler.php(122): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))\n#27 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\CallQueuedHandler.php(70): Illuminate\\Queue\\CallQueuedHandler->dispatchThroughMiddleware(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Object(App\\Jobs\\SendSiabResetPassword))\n#28 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Jobs\\Job.php(98): Illuminate\\Queue\\CallQueuedHandler->call(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Array)\n#29 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Worker.php(428): Illuminate\\Queue\\Jobs\\Job->fire()\n#30 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Worker.php(378): Illuminate\\Queue\\Worker->process(\'database\', Object(Illuminate\\Queue\\Jobs\\DatabaseJob), Object(Illuminate\\Queue\\WorkerOptions))\n#31 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Worker.php(172): Illuminate\\Queue\\Worker->runJob(Object(Illuminate\\Queue\\Jobs\\DatabaseJob), \'database\', Object(Illuminate\\Queue\\WorkerOptions))\n#32 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Console\\WorkCommand.php(117): Illuminate\\Queue\\Worker->daemon(\'database\', \'default\', Object(Illuminate\\Queue\\WorkerOptions))\n#33 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Queue\\Console\\WorkCommand.php(101): Illuminate\\Queue\\Console\\WorkCommand->runWorker(\'database\', \'default\')\n#34 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Queue\\Console\\WorkCommand->handle()\n#35 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(40): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()\n#36 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))\n#37 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))\n#38 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(651): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)\n#39 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(136): Illuminate\\Container\\Container->call(Array)\n#40 C:\\laragon\\www\\generasijuara-web\\vendor\\symfony\\console\\Command\\Command.php(299): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))\n#41 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(121): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))\n#42 C:\\laragon\\www\\generasijuara-web\\vendor\\symfony\\console\\Application.php(978): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#43 C:\\laragon\\www\\generasijuara-web\\vendor\\symfony\\console\\Application.php(295): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Queue\\Console\\WorkCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#44 C:\\laragon\\www\\generasijuara-web\\vendor\\symfony\\console\\Application.php(167): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#45 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(92): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#46 C:\\laragon\\www\\generasijuara-web\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#47 C:\\laragon\\www\\generasijuara-web\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))\n#48 {main}', '2025-07-10 07:52:34');
 
 -- --------------------------------------------------------
 
@@ -672,7 +747,8 @@ CREATE TABLE `jobs` (
 --
 
 INSERT INTO `jobs` (`id`, `queue`, `payload`, `attempts`, `reserved_at`, `available_at`, `created_at`) VALUES
-(562, 'default', '{\"uuid\":\"0a84cb9f-5038-49f5-b465-c6396e7f80f8\",\"displayName\":\"App\\\\Jobs\\\\SendSiabResetPassword\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"App\\\\Jobs\\\\SendSiabResetPassword\",\"command\":\"O:30:\\\"App\\\\Jobs\\\\SendSiabResetPassword\\\":12:{s:9:\\\"\\u0000*\\u0000params\\\";a:3:{s:3:\\\"nis\\\";s:9:\\\"202106068\\\";s:5:\\\"email\\\";s:19:\\\"ay.taon90@gmail.com\\\";s:5:\\\"token\\\";s:64:\\\"Pnx8BxOnGFerOvlpRxdTEok85iVHRxEwDmxrnZduE1KSPwEW1JAR7KDUEUqSRir5\\\";}s:11:\\\"\\u0000*\\u0000receiver\\\";a:2:{s:5:\\\"email\\\";s:19:\\\"ay.taon90@gmail.com\\\";s:4:\\\"name\\\";s:22:\\\"Adzkira Shezan Fahrial\\\";}s:3:\\\"job\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";N;s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}}\"}}', 0, NULL, 1719992102, 1719992102);
+(563, 'pdf', '{\"uuid\":\"e5872111-ec18-4091-b410-cec55c7ad34d\",\"displayName\":\"App\\\\Jobs\\\\GenerateRaportJob\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"App\\\\Jobs\\\\GenerateRaportJob\",\"command\":\"O:26:\\\"App\\\\Jobs\\\\GenerateRaportJob\\\":10:{s:3:\\\"job\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";s:3:\\\"pdf\\\";s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}}\"}}', 0, NULL, 1748309851, 1748309851),
+(564, 'pdf', '{\"uuid\":\"4a43e845-381b-48bd-b7bf-32c410e77573\",\"displayName\":\"App\\\\Jobs\\\\GenerateRaportJob\",\"job\":\"Illuminate\\\\Queue\\\\CallQueuedHandler@call\",\"maxTries\":null,\"maxExceptions\":null,\"failOnTimeout\":false,\"backoff\":null,\"timeout\":null,\"retryUntil\":null,\"data\":{\"commandName\":\"App\\\\Jobs\\\\GenerateRaportJob\",\"command\":\"O:26:\\\"App\\\\Jobs\\\\GenerateRaportJob\\\":10:{s:3:\\\"job\\\";N;s:10:\\\"connection\\\";N;s:5:\\\"queue\\\";s:3:\\\"pdf\\\";s:15:\\\"chainConnection\\\";N;s:10:\\\"chainQueue\\\";N;s:19:\\\"chainCatchCallbacks\\\";N;s:5:\\\"delay\\\";N;s:11:\\\"afterCommit\\\";N;s:10:\\\"middleware\\\";a:0:{}s:7:\\\"chained\\\";a:0:{}}\"}}', 0, NULL, 1748309860, 1748309860);
 
 -- --------------------------------------------------------
 
@@ -700,6 +776,13 @@ CREATE TABLE `kelas` (
   `jurusan` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `jenis_rapor` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT 'lama'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data untuk tabel `kelas`
+--
+
+INSERT INTO `kelas` (`id`, `layanan_kelas_id`, `nama`, `kode`, `type`, `biaya`, `is_active`, `kelas`, `semester`, `tahun_akademik_id`, `paket_kelas_id`, `created_by`, `updated_by`, `created_at`, `updated_at`, `is_lock_nilai`, `jurusan`, `jenis_rapor`) VALUES
+(56, 1, 'A12 HST B-2025', 'A12 HST B-2025', 0, NULL, 1, 12, 1, 97, 1, NULL, NULL, '2025-05-12 04:01:09', '2025-05-14 04:19:14', 0, NULL, 'merdeka');
 
 -- --------------------------------------------------------
 
@@ -4238,7 +4321,18 @@ INSERT INTO `kelas_mata_pelajaran` (`id`, `kelas_id`, `mata_pelajaran_id`, `tuto
 (4692, NULL, 13, 41, NULL, NULL, '2024-05-08 09:30:00', '2024-05-08 09:30:00'),
 (4693, NULL, 13, 41, NULL, NULL, '2024-05-08 09:31:20', '2024-05-08 09:31:20'),
 (4694, NULL, 13, 41, NULL, NULL, '2024-05-08 09:32:04', '2024-05-08 09:32:04'),
-(4695, NULL, 13, 41, NULL, NULL, '2024-05-08 09:32:36', '2024-05-08 09:32:36');
+(4695, NULL, 13, 41, NULL, NULL, '2024-05-08 09:32:36', '2024-05-08 09:32:36'),
+(4697, 56, 1, 5, NULL, NULL, '2025-05-14 02:33:19', '2025-05-14 02:33:19'),
+(4698, 56, 2, 8, NULL, NULL, '2025-05-14 02:33:47', '2025-05-14 02:33:47'),
+(4699, 56, 3, 10, NULL, NULL, '2025-05-14 02:34:05', '2025-05-14 02:34:05'),
+(4700, 56, 4, 9, NULL, NULL, '2025-05-14 02:34:25', '2025-05-14 02:34:25'),
+(4701, 56, 8, 9, NULL, NULL, '2025-05-14 02:36:08', '2025-05-14 02:36:08'),
+(4702, 56, 7, 5, NULL, NULL, '2025-05-14 02:36:40', '2025-05-14 02:36:40'),
+(4704, 56, 14, 3, NULL, NULL, '2025-05-14 02:37:59', '2025-05-14 02:37:59'),
+(4705, 56, 12, 9, NULL, NULL, '2025-05-14 02:38:44', '2025-05-14 02:38:44'),
+(4706, 56, 23, 6, NULL, NULL, '2025-05-15 03:06:59', '2025-05-15 03:06:59'),
+(4707, 56, 25, 3, NULL, NULL, '2025-06-23 04:34:27', '2025-06-23 04:34:27'),
+(4708, 56, 9, 7, NULL, NULL, '2025-07-12 13:57:56', '2025-07-12 13:57:56');
 
 -- --------------------------------------------------------
 
@@ -4265,6 +4359,13 @@ CREATE TABLE `kelas_wb` (
   `sakit` int(11) NOT NULL DEFAULT '0',
   `alpa` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data untuk tabel `kelas_wb`
+--
+
+INSERT INTO `kelas_wb` (`id`, `kelas_id`, `wb_id`, `created_by`, `updated_by`, `catatan_pj_rombel`, `tanggapan_wali`, `catatan`, `is_active`, `created_at`, `updated_at`, `catatan_perkembangan_profil_pelajar`, `catatan_perkembangan_pemberdayaan`, `catatan_perkembangan_keterampilan`, `izin`, `sakit`, `alpa`) VALUES
+(7421, 56, 2259, NULL, NULL, NULL, NULL, NULL, 1, '2025-05-12 04:01:09', '2025-05-14 02:41:13', 'belajar lebih maksimal lagi', 'belajar lebih maksimal lagi', 'belajar lebih maksimal lagi', 2, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -7022,7 +7123,19 @@ INSERT INTO `kmp_setting` (`id`, `kmp_id`, `persentase_tm`, `persentase_um`, `ju
 (3535, 4047, 50.00, 50.00, 2, 1, 70.00, NULL, NULL, '2024-06-24 05:16:30', '2024-06-24 05:16:30', 2, 100.00, 0.00),
 (3536, 4046, 50.00, 50.00, 2, 1, 70.00, NULL, NULL, '2024-06-24 05:16:50', '2024-06-24 05:16:50', 2, 100.00, 0.00),
 (3537, 4049, 50.00, 50.00, 2, 1, 70.00, NULL, NULL, '2024-06-24 05:17:08', '2024-06-24 08:08:46', 2, 100.00, 0.00),
-(3538, 4048, 50.00, 50.00, 2, 1, 70.00, NULL, NULL, '2024-06-24 05:17:28', '2024-06-24 08:08:38', 2, 100.00, 0.00);
+(3538, 4048, 50.00, 50.00, 2, 1, 70.00, NULL, NULL, '2024-06-24 05:17:28', '2024-06-24 08:08:38', 2, 100.00, 0.00),
+(3539, NULL, 50.00, 50.00, 1, 0, 70.00, NULL, NULL, '2025-05-12 04:09:04', '2025-05-12 04:09:04', 2, 100.00, 0.00),
+(3540, 4699, 50.00, 50.00, 1, 0, 70.00, NULL, NULL, '2025-05-14 02:49:34', '2025-05-14 03:32:15', 2, 0.00, 0.00),
+(3541, 4700, 50.00, 50.00, 1, 0, 70.00, NULL, NULL, '2025-05-14 02:49:58', '2025-05-14 03:34:24', 2, 0.00, 0.00),
+(3542, 4697, 50.00, 50.00, 1, 0, 70.00, NULL, NULL, '2025-05-14 02:50:23', '2025-05-14 03:44:55', 2, 0.00, 0.00),
+(3543, 4698, 50.00, 50.00, 1, 0, 70.00, NULL, NULL, '2025-05-14 02:50:42', '2025-05-14 03:45:15', 2, 0.00, 0.00),
+(3544, 4705, 70.00, 70.00, 2, 0, 70.00, NULL, NULL, '2025-05-14 02:51:03', '2025-05-14 02:51:03', 1, 70.00, 70.00),
+(3545, 4701, 50.00, 50.00, 1, 0, 70.00, NULL, NULL, '2025-05-14 02:51:26', '2025-05-14 03:45:41', 0, 0.00, 0.00),
+(3546, 4702, 50.00, 50.00, 1, 0, 70.00, NULL, NULL, '2025-05-14 02:51:47', '2025-05-14 03:45:54', 2, 0.00, 0.00),
+(3547, 4704, 50.00, 50.00, 1, 0, 70.00, NULL, NULL, '2025-05-14 02:52:05', '2025-05-14 03:46:12', 2, 0.00, 0.00),
+(3548, 4706, 50.00, 50.00, 1, 0, 50.00, NULL, NULL, '2025-05-15 03:09:38', '2025-05-15 03:09:38', 2, 0.00, 0.00),
+(3549, 4707, 70.00, 70.00, 2, 0, 60.00, NULL, NULL, '2025-07-12 13:57:22', '2025-07-12 13:57:22', 3, 70.00, 70.00),
+(3550, 4708, 75.00, 75.00, 1, 0, 60.00, NULL, NULL, '2025-07-12 13:58:30', '2025-07-12 13:58:30', 2, 75.00, 70.00);
 
 -- --------------------------------------------------------
 
@@ -7136,14 +7249,14 @@ CREATE TABLE `mata_pelajaran` (
 
 INSERT INTO `mata_pelajaran` (`id`, `nama`, `kelompok`, `sub_kelompok`, `is_active`, `created_by`, `updated_by`, `created_at`, `updated_at`, `is_mapel_ekskul`) VALUES
 (1, 'Pendidikan Agama dan Budi Pekerti', 'kelompok_umum', 'pemberdayaan', 1, NULL, NULL, '2022-05-18 08:57:09', '2022-06-24 21:04:29', 0),
-(2, 'Pendidikan Pancasila dan Kewarganegaraan (PPKn)', 'kelompok_umum', NULL, 1, NULL, NULL, '2022-05-18 08:57:09', '2022-05-19 01:11:50', 0),
+(2, 'Pendidikan Pancasila', 'kelompok_umum', NULL, 1, NULL, NULL, '2022-05-18 08:57:09', '2025-06-23 04:04:22', 0),
 (3, 'Bahasa Indonesia', 'kelompok_umum', NULL, 1, NULL, NULL, '2022-05-18 08:57:09', '2022-05-19 01:01:42', 0),
 (4, 'Matematika', 'kelompok_umum', NULL, 1, NULL, NULL, '2022-05-18 08:57:09', '2022-05-19 01:02:27', 0),
 (5, 'Ilmu Pengetahuan Alam', 'kelompok_umum', NULL, 1, NULL, NULL, '2022-05-18 08:57:09', '2022-05-19 01:03:39', 0),
 (6, 'Ilmu Pengetahuan Sosial', 'kelompok_umum', NULL, 1, NULL, NULL, '2022-05-18 08:57:09', '2022-05-19 01:03:58', 0),
 (7, 'SBdP', 'kelompok_khusus', 'keterampilan_wajib', 1, NULL, NULL, '2022-05-18 08:57:09', '2022-05-18 08:57:09', 0),
 (8, 'POdR', 'kelompok_khusus', 'keterampilan_wajib', 1, NULL, NULL, '2022-05-18 08:57:09', '2022-05-18 08:57:09', 0),
-(9, 'Riset', 'kelompok_khusus', 'keterampilan_pilihan', 1, NULL, NULL, '2022-05-18 08:57:09', '2022-05-19 01:10:19', 0),
+(9, 'Riset', 'kelompok_khusus', 'keterampilan_pilihan', 1, NULL, NULL, '2022-05-18 08:57:09', '2025-06-23 04:06:36', 0),
 (10, 'Wirausaha Kreatif', 'kelompok_khusus', 'keterampilan_pilihan', 1, NULL, NULL, '2022-05-18 08:57:09', '2022-05-18 08:57:09', 0),
 (11, 'Percakapan Bahasa Arab', 'kelompok_khusus', 'pemberdayaan', 1, NULL, NULL, '2022-05-18 08:57:09', '2022-05-19 01:07:38', 0),
 (12, 'Percakapan Bahasa Inggris', 'kelompok_khusus', 'pemberdayaan', 1, NULL, NULL, '2022-05-18 08:57:09', '2022-05-30 21:50:55', 0),
@@ -7157,8 +7270,9 @@ INSERT INTO `mata_pelajaran` (`id`, `nama`, `kelompok`, `sub_kelompok`, `is_acti
 (20, 'Matematika', 'mia', NULL, 1, NULL, NULL, '2022-05-18 08:57:18', '2022-05-30 23:27:37', 0),
 (21, 'Geografi', 'iis', NULL, 1, NULL, NULL, '2022-05-18 08:57:18', '2022-05-30 23:25:02', 0),
 (22, 'Sosiologi', 'iis', NULL, 1, NULL, NULL, '2022-05-18 08:57:18', '2022-05-30 23:25:14', 0),
-(23, 'Ekonomi', 'iis', NULL, 1, NULL, NULL, '2022-05-18 08:57:18', '2022-05-30 23:25:23', 0),
-(24, 'Sejarah', 'iis', NULL, 1, NULL, NULL, '2022-05-18 08:57:18', '2022-05-30 23:27:18', 0);
+(23, 'Ekonomi', 'kelompok_khusus', 'pemberdayaan', 1, NULL, NULL, '2022-05-18 08:57:18', '2025-05-15 03:07:40', 0),
+(24, 'Sejarah', 'iis', NULL, 1, NULL, NULL, '2022-05-18 08:57:18', '2022-05-30 23:27:18', 0),
+(25, 'Wirek', 'kelompok_khusus', 'pemberdayaan', 1, NULL, NULL, '2025-06-23 04:07:06', '2025-06-23 04:18:25', 0);
 
 -- --------------------------------------------------------
 
@@ -7342,6 +7456,18 @@ CREATE TABLE `nilai` (
   `capaian_kompetensi` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data untuk tabel `nilai`
+--
+
+INSERT INTO `nilai` (`id`, `kelas_id`, `kmp_id`, `wb_id`, `p_tugas_1`, `p_ujian_1`, `p_nilai_1`, `p_predikat_1`, `k_nilai_1`, `k_predikat_1`, `p_tugas_2`, `p_ujian_2`, `p_nilai_2`, `p_predikat_2`, `k_nilai_2`, `k_predikat_2`, `p_tugas_3`, `p_ujian_3`, `p_nilai_3`, `p_predikat_3`, `k_nilai_3`, `k_predikat_3`, `sikap_spiritual`, `sikap_spiritual_desc`, `sikap_sosial`, `sikap_sosial_desc`, `susulan_remedial`, `p_susulan_1`, `p_susulan_2`, `p_susulan_3`, `k_susulan_1`, `k_susulan_2`, `k_susulan_3`, `p_remedial_1`, `p_remedial_2`, `p_remedial_3`, `k_remedial_1`, `k_remedial_2`, `k_remedial_3`, `is_tagihan_created`, `created_by`, `updated_by`, `created_at`, `updated_at`, `capaian_kompetensi`) VALUES
+(1, 56, NULL, NULL, 80.00, 80.00, 80.00, 'B', 0.00, 'E', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'A', NULL, 'A', NULL, '{\"susulan\":{\"p_tugas\":[],\"p_ujian\":[],\"k_tugas\":[],\"k_ujian\":[]},\"remedial\":{\"p_tugas\":[],\"p_ujian\":[],\"k_tugas\":[],\"k_ujian\":[]}}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, '2025-05-12 04:09:56', '2025-05-15 02:04:22', 'oke'),
+(2, 56, 4698, 2259, 90.00, 90.00, 90.00, 'A', 0.00, 'E', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'A', NULL, 'A', NULL, '{\"susulan\":{\"p_tugas\":[],\"p_ujian\":[],\"k_tugas\":[],\"k_ujian\":[]},\"remedial\":{\"p_tugas\":[],\"p_ujian\":[],\"k_tugas\":[],\"k_ujian\":[]}}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, '2025-05-15 02:33:55', '2025-05-15 02:39:58', 'sad'),
+(3, 56, 4706, 2259, 90.00, 90.00, 90.00, 'A', 0.00, 'E', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'A', NULL, 'A', NULL, '{\"susulan\":{\"p_tugas\":[],\"p_ujian\":[],\"k_tugas\":[],\"k_ujian\":[]},\"remedial\":{\"p_tugas\":[],\"p_ujian\":[],\"k_tugas\":[],\"k_ujian\":[]}}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, '2025-05-15 03:10:05', '2025-05-15 03:10:05', 'oke'),
+(4, 56, 4701, 2259, 90.00, 90.00, 90.00, 'A', 0.00, 'E', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'A', NULL, 'A', NULL, '{\"susulan\":{\"p_tugas\":[],\"p_ujian\":[],\"k_tugas\":[],\"k_ujian\":[]},\"remedial\":{\"p_tugas\":[],\"p_ujian\":[],\"k_tugas\":[],\"k_ujian\":[]}}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, '2025-05-15 06:54:13', '2025-05-15 06:54:13', 'oke'),
+(5, 56, 4708, 2259, 75.00, 75.00, 112.50, 'A', 70.00, 'B', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'A', NULL, 'A', NULL, '{\"susulan\":{\"p_tugas\":[],\"p_ujian\":[],\"k_tugas\":[],\"k_ujian\":[]},\"remedial\":{\"p_tugas\":[],\"p_ujian\":[],\"k_tugas\":[],\"k_ujian\":[]}}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, '2025-07-12 14:00:05', '2025-07-12 14:00:15', 'ini riset'),
+(6, 56, 4707, 2259, 75.00, 75.00, 105.00, 'A', 75.00, 'B', 70.00, 70.00, 98.00, 'A', 70.00, 'B', NULL, NULL, NULL, NULL, NULL, NULL, 'A', NULL, 'A', NULL, '{\"susulan\":{\"p_tugas\":[],\"p_ujian\":[],\"k_tugas\":[],\"k_ujian\":[]},\"remedial\":{\"p_tugas\":[],\"p_ujian\":[],\"k_tugas\":[],\"k_ujian\":[]}}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, '2025-07-12 14:00:50', '2025-07-12 14:00:50', 'ini wirek');
+
 -- --------------------------------------------------------
 
 --
@@ -7396,6 +7522,13 @@ CREATE TABLE `nilai_kegiatan` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data untuk tabel `nilai_kegiatan`
+--
+
+INSERT INTO `nilai_kegiatan` (`id`, `kwb_id`, `jenis_kegiatan`, `prestasi`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+(1, 7421, 'Pramuka', 'A', 2727, 2727, '2025-05-12 09:01:01', '2025-05-12 09:01:01');
+
 -- --------------------------------------------------------
 
 --
@@ -7410,6 +7543,13 @@ CREATE TABLE `nilai_point` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data untuk tabel `nilai_point`
+--
+
+INSERT INTO `nilai_point` (`id`, `point_id`, `kelas_wb_id`, `point_nilai`, `created_at`, `updated_at`) VALUES
+(1, 6, 7421, 'MB', '2025-05-27 01:02:00', '2025-05-27 01:02:00');
 
 -- --------------------------------------------------------
 
@@ -7636,6 +7776,13 @@ CREATE TABLE `point` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data untuk tabel `point`
+--
+
+INSERT INTO `point` (`id`, `elemen_id`, `point_name`, `fase`, `created_at`, `updated_at`) VALUES
+(6, 1, '70', 'a', '2025-05-23 04:39:54', '2025-05-23 04:39:54');
+
 -- --------------------------------------------------------
 
 --
@@ -7725,6 +7872,13 @@ CREATE TABLE `ppdb` (
   `discount` double(10,2) NOT NULL DEFAULT '0.00',
   `url_foto_wb` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data untuk tabel `ppdb`
+--
+
+INSERT INTO `ppdb` (`id`, `cabang_id`, `user_id`, `nisn`, `no_induk`, `type`, `nis`, `nama`, `kelamin`, `nama_ibu`, `nama_ayah`, `nik_siswa`, `nik_ayah`, `nik_ibu`, `tempat_lahir`, `tanggal_lahir`, `status_dalam_keluarga`, `anak_ke`, `alamat_peserta_didik`, `alamat_domisili`, `alamat_orang_tua`, `no_telp_rumah`, `satuan_pendidikan_asal`, `agama`, `pekerjaan_ayah`, `pekerjaan_ibu`, `hp_siswa`, `hp_ayah`, `hp_ibu`, `telegram_siswa`, `telegram_ayah`, `telegram_ibu`, `nama_wali`, `no_telp_wali`, `alamat_wali`, `pekerjaan_wali`, `email`, `tahun_akademik_id`, `layanan_kelas_id`, `paket_kelas_id`, `tipe_kelas_sebelum`, `kelas_sebelum`, `smt_kelas_sebelum`, `kelas`, `smt_kelas`, `lulusan`, `tahun_lulus`, `paket_spp_id`, `dokumen_ktp_orang_tua`, `dokumen_akta_kelahiran`, `dokumen_shun_skhun`, `dokumen_kartu_keluarga`, `dokumen_ijasah`, `is_ktp_approved`, `is_akta_approved`, `is_shun_skhun_approved`, `is_kk_approved`, `is_ijasah_approved`, `url_bukti_trf`, `url_bukti_trf2`, `url_kartu_pelajar`, `biaya_daftar`, `biaya_program`, `biaya_spp`, `biaya`, `peminatan`, `wakaf`, `infaq`, `url_bukti_trf_zakat`, `kelas_id`, `is_active`, `created_by`, `updated_by`, `created_at`, `updated_at`, `is_approved`, `tgl_terima`, `voucher_code`, `discount_type`, `discount`, `url_foto_wb`) VALUES
+(2259, 1, 2753, '0110221019', NULL, 0, '0110221019', 'Ayu', 'p', 'Adila', 'Fahmi', '9999', '99999', '9999', 'Depok', NULL, NULL, '2', NULL, 'jalan duku 5', NULL, NULL, NULL, 'Islam', 'PNS', 'PNS', NULL, '899999999', '897777777', '8977367699', NULL, NULL, NULL, NULL, NULL, NULL, 'fahmi@gmail.com', 97, 1, 1, NULL, NULL, NULL, 'Kelas 5 Semester 1', NULL, '2020', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 56, 1, NULL, NULL, '2025-05-12 04:01:09', '2025-05-12 04:40:57', 0, '2025-05-12', NULL, NULL, 0.00, NULL);
 
 -- --------------------------------------------------------
 
@@ -7946,7 +8100,8 @@ INSERT INTO `raport_setting` (`id`, `kelas_id`, `nama_ketua_pkbm`, `nip_ketua_pk
 (159, NULL, 'Datu Nadewa Putri Rosa', 'undefined', '/uploads/ttd/wzG5DcW18eLPCbAPD32v5bXDpsr2Sx6QtZPv7eKl.jpg', 'Yumna Fadhillatunnisa', NULL, 'https://siakad.makinpintar.id/uploads/ttd/sRRWRIk6uQQMYtTCNE5lalTPOU4iCEqpyKYX0uQe.jpg', '2024-06-24 06:38:49', '2024-06-24 06:38:49'),
 (160, NULL, 'Datu Nadewa Putri Rosa', 'undefined', '/uploads/ttd/xT1rUNxEookbGvhqaXZtPx8oiwcsPz5nlezDwO8H.jpg', 'Yumna Fadhillatunnisa', NULL, 'https://siakad.makinpintar.id/uploads/ttd/UqkrnG2MEKoGDyuQc4kDt362JjfijKASRpWgYuE0.jpg', '2024-06-24 06:39:14', '2024-06-24 06:39:14'),
 (161, NULL, 'Datu Nadewa Putri Rosa', 'undefined', '/uploads/ttd/A3d9haAq5pdg4qhXD8eEhNKt476ROim8LfQldbU4.jpg', 'Yumna Fadhillatunnisa', NULL, 'https://siakad.makinpintar.id/uploads/ttd/szW3RloCdbLjtubendgpc2A7BWHDRypYomI6nFrF.jpg', '2024-06-24 06:39:55', '2024-06-24 06:39:55'),
-(162, NULL, 'Datu Nadewa Putri Rosa', 'undefined', '/uploads/ttd/viHowpqQ3xsr4hWXkdbbxiOcuqddeA2FAn3pEDcd.jpg', 'Yumna Fadhillatunnisa', NULL, 'https://siakad.makinpintar.id/uploads/ttd/Pi9ChR8aCamwZXgEtzo63j8m93v0WCHAfRMj8tn9.jpg', '2024-06-24 06:40:19', '2024-06-24 06:40:19');
+(162, NULL, 'Datu Nadewa Putri Rosa', 'undefined', '/uploads/ttd/viHowpqQ3xsr4hWXkdbbxiOcuqddeA2FAn3pEDcd.jpg', 'Yumna Fadhillatunnisa', NULL, 'https://siakad.makinpintar.id/uploads/ttd/Pi9ChR8aCamwZXgEtzo63j8m93v0WCHAfRMj8tn9.jpg', '2024-06-24 06:40:19', '2024-06-24 06:40:19'),
+(163, 56, 'Datu Nadewa Putri Rosa', 'undefined', '/uploads/ttd/CTDm9DjQnUleb7fi6LkAhVaWfZuEh9pTzVaijJQJ.jpg', 'Fahmi', '0110221015', 'http://localhost:8000/uploads/ttd/HFxrbhKMbU5aIqEncv1T9fTRP47rTytmw6oEIrCv.png', '2025-05-27 01:22:56', '2025-05-27 01:22:56');
 
 -- --------------------------------------------------------
 
@@ -7994,6 +8149,13 @@ CREATE TABLE `rombel` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data untuk tabel `rombel`
+--
+
+INSERT INTO `rombel` (`id`, `ppdb_id`, `tahun_akademik_id`, `kelas_id`, `status_wb`, `is_active`, `keterangan`, `is_answer_quiz`, `created_at`, `updated_at`) VALUES
+(28, 2259, 97, 56, 'Lama', 1, NULL, 0, '2025-05-12 04:01:09', '2025-05-12 04:40:57');
 
 -- --------------------------------------------------------
 
@@ -8367,7 +8529,9 @@ CREATE TABLE `tahun_akademik` (
 --
 
 INSERT INTO `tahun_akademik` (`id`, `kode`, `tahun_ajar`, `keterangan`, `periode_start`, `periode_end`, `tgl_raport`, `tgl_cover_raport`, `is_active`, `is_generate_rombel`, `created_at`, `updated_at`) VALUES
-(97, 20251, '2025/2026-Ganjil', 'Semester Ganjil Tahun Ajaran 2025/2026-Ganjil', '2025-01-01', '2025-06-30', NULL, NULL, 1, 0, '2025-05-12 03:05:49', '2025-05-12 03:05:49');
+(97, 20251, '2025/2026-Ganjil', 'Semester Ganjil Tahun Ajaran 2025/2026-Ganjil', '2025-01-01', '2025-06-30', '2025-08-30', NULL, 1, 0, '2025-05-12 03:05:49', '2025-05-12 03:05:49'),
+(100, 20232, '2023/2024', 'Semester Genap Tahun Ajaran 2023/2024-Genap', '2024-01-01', '2024-07-01', '2024-06-08', NULL, 0, 1, NULL, NULL),
+(101, 20242, '2024/2025', 'Semester Genap Tahun Ajaran 2024/2025-Genap', '2025-01-13', '2025-06-28', '2025-06-21', NULL, 1, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -10523,7 +10687,206 @@ INSERT INTO `users` (`id`, `name`, `username`, `email`, `email_verified_at`, `ph
 (2724, 'rahmat test', 'a9e56972-2df8-4caf-9cda-aec60cf26339', NULL, NULL, NULL, NULL, '$2y$10$Y0YSXbPzIVbnjmjv1qEnLuD2zD7NR3AFXZNi/WiLDB0gWEoiHh4Hi', NULL, 0, NULL, NULL, '2024-06-23 01:01:21', '2024-06-23 01:01:21'),
 (2725, 'rahmat@makinpintar.id', 'rahmat@makinpintar.id', NULL, NULL, NULL, NULL, '$2y$10$kSxvYwMuLdWx6FXgj7Nv4.OI0.so53UArH6SF.FWzrnARYOuHxsoC', NULL, 1, NULL, NULL, '2025-03-17 01:08:59', '2025-03-17 01:08:59'),
 (2726, 'admin@makinpintar.id', 'admin@makinpintar.id', NULL, NULL, NULL, NULL, '$2y$10$4Yrqnn2LjiTM4ZTYCDcy0e/89AJi6NU/vJLn74U9BLrAqNSqB4X8C', NULL, 1, NULL, NULL, '2025-05-02 02:29:47', '2025-05-02 02:29:47'),
-(2727, 'fahmi@gmail.com', 'fahmi@gmail.com', NULL, NULL, NULL, NULL, '$2y$10$p2WUa8HuKVvJ5be3T2iRJe7zgFUkuhMYvdw9nnOMfCjMtyKHzzPYu', NULL, 1, NULL, NULL, '2025-05-07 02:35:46', '2025-05-07 02:35:46');
+(2727, 'fahmi@gmail.com', 'fahmi@gmail.com', NULL, NULL, NULL, NULL, '$2y$10$p2WUa8HuKVvJ5be3T2iRJe7zgFUkuhMYvdw9nnOMfCjMtyKHzzPYu', NULL, 1, NULL, NULL, '2025-05-07 02:35:46', '2025-05-07 02:35:46'),
+(2751, 'Fahmii', '0110221017', '0110221017@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$0tnN2czrgbDuQ.PH1Wh0q.DdMY3U/OrkfzFals02zvs8FPt7mLSQC', NULL, 1, NULL, NULL, '2025-05-12 03:54:52', '2025-05-12 03:54:52'),
+(2752, 'Fahmii', '0110221018', '0110221018@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$4niahsduv/Szzq/adX246u26uUEZ4fdlWRMEcDTOuUIGw6p3NUxSm', NULL, 1, NULL, NULL, '2025-05-12 04:01:09', '2025-05-12 04:40:57'),
+(2753, 'Ayu', '0110221019', '0110221019@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$j37B7Tu3UOhomYQXHBtjbu1pa74F9hpWIKGlWvc4OmdDsN3H5VVsi', NULL, 1, NULL, NULL, '2025-05-12 04:01:09', '2025-05-12 04:40:57'),
+(2754, 'Gunawan', '0110221089', '0110221089@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$EUMk1K2RgZrgC1aAaLmRJemqIEXSrzLv76wFxKn0Li6B8p7J9151G', NULL, 1, NULL, NULL, '2025-05-12 04:01:10', '2025-05-12 04:40:57'),
+(2755, 'Putri', '0110297017', '0110297017@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$d.l5ymUlaj.kAp.Uj5CO1.16qEhgK7mmy03m5EIp7tjlLSiBqaoZK', NULL, 1, NULL, NULL, '2025-05-12 04:01:10', '2025-05-12 04:40:57'),
+(2756, 'Diana', '0110221096', '0110221096@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$K2AeT9ATNACGW9fJYmWsieXX.ehjzzVnGfq1nBzexnqPbgsKHw9eW', NULL, 1, NULL, NULL, '2025-05-12 04:01:10', '2025-05-12 04:40:57'),
+(2757, 'Dwi', '0110221095', '0110221095@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$uGNeNqJxxt9sTgtHodWLzuQA3mgRNZw4X2TZDsB8f6d.4X6zDqYuS', NULL, 1, NULL, NULL, '2025-05-12 04:01:10', '2025-05-12 04:40:57'),
+(2758, 'Hendra', '0110221094', '0110221094@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$0B1yQZEzHTn/81HnaVxPKuHZBS2kPgpx1x86og66wNd9zHjbN94y2', NULL, 1, NULL, NULL, '2025-05-12 04:01:10', '2025-05-12 04:40:57'),
+(2759, 'Tama', '0110221093', '0110221093@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$bxCBCF4G.Z5wCXEmdbs2kO5NVVRn.06gJp68ehFbYB7rJlLb65vVS', NULL, 1, NULL, NULL, '2025-05-12 04:01:11', '2025-05-12 04:40:58'),
+(2760, 'Budi', '0110221092', '0110221092@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$/YqFi9AZSlZF/A4PWG5VXOAfpx/8Mbw/RWmrRTSzjb3BTdcViiSGy', NULL, 1, NULL, NULL, '2025-05-12 04:01:11', '2025-05-12 04:40:58'),
+(2761, 'Fera', '0110221091', '0110221091@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$cvdDz8yeIwSgSsY1LCoLcehShRTJd6tW9DaEIxpFZpHBeiwmgpHQu', NULL, 1, NULL, NULL, '2025-05-12 04:01:11', '2025-05-12 04:40:58'),
+(2762, 'Juki', '011022187', '011022187@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$tyJlavut4Hz3b5YBcUg2uusWKXy3yz2ltAoLBvU0aMEwhuy5VnvkO', NULL, 1, NULL, NULL, '2025-05-12 04:01:11', '2025-05-12 04:40:58'),
+(2764, 'Fani', '011022156', '011022156@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$v89AhB5wD4PES6149sD8LO/OHPKfPlJT221Koapvld0hKryJb5lvK', NULL, 1, NULL, NULL, '2025-05-12 04:40:58', '2025-05-12 04:40:58'),
+(2941, 'Abdullah Shalih', '3181887371', '3181887371@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$Eu6CUdP5uHCBrtlzyYEbBO/Fb9wpjORRrQfA7DMsBqVLygjvQ1/42', NULL, 1, NULL, NULL, '2025-05-12 07:55:58', '2025-05-12 07:55:58'),
+(2942, 'Aqmar Hakim Alfaruq Putrajani', '3184843831', '3184843831@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$BFkoX2k.EHKO5fKCAn7UzO1CiKL6RdNbBZrKQWjxBcPDjxwvDs87.', NULL, 1, NULL, NULL, '2025-05-12 07:55:58', '2025-05-12 07:55:58'),
+(2943, 'Arsyila Rasyidah Rahmatullah', '3168824858', '3168824858@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$WduTTeL5rY5bbHD7S0MqHu/mjGw/4KuYQdiyV1HVGfDs6pmROIPyG', NULL, 1, NULL, NULL, '2025-05-12 07:55:58', '2025-05-12 07:55:58'),
+(2944, 'Asiyah Cahaya Mujahidah Soetrisno', '3167508691', '3167508691@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$jFIkwWhjk1tDMfygdMSJ0e5JjuUEfZBAks7A9fm9.FkwPIAb1.rD2', NULL, 1, NULL, NULL, '2025-05-12 07:55:58', '2025-05-12 07:55:58'),
+(2945, 'Asma Zafira Hafizhah ', '3183830653', '3183830653@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$wQ/g2XjCEv.FkSgBRmQFcug5jFc1EUd/a40HB1KpXGbDCSMXP5Mki', NULL, 1, NULL, NULL, '2025-05-12 07:55:58', '2025-05-12 07:55:58'),
+(2946, 'Dihyah El Hanif Harahap', '3173641928', '3173641928@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$sPsSMkulgSksMQUdw0s4LONkBDukLHXGwtQwMng4Du/.Il0HrKO9m', NULL, 1, NULL, NULL, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2947, 'Farzana Arista Trahutomo', '3170665480', '3170665480@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$vk4412Xy/FGSMbqlKgQLmO8DvW7qRV61kbnI5ikchhdDZ3z9vP0ua', NULL, 1, NULL, NULL, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2948, 'Fatimah Zahidah Choirunnisa', '3176443246', '3176443246@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$IwqXM5haftkSA44Px31LZusDV1o2SMEUmc0uGGKEmCwtNz/UNVvaO', NULL, 1, NULL, NULL, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2949, 'Gaza Ibnul Muttaqien', '3175759140', '3175759140@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$86vza/4mMUfsmANTMVQMteigyU10PA2URD37TdNWKQQoVtRFa7wvG', NULL, 1, NULL, NULL, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2950, 'Khaulah Salma Nugraha', '3170052870', '3170052870@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$64XbPPgvW0g8Vf/bNDcr/OQwNtSVAZfQrD7z7t3Z4yXu3yTnvJ.6O', NULL, 1, NULL, NULL, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2951, 'Layla Hardjanto', '3174302436', '3174302436@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$isIrqwwxnbsZIxhVS77eCeauHa5XEtWECQqwnIAiES6Z8f6ASsN06', NULL, 1, NULL, NULL, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2952, 'Maryam Adenia Nirwasita', '3184469872', '3184469872@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$eWnTGe.UFB5lWrC3888zwewlsx1M1MCtQCdmAZA8DqLQc5oVewF36', NULL, 1, NULL, NULL, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2953, 'Mayra Almahyra', '3179244740', '3179244740@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$vPR85m.RHqOt/5X2IEZJ..ryVX4W3/WqCx0dTeTALRkLP79.O7zyK', NULL, 1, NULL, NULL, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2954, 'Muhammad Al Kautsar Nuzirwan ', '3173062504', '3173062504@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$hwM9OGNyOeA/9XLsHo3ygOV76ej/QpjuhA33Oxz/tFi9K6vmAqv52', NULL, 1, NULL, NULL, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2955, 'Muhammad Fawaid Senjaya', '3170143924', '3170143924@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$LswVsX9H0tLMJY0gCgBobeltOwJdkckrtWp2ioQRp4Mel6ZJTzmCe', NULL, 1, NULL, NULL, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2956, 'Muhammad Khoirul Azzam', '3188736147', '3188736147@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$IhzaRbx9XyRIXqxJnrbAG.n3IGF/pk44lhlkme1VRzPvhJqcqGfbK', NULL, 1, NULL, NULL, '2025-05-12 07:56:00', '2025-05-12 07:56:00'),
+(2957, 'Muhammad Zaky Al Fatih', '3175984730', '3175984730@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$XQL9lqSuBalWVywjc6qomeT/ousfQvr0SSqntLC6wQUoqX2gAKU7S', NULL, 1, NULL, NULL, '2025-05-12 07:56:00', '2025-05-12 07:56:00'),
+(2958, 'Regina Bennetta Pakpahan', '3186865859', '3186865859@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$Jl1JqVlxxY20y9WDqvIrr.k42Z/uTk/dJJFnqWGTdgykSovhCwLSa', NULL, 1, NULL, NULL, '2025-05-12 07:56:00', '2025-05-12 07:56:00'),
+(2959, 'Saad Shalahuddin Ramadhan', '3175475531', '3175475531@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$uB4MDuLHMF4AquYt6AkCuem0GzXua0OONHKmop3HelXeGDv6ilVA6', NULL, 1, NULL, NULL, '2025-05-12 07:56:00', '2025-05-12 07:56:00'),
+(2960, 'Syakira Naqiyyatul Alifah', '3173250067', '3173250067@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$tsw7gpX9w3SYlN7yB3/vMuCSkRRcohl.ywqg1Nf0Q/G0qlSVJrXy.', NULL, 1, NULL, NULL, '2025-05-12 07:56:00', '2025-05-12 07:56:00'),
+(2961, 'Yasmin Fathiyyaturrahma Mandala Putri', '3175375540', '3175375540@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$3uily.bWN.dmLUGAe9TNrOzc1/Oz42zAGvjk6CZo7Pv/Xaiu5U5se', NULL, 1, NULL, NULL, '2025-05-12 07:56:00', '2025-05-12 07:56:00'),
+(2962, 'Zaid Shalahuddin Ramadhan', '3172937286', '3172937286@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$yQ6X2/0VkcA2MJ6A/zB5PeNYLSG4BkfADs7gUfBckjueCSB00Iyje', NULL, 1, NULL, NULL, '2025-05-12 07:56:00', '2025-05-12 07:56:00'),
+(2963, 'Zakariyya', '3186771815', '3186771815@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$DB0vpL.CShg6Wec6oDoyDeP8qJZL8GfSlJemV3gKQi5LdPlMOLoVO', NULL, 1, NULL, NULL, '2025-05-12 07:56:00', '2025-05-12 07:56:00'),
+(2964, 'Zhafira Shofiyyatul Azizah', '3171400080', '3171400080@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$WE3Atitgogdp.cX2iSReVOe/y2yURCCSbnqJPvrUrNiEbH29ganru', NULL, 1, NULL, NULL, '2025-05-12 07:56:00', '2025-05-12 07:56:00'),
+(2965, 'Aika Abdullah Althaf', '	3184216717', '	3184216717@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$mUAj58DezSCjFdUrp15rduZGIZyyxmjq4Ujol9UZ/5STyu5kQq4Hu', NULL, 1, NULL, NULL, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2966, 'Aineena Moeza Rochman (ABK)', '3165740662', '3165740662@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$5kuLRS0w8g7D0EwQ3bWCPe9MfFgJ8P1XqpH.tpnSYMJuBzm11DPsa', NULL, 1, NULL, NULL, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2967, 'Alby Hamizan Fahriza', '3172387222', '3172387222@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$1l6ikpYZjtcVsSZAnsty4eWTtBq7Brnb4ruk7A723.yh7I50siGN6', NULL, 1, NULL, NULL, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2968, 'Azzura Azkadiena Ayudiansyah', '3185771721', '3185771721@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$u4uTuqxGuaJ5PoIhFbuZ3uf.3UaKu2jahDk90hlG1GdM1IdMw4Je2', NULL, 1, NULL, NULL, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2969, 'Cattleya Michiko Lovy Al Aufa', '3179707639', '3179707639@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$i5aPpFx8oANbIp6tLQZYAeGO3u5jpjEZX80OcPZauJ7NU1kjrndy2', NULL, 1, NULL, NULL, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2970, 'Fatih Ramadhan Kareem', '3177022779', '3177022779@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$X3f//.bAOiWKWJbr8gOxbOwKJ8tTf4mFCdUkQE2edjJyYT8wRh1vy', NULL, 1, NULL, NULL, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2971, 'Ghaitsa Adzkiya Naqeeba', '3180146934', '3180146934@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$kzJ.17Ydr.jX/2UbI2m7ce2on8B1wHcLluxU8lVNt0TF78Iv.bcs.', NULL, 1, NULL, NULL, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2972, 'Habil Alfurqan Huzain (ABK)', '3186812274', '3186812274@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$bxjEu62elC1Sb2KEEiQOGOTYNjuoX/uKBkFYPQbQ.dV2N/122SCmy', NULL, 1, NULL, NULL, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2973, 'Hasna Faida Azmi', '3178267494', '3178267494@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$lf4Z9cohNQ.PQi36bseLh.I4.tAlGEEUTIswgzBMrbaTBGc7OSG5y', NULL, 1, NULL, NULL, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2974, 'Husain Abdullah', '3177437052', '3177437052@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$j9WyJzq70XlO8GJQjWrNDenJPCkw6VixrMXPulumUEyQuaVty6i8S', NULL, 1, NULL, NULL, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2975, 'Ismail Albiruni', '3174682943', '3174682943@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$s2BTrpnaBvK/lg.wgL408uC8VAuH.wCK3GZJYRLgP9SgvuU19V2cW', NULL, 1, NULL, NULL, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2976, 'Khadija Salma Zakiyya', '3171516793', '3171516793@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$ucNfMoGuDYl38kjzqy98k.CrZdX/mJXZuIUGloyVDij75x0NweoBK', NULL, 1, NULL, NULL, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2977, 'Khairana Falihah Zunaira', '3172745361', '3172745361@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$w/abBKDt2.E6Lh4PorR7g.jzwPVeCvY.cXEzBAenHSl7P84JTFx3S', NULL, 1, NULL, NULL, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2978, 'Kholisa Syafira Almahira', '3172002340', '3172002340@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$E9u.WIbZwTmaW7Mgro7IfeWOSNgVTIdmGDv/uP0XFkM0XM.kuFUNe', NULL, 1, NULL, NULL, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2979, 'Mahir Ulul Albab', '3179155056', '3179155056@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$M7/uu1U6Yx2K9swITCG9JunMtGeL.wICE.9Rk4ECupGqBfYNUwdvS', NULL, 1, NULL, NULL, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2980, 'Maryam Azzukhrufa Sahla', '3178559277', '3178559277@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$j8eMYozqkv8wI5NINCsJb.r/7ufJaKdaJfDfxNWoORGPqRToaRqri', NULL, 1, NULL, NULL, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2981, 'Muhammad Syakieb Usman', '3186448825', '3186448825@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$uCQYD//rFnh52EIxgraRNeT8UkukihMC1xw9zy97zGIdjuFxn.Cze', NULL, 1, NULL, NULL, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2982, 'Muhammad Totti Ar Rayyan', '3178484704', '3178484704@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$XdUq4s62gtT530FjfzY1B.2Y7X.CzyGuaw2XEaD/fXB2d7CHKxrme', NULL, 1, NULL, NULL, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2983, 'Muhammad Umar Alfaruq', '3173040049', '3173040049@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$OrGhkklkVOAMuEFJWLiRau1C3LxlqPGJqjn0td2bX0iCs87EkH2z6', NULL, 1, NULL, NULL, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2984, 'Namira Yumna', '3177331499', '3177331499@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$1GuVhhK.l1mcrc/Irmbp.ukZb/6EftTlFMvqjDHOTGdHMv/zZddLK', NULL, 1, NULL, NULL, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2985, 'Narashya Zakira Parbowo', '3186406812', '3186406812@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$70IWXHASxOqnZWmUKH/K7.U/Tl5K5DHO1BwjPt/oqX.usMi4LZiQC', NULL, 1, NULL, NULL, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2986, 'Sa\'ad Amrullah', '3170802165', '3170802165@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$sza2wX3JHI2znwkiWoVN8ubmnL0jmMQeqWt6FjAdioI3H.mVD.Q0C', NULL, 1, NULL, NULL, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2987, 'Saad Annoba', '3170671736', '3170671736@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$BBA4H8mgPjCQL1KypgM5GuwT37L6J3bTkOMZGaPHc48PTYHtawZhq', NULL, 1, NULL, NULL, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2988, 'Shezi Raelani Mulyawan', '3174966456', '3174966456@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$KsSKEGONNTkDkYXhOEv9L.CbU9FFlpClEusVDRPEj4SvsVWLGtij2', NULL, 1, NULL, NULL, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2989, 'Abdurrahman Alhazen', '3177335513', '3177335513@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$AA54HBa6ZKjX2itDwarVO.X2P9yLD9/.8s9piasCm4H3YVne.eI2.', NULL, 1, NULL, NULL, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2990, 'Afifah Binti Murtaji', '3172242751', '3172242751@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$uoGHwxAL90JKsrS2Bj0Kg.hrxHhmsT4Y7pfs7rOR5ikdkRPGo1HZO', NULL, 1, NULL, NULL, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2991, 'Agustina Aulia Putri (ABK)', '3178329739', '3178329739@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$kFw8fY0oj3.dBjgP4Cax4uATMS9kijHL7T7HFq.aO/pGRuL.cHjc.', NULL, 1, NULL, NULL, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2992, 'Ahmad Ismail', '3177984312', '3177984312@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$vY1QgFLiZl1v7obk23iL1OyCyWagpcBMZqoRpohpN.lUj1nVA02lS', NULL, 1, NULL, NULL, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2993, 'Artha Mahesha Jayadi (ABK)', '3170533057', '3170533057@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$swIjP6LLZA4Ja4MKQBbfYeanZ2ihrg9o.09eYMl3/hAnUTs2tGtXS', NULL, 1, NULL, NULL, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2994, 'Athanasius Mikael Sinabang (ABK)', '3178761875', '3178761875@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$GgYRnbOlSGbCVEzxgFe/ReQ2kauRGRGxa8D8XyP7IbvTBxHHBO9HK', NULL, 1, NULL, NULL, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2995, 'Bisma Alfarizi Nugroho (ABK)', '3169152548', '3169152548@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$J0J39G4Zf9ZiJGGn7ef6lOnnDujvzrRd7h8hFfvYLXDI/vKUMcN2i', NULL, 1, NULL, NULL, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2996, 'Faatma El Farsya Habruzi', '3171346170', '3171346170@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$pSGC/c9EInbrme4rmJLUleZtB4r3JT9S8C5OZO0GUi2Mw688R0z.u', NULL, 1, NULL, NULL, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2997, 'Faeyza Athalla Oktarian', '3186479215', '3186479215@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$bTJOMEUVRv0kOFSsOM.hJOCeiJOEaMc.Xchf9iss.Gyxsqw0zeSxK', NULL, 1, NULL, NULL, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2998, 'Faiq Izazi', '3170036030', '3170036030@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$HdWYlSiTlIbEEhSL75DIEefXqRyu9nbBWMQujo6OI2RsHkTwiWDYS', NULL, 1, NULL, NULL, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2999, 'Fatima Airani Nahda', '3174576283', '3174576283@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$SyyWFrE1LraR.yljFKHpP.KX0rjVJokt/lBBzEQXQB6IDssh/N/Uu', NULL, 1, NULL, NULL, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(3000, 'Gendhis Rafifa Az Zahra', '3178185207', '3178185207@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$dtN8dREk/P37.YFZQEn98.EMJKjpo2ms8HMqw.ahrGJfCPWmmeFSq', NULL, 1, NULL, NULL, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(3001, 'Ghazian Ali Kazhimi', '0175002021', '0175002021@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$w7f.p7T.K4NE34RCkVrBK.zALhVhM4xHWB8StKgAT/rJ01E/VENLK', NULL, 1, NULL, NULL, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(3002, 'Hanifah Jihan Khairunnisa', '3171995041', '3171995041@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$By7nV/cK8l46W4/nkuNvTu7c5sWNYl4eeEyUsXGrEo3B6c6adef7e', NULL, 1, NULL, NULL, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(3003, 'Harun Ar Rasyid', '3174114911', '3174114911@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$LZFdXSYYCwGyCH08pN7PTOxwcS1404BxC/GiPUGny4CYCY8.AOLmm', NULL, 1, NULL, NULL, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(3004, 'Hayumnaa Sakhi Azzahra (ABK)', '3178741404', '3178741404@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$oxAXUnvvlWIGxw0WGf2KyergjD45bdhKi8hFcLcG5cVK7v.MOZZse', NULL, 1, NULL, NULL, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(3005, 'Labib Adhyastha Shaquilano', '3175004349', '3175004349@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$/E2CrrsfXeZMEm/heR0aPu5/wmoIAiFPnmWX.xTMz53oHclQHBNJ2', NULL, 1, NULL, NULL, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(3006, 'Maryam Auliya Ahmad', '3173028419', '3173028419@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$ZRrQtUfrLoCNIZsMxMucC.098pwIqi1gvtDFJcv68TMkkrjt1dVD6', NULL, 1, NULL, NULL, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(3007, 'Naiwa Adara Adzkiyya (ABK)', '3173763104', '3173763104@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$Fgi6KUsFEUAzHUZ9Q3UPluIn.oS5g8KUO3pviKN2s.pR1js/UP8LS', NULL, 1, NULL, NULL, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(3008, 'Ocean Adeera Qudsi', '3187586492', '3187586492@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$bF5EBGNMP0JM98I2XZKIuO0JvV/1JB3nWL7EIP0QZNIhk3oxoszoO', NULL, 1, NULL, NULL, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(3009, 'Badzlin Joewina Korompis', '202401071', '202401071@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$y0VQaBCzQVmwbbKhVOLy2.APSO11sKkJB2W3VuWVqCTTwOKYb0l0S', NULL, 1, NULL, NULL, '2025-05-12 07:56:04', '2025-05-12 07:56:12'),
+(3010, 'Saafia Nuriani Syam Lubis', '3179767386', '3179767386@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$3TRRpNB.tQUieXTJd/wo7ePKEnPqKW45Oq7/abXAD3qGGwQ5RTixu', NULL, 1, NULL, NULL, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(3011, 'Yufa Nur Alamsyah', '3162066197', '3162066197@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$zXfE.WeCe8kTqLlMqfi0KOXHlvP7N5cEQGWLyZnED7iF5zUAfC27W', NULL, 1, NULL, NULL, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(3012, 'Airlangga Guevara Al\'Muhammad', '3171618123', '3171618123@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$MENvNb5G3FRzedLyRpRwJeeVFq3mEYJbirHojtWZZafgmbKJLlS72', NULL, 1, NULL, NULL, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3013, 'Ardhanisa Zahra Rafanda (ABK)', '3182411441', '3182411441@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$YsJFj38ulmPiEbf6FdeUu.g09qLQLOPsJLFL.oeWCrBTolcaEhL2C', NULL, 1, NULL, NULL, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3014, 'Arvino Faeyza Darmawan', '3171725957', '3171725957@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$d0o.DutPhexcXh./485YzOQYhKQmziCHqa5Tip9zNUuJQW.gL9W/u', NULL, 1, NULL, NULL, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3015, 'Auzaie Razan Asyah', '3183857709', '3183857709@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$HybO8DkHWCsNcMuy2b09Fejdf.iW.MdJK8unPYFniCe/XLYerBI/C', NULL, 1, NULL, NULL, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3016, 'Ayyub Ibadurrahman Adz Dzaki', '3181421372', '3181421372@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$Q4h8M1.YKPfHx/LVMpbLyeM8aV3Bp3alkk.L/QsoAxQ8qqrW4K64y', NULL, 1, NULL, NULL, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3017, 'Dafiq Pallawarukka Astuh', '3161297147', '3161297147@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$uJpI3E3qOVRKI3bxL3qTNOC0ilpv7oncExQhZG6Zs3CZisLc3/RTa', NULL, 1, NULL, NULL, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3018, 'Duta Angkasa AlMusyaffa', '3178930003', '3178930003@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$aBc0mbT0hKpCjbh7Mh5llupPOdK0yFFsXguAl20pHpRrgWPHMkMZO', NULL, 1, NULL, NULL, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3019, 'Ezhar Maulana Rado (ABK)', '3168580930', '3168580930@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$nEDQ1pUEmexXnHzz6oK2MOfpH3GxUq5whajIZvSuw7xrcDdUuDb5i', NULL, 1, NULL, NULL, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3020, 'Fahira Dafina Azzahra', '3183623166', '3183623166@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$69f/FNQdvdkG8qk4hBjwhuvlXj/s2EG5dedmH3NikSx/nrwfcInVu', NULL, 1, NULL, NULL, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3021, 'Ghazy Waliuddin', '3176173593', '3176173593@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$K2O8DR4CUUuw94Y5w9WPIuFB9qgjO0MKQtsyEdzSFXIBNvdP.Arke', NULL, 1, NULL, NULL, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3022, 'Haniin Hannaaniyah Zakaria', '3186933198', '3186933198@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$.Y046pVlVSR9.6jr8BcAY.ZuZekxSj5aynJKcngTuIB.cNQUFB2Bu', NULL, 1, NULL, NULL, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3023, 'Khadijah Luthfa Kayyisa', '3174776027', '3174776027@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$6VCE51CqPKsy8myfMeQyE.tyft095TIniWz1sKls3jTiBlMd/4.Qu', NULL, 1, NULL, NULL, '2025-05-12 07:56:06', '2025-05-12 07:56:06'),
+(3024, 'Khalid Fatih Harahap', '3171626017', '3171626017@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$NAlzqEai12JK8W8KLdSTauWhoOoyapzAi1NZn10wqwL89dQcj1un2', NULL, 1, NULL, NULL, '2025-05-12 07:56:06', '2025-05-12 07:56:06'),
+(3025, 'Madina Karim Almahyra', '3173330754', '3173330754@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$rm5RKMg4eFjND/tup0DlOO748hDtPQ7CDxRPrXBwfFx8di4I3LLzS', NULL, 1, NULL, NULL, '2025-05-12 07:56:06', '2025-05-12 07:56:06'),
+(3026, 'Mhd Kairo Attaqi', '3180330838', '3180330838@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$OU1BPmk7omOkZCa9hD2ynu9x8VZCDaRmplzxcI3Sa3trMq1vk5qvy', NULL, 1, NULL, NULL, '2025-05-12 07:56:06', '2025-05-12 07:56:06'),
+(3027, 'Muhammad Afnan Al Mubarok', '3176228368', '3176228368@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$IhviDfVdKsZP0tNoVUdiKObXIqKUJMj62oxXma5JMJVcIOUXQM.CK', NULL, 1, NULL, NULL, '2025-05-12 07:56:06', '2025-05-12 07:56:06'),
+(3028, 'Muhammad Ariq Harahap', '3181491363', '3181491363@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$fv8/qROpBPzVEz78uJj1peToyWiZJ1Q8d1ddztUvzEWIpEFOu13f6', NULL, 1, NULL, NULL, '2025-05-12 07:56:06', '2025-05-12 07:56:06'),
+(3029, 'Muhammad Bilal Kareem', '3169443328', '3169443328@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$7iwlJWQcS1U0anxhrldmxuQ7t9hAjHzM8F.wBhrNKoyuU0899pIS.', NULL, 1, NULL, NULL, '2025-05-12 07:56:06', '2025-05-12 07:56:06'),
+(3030, 'Muhammad Umar Ghazi', '3171612493', '3171612493@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$GKfUp1MEYI53LEZ18iKMA.UHShaodDVc8pGEkE17/FDIsZfFR1Woy', NULL, 1, NULL, NULL, '2025-05-12 07:56:06', '2025-05-12 07:56:06'),
+(3031, 'Romeesa Quichytia Florian', '3187861193', '3187861193@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$gHOhGsv0RnoqJcqFT6SGvee2rZEed6Xvgd99gvS4iQaom7/TLsWlK', NULL, 1, NULL, NULL, '2025-05-12 07:56:06', '2025-05-12 07:56:06'),
+(3032, 'Sayyid Hadziq Alfarizki', '3171055135', '3171055135@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$AgYRyhbNtStsLNKQkK5.P.6MBKK0oeerZbzwmj.DtxLKgTtZy./7O', NULL, 1, NULL, NULL, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3033, 'Ahmad Allegro Razaani', '3162939976', '3162939976@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$XWhVsIO..TS/Hg3Rks1KqugW8qce5f1ZvOsTR.rPD7HCMwytaKz7y', NULL, 1, NULL, NULL, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3034, 'Ahna Nurul Ihsan', '0163020540', '0163020540@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$YOD3YOOkbYyYRSNIv5tiS.54hnYCw2ZO12gXTxyJPMndeYi2JA4Za', NULL, 1, NULL, NULL, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3035, 'Aidatul Ahlam', '3168689580', '3168689580@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$qU1bBONpaLKIyfd.RXMBjOjgzR8LWd1SSY194O0pa9jZRPE31ezl6', NULL, 1, NULL, NULL, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3036, 'Ali Hardjanto', '3162149100', '3162149100@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$XOzJ0R.q3MojhwHEa0vNK.0mJCbd/KfdT3n/95/eqmCEoTQu4.93m', NULL, 1, NULL, NULL, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3037, 'Ammar', '3173893421', '3173893421@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$lSJrr4LteaX6lLtRCB8W9uXMj6MRu3zpESB8Kt3tHRwjeBNkVxcxK', NULL, 1, NULL, NULL, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3038, 'Arjuna Rafif Al Ghifari', '3161973819', '3161973819@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$I6Si6FtJ3vHUSEkanidGcuwZU5A1eEJ.f1WLrcloI3UaXZoSIcxsO', NULL, 1, NULL, NULL, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3039, 'Fatih Shaddiq Arafat', '3162563448', '3162563448@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$3zifIdULk55hrp4P7Z1Yz.9.7LKgndj0noUqnIj4ke6lzMlDxleVS', NULL, 1, NULL, NULL, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3040, 'Kalena Salji Almulika', '3160249566', '3160249566@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$1NIES8e8pr4KCDj0xOa8VOF9K7DkxmCgiUhCzZwnDhjxfd04Ag3Nq', NULL, 1, NULL, NULL, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3041, 'Luqman Althaf', '3169105302', '3169105302@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$sT3jjxJeB7XHcCeGGb6.TOZdi22uxxZuM1npFXUh4icbfsnQsn6VK', NULL, 1, NULL, NULL, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3042, 'Muhammad \'Ushaim Hadziq', '3169179867', '3169179867@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$Y6xeDrYBKwA12zv13xm3LOxLGGgGvfNBJYrc5fA3XYwi.5YGeOsbG', NULL, 1, NULL, NULL, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3043, 'Muhammad Arfan Chakim', '3165846537', '3165846537@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$RIay/y37vbRQMULDS5OlyOSIQ73Mi/dF5LBJAguPAlbwwmeZYG4Du', NULL, 1, NULL, NULL, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3044, 'Muhammad Ukkasyah Afifi', '3176652275', '3176652275@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$3dCgb7b9YtyDQKLeQ8wUqe6HL4JFEoj2d.wRptsYQAw9Nt6qZWnA2', NULL, 1, NULL, NULL, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3045, 'Nadrasafa Aisha', '3168175016', '3168175016@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$Mz00xMcimuEt5CC4VTfVjOpXCEflpfUuxKL7EYKajzfrfZNkV3Pem', NULL, 1, NULL, NULL, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3046, 'Putri Shalihah', '3160394131', '3160394131@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$QCaA8aO0KQyMtCGOMJRgDemZxeBJGaZJKSn2zQLzA124/gtHhB3OW', NULL, 1, NULL, NULL, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3047, 'Qonita Adiba Abqoriah', '3165173450', '3165173450@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$CgJs8/z8B2H0MQCB3EJxjO9twN5dsH69hdWoMaZA7BuS9eD.ZV3tG', NULL, 1, NULL, NULL, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3048, 'Shafiyah Maryam Azzahra', '3176366831', '3176366831@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$oSi.kWrKZr82cRQ6eWHx4.jYORJ.vTLCVj/txUEtAPl713NstJfHO', NULL, 1, NULL, NULL, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3049, 'Shafwan Al Khoiry', '3172661638', '3172661638@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$q30hu.sSEYm2PsUE7OitAODfPLyI3juzQADt.yamiUDCWBOmdj8sW', NULL, 1, NULL, NULL, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3050, 'Shofiyyah Alsya Atsariyyah', '3170433361', '3170433361@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$L3OKVJrTmaos7uobGQ.3butHiuaBPhWNfKjAWzimIbaIztfIax/R6', NULL, 1, NULL, NULL, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3051, 'Syafiq Al Khoiry', '3179872531', '3179872531@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$EKhakPSZN1hZO.//gTslg.vEhqtL5JqH4ETqt4xVJ1oAVKQ4Wpmk6', NULL, 1, NULL, NULL, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3052, 'Tabina Istiqamah Gosari', '3168123648', '3168123648@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$qhtrC3PNbuXJ9HkgQQpMY.M3idPgo8T0Yx2HKJW9gLDmn7oOYZaJS', NULL, 1, NULL, NULL, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3053, 'Zaynab', '3173074685', '3173074685@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$Mm5i.VwzcfnEl8PgKV5ls.N5Pq2pdvWiYxFeEc1gF7AT4qwF3LwaS', NULL, 1, NULL, NULL, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3054, 'Abdullah Khoirun Ni\'am Zamzami', '3161445902', '3161445902@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$RPKLfTS6CrWLW38aOiPTuuz13H75PP0ot6uZkPU9WHKLH1lTUxI5.', NULL, 1, NULL, NULL, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3055, 'Abdurrahman Izzul Islam', '3164319192', '3164319192@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$IjyU50yH6d9JgTU0Vq48p.kXWi.wINrJk8hyqkqKTiYf3Vjh3HMda', NULL, 1, NULL, NULL, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3056, 'Adnan', '3162014821', '3162014821@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$wV1RElBQlNEHr.8NXAYE/eFPNtoqHOrIPXI6.tq66EGI5ruaH.vi2', NULL, 1, NULL, NULL, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3057, 'Aghna Sultan Mandala Waliyurrahman', '3177668351', '3177668351@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$qPWW2BnMb4dDiBIhcP7cCOXdGDFZCetg7yrAC6wSayGfvEJ7HLEb2', NULL, 1, NULL, NULL, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3058, 'Aishalina El Abidah', '3179158208', '3179158208@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$K.GTB4Cg5wa5COODt2JGTeb.Q33pz.YAVwBHi/5XVkY6pLR/9pEDq', NULL, 1, NULL, NULL, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3059, 'Aisyah Syamina Khalifah', '3161577939', '3161577939@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$pHEq1I.iF0YsdotfiEqhMuYbRN4sAKuuqxypWVBJNMVvAZJEQF.Li', NULL, 1, NULL, NULL, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3060, 'Alfathiya Syayma Maryam', '3163289925', '3163289925@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$SJbhhfv7Zv28FR7pCBTCx.QW31dgKU5OjjtbY/yGR4n.JKNcSaHD.', NULL, 1, NULL, NULL, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3061, 'Alifa Trimarsia Hafidz', '3174524445', '3174524445@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$nxqe.Zvv6zBQM82CwiOMvOvyChXQlbP.DwQ6N6fRizy6o0TgLML1e', NULL, 1, NULL, NULL, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3062, 'Annasya Nur Azkadina', '3163094163', '3163094163@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$bWI8b.F0Piy4wbk8TNW3Xe7SToBqhLzc9.YtQbRHJvLawT0zCS6aS', NULL, 1, NULL, NULL, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3063, 'Kenneth Naratama Haidar', '3164306177', '3164306177@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$.rv3nA/SoCKLH5ODnsfBx.rkag5B1l9.08E1boZ5DeUSY/hOLSSOm', NULL, 1, NULL, NULL, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3064, 'Kinanti Asyifa Wiryawan', '3162830408', '3162830408@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$LeRCP4nKWrYuvRXSMcQTM.OG1hCHdrs3V1AHkrFjKvw7enJw2GII2', NULL, 1, NULL, NULL, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3065, 'Luqman Abdul Majid', '3165452301', '3165452301@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$kQkVHhivh.C8dICtgaXqAeQIz9BLOpNhnN7q8qX0.qVw5G3A0UgEK', NULL, 1, NULL, NULL, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3066, 'Muhammad Aldo Shakeil Alfatih', '3172840895', '3172840895@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$VjtIrSWSmQGQ/EHLXV8z3OEl4dIhgmHCFD4D35du.VP6uRRCou5bK', NULL, 1, NULL, NULL, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3067, 'Muhammad Athar Rizky Yudistira', '3167113979', '3167113979@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$DXXsyde8P6R76sGVuRtQ5erP/sYIFwCZD5sHQSple.vek91GcCC2u', NULL, 1, NULL, NULL, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3068, 'Muhammad Shiddiq Basir', '3169371628', '3169371628@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$q1Jwc/Vg2HJs1J6O2yCvSu5v8yCVOfLN8QAdOZ0kgJPS7TbAru536', NULL, 1, NULL, NULL, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3069, 'Musa Aslam Alghifaar', '3169056211', '3169056211@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$KbGLSI6Fo7DtKhbkEqC/l.4O6qfn7CYuYvnivBhKoam9r53UuYL2S', NULL, 1, NULL, NULL, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3070, 'Raihanah Hafidzah Ahmad', '3177813153', '3177813153@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$9LscaeWgeNsJjArpxxmpVeQF3XqaQNnO8qdlqmQA0SJnm6PikHq/i', NULL, 1, NULL, NULL, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3071, 'Reyna Fahira Nashwa', '3165946685', '3165946685@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$KGrwnDbXoykQeXrDfjKVYOKUIGdCSxl/MPTHfqOPrDatB4IcNlkhy', NULL, 1, NULL, NULL, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3072, 'Rufaidah Aslamiyah', '3161282594', '3161282594@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$NC4fqfNYHvSubMkE6OFUXO4Tww2c65MRYK2Tqo0/W4nlsD2G.MrfO', NULL, 1, NULL, NULL, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3073, 'Shaffiyah Ilmi Fahrial', '3171454982', '3171454982@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$kjznUFLSGYklYa6gLTmaI.5Lgb2rSqFZjgugeWSMJ3MPZfIQV9mt.', NULL, 1, NULL, NULL, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3074, 'Sheza Farzana Mulyawan', '3160259997', '3160259997@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$IKM7OsrLolx1zd1jenctmeEFw2vyOVnKKntunNvR3w5e0jg1jpUM2', NULL, 1, NULL, NULL, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3075, 'Usamah Nabil Assyakir', '3173745626', '3173745626@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$Fq1v98FXhMq4sPmYdydYF.1Lz0SajZoPTc2szkQGCAwe47Balasxu', NULL, 1, NULL, NULL, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3076, '\'Abdurrahman', '3168569289', '3168569289@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$2grHs5xe3YhmbNmb/O5qjehbcKcW7mzODJg5kDY.1pFnGL3v9eSKC', NULL, 1, NULL, NULL, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3077, 'Abraham Michael Chandra (ABK)', '3172518747', '3172518747@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$sdwnVXbkWaUanpTSFvwK3OPfYqZGK2CnOPzm/m7.fIk1nTEnb9ndy', NULL, 1, NULL, NULL, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3078, 'Ameera Nushaibah Fathinatunnisa', '3173487232', '3173487232@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$WXYFQeqYh6wQlouMVD.5.eCmSfYzaUMzjlst96nIXOaJFOtPsCiPC', NULL, 1, NULL, NULL, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3079, 'Amiinah Syahidah Gumay', '3173764767', '3173764767@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$rj2122ndAjdWFmlokEr9QuRP0ba1I24GKzhn6YT1mMVwo1277q5gW', NULL, 1, NULL, NULL, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3080, 'Anindhita Fauziah Silmi', '3164852352', '3164852352@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$DrTbkn6cN2Ja/aPgfRzD3O5GhuPLRWUBC.7NS7iu/OK5aIMU8YohC', NULL, 1, NULL, NULL, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3081, 'Azlan Alfarghani', '3166958505', '3166958505@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$AZNlSb1pgBZdRh/Dx023s.iPc9X3GDol8mmFZOcufXPv/.dNgcb7q', NULL, 1, NULL, NULL, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3082, 'Delisha Fatima Rahman', '3160731340', '3160731340@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$DLtqWVfgHS/KLG8G2dZcdekXdQF3ckrfreXGzFS.74kE35qvUw/BO', NULL, 1, NULL, NULL, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3083, 'Ferikevval Junaydilhaqq Gunawan', '3179947852', '3179947852@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$bvP4MfT3VjIYw5lUvVDI3OzzEzidOZgFlXISAi0oaD4Y.OxVvifGu', NULL, 1, NULL, NULL, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3084, 'Hafshah Harisatudz Dzikra', '3176166160', '3176166160@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$U2.J/cQOoghOYuy.x6dV9.6uKfpl4fObyrix2RLaqdRFGuP8XPmmi', NULL, 1, NULL, NULL, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3085, 'Kirana Dwizra', '3146068594', '3146068594@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$SL6NrgkftYaNL50QaauMM.XPK3ontsHdCjQyRY.dPN4Q6CTRK846q', NULL, 1, NULL, NULL, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3086, 'Muhamad Fikri Azka Salami', '3169683278', '3169683278@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$e078VmSKEJ5BMe3717ZV7uYjsURdaQMRvlPvqrxmHf0XJ0QEBF2jS', NULL, 1, NULL, NULL, '2025-05-12 07:56:11', '2025-05-12 07:56:11');
+INSERT INTO `users` (`id`, `name`, `username`, `email`, `email_verified_at`, `phone`, `phone_verified_at`, `password`, `photo_url`, `is_active`, `token_reset`, `remember_token`, `created_at`, `updated_at`) VALUES
+(3087, 'Muhammad Iqbal (ABK)', '3143589274', '3143589274@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$GP9MH/pYE6hm6T7FLy.Gc.W5C1.F3oWmrCSvS8ALqxFgBvrQ1vbe.', NULL, 1, NULL, NULL, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3088, 'Muhammad Kenzie Jani Pratama (ABK)', '3160460959', '3160460959@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$Ew1xSoRbn0u3vp14wthcZ.lm8mbapLuS4HELtWR4Ugw3sC4tbD416', NULL, 1, NULL, NULL, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3089, 'Muhammad Mirza Ahnaf (ABK)', '3161508680', '3161508680@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$CXtLmPJnHtY9i4A7ryfmqehAiGUeemcQtmsFdYA8DJAdXdu46zAGm', NULL, 1, NULL, NULL, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3090, 'Muhammad Rafaeyza Judhistira', '3173098053', '3173098053@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$KNfaRwRNOS0tGsj9N0M2dOAduF8FoDKLOXtHe4DTfkNUxbvu10RQ.', NULL, 1, NULL, NULL, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3091, 'Muhammad Suhail Alfaqih', '3178110916', '3178110916@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$4v4nOekQZknmbe3ErxSor.KIW7uF2Jj36RhZkHEknTir6bae1cHM6', NULL, 1, NULL, NULL, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3092, 'Nyayu Nidhifah Ufairah', '3163133309', '3163133309@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$5P1F536YlPRLZN6xfHeRzOgpNDqYtx2PDpw1gJcsgIvbSxFohxXlu', NULL, 1, NULL, NULL, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3093, 'Rahayuning Dinda Widihatmoko', '3166656340', '3166656340@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$MNlx6HzjjE2f1OvklditFuVd6GIJFxNzPhA1LqGqhnC1X8nY2nfdO', NULL, 1, NULL, NULL, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3094, 'Rakana Muttaqi Ahmad', '3177414083', '3177414083@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$qWFLq4dr6qWMr0GTUzhIAOtArJ.ohQDGQzu88X2lEqmjh/47aPJlm', NULL, 1, NULL, NULL, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3095, 'Rayyan Ash Shiddiq', '3170242106', '3170242106@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$MQVCasLa/ASq0vVAV4UyDu/tzTyb6GiqGijxQzekW/jAcQJtJ97/G', NULL, 1, NULL, NULL, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3096, 'Shaliha Aira Ata', '3177752433', '3177752433@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$uWXGrI7eGmz06U77V0qsxuC8QZdggK0Uz8xeK3TNPnoeQwe55Ltpq', NULL, 1, NULL, NULL, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3097, 'Uwais Al-Qarni', '3169997969', '3169997969@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$G1/kW40Ey3gAmxS2sUO..ensqHGfC8NCAdH7XYj.TUR6bOZVGNuNe', NULL, 1, NULL, NULL, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3098, 'Abdurrahman Syafei', '3176939564', '3176939564@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$nFXjv1U5rZUpDJyfIc29lOewU2jLVXEWkXJTzziez59dN51eRtpJm', NULL, 1, NULL, NULL, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3099, 'Alifa Putri Habbaba', '0162166015', '0162166015@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$xBffhj1h2VxQyEu7MhZIq.ikC2ClzSTaOsLZIHhd.K7j4S9TTmnHi', NULL, 1, NULL, NULL, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3100, 'Arabella Mujahidah Amardias', '3175857760', '3175857760@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$j7bn3bcYgIHRQ3dP8fhV8eicG93iJdppXs4jkngwO6h/IX68Lrcxq', NULL, 1, NULL, NULL, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3101, 'Aufa Qonita Nuha', '3172855485', '3172855485@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$l/9ScpKOgt6adbECJpqh/O70ieZAudsKLMiKG/o1DgtpxkR1W7Npm', NULL, 1, NULL, NULL, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3102, 'Azkiya Amanina Zafira', '0161034970', '0161034970@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$UmDz5Kuwm.1nDtqzptEOzOskp/tVWwa1tu6g6rrYk..GqMgeccy2e', NULL, 1, NULL, NULL, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3103, 'Daniel Erland Prasetya (ABK)', '3166409806', '3166409806@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$T6KDcvBxYbtEiNsgs/nNmeJyXvYHxrj0axwwTvk3TfsmFNXzACvua', NULL, 1, NULL, NULL, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3104, 'Dzakiya Shahwatul Islami', '3160258978', '3160258978@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$QkGX/4ZopqitJVPP.x5.iu.1FafhCgnUa4hQcr7eLVOYTmdQ3RduG', NULL, 1, NULL, NULL, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3105, 'Faqih Tsaqif Arrayyan', '3173400825', '3173400825@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$oYoJRBZLt0W9wftPxFE1ouQnOGrzyL0LgeAeyT3FTFzisgJLkLOpi', NULL, 1, NULL, NULL, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3106, 'Firzanah Khanza Rahmadania', '3151456746', '3151456746@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$B5JfrP.XvYV9S3MYRnL0MOivLggIb0xf2.ZNl1ZvUM/EX3c7jFoH2', NULL, 1, NULL, NULL, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3107, 'Hana Mujtahidah Syafie', '3172545838', '3172545838@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$4OgoMOjJcaU0d.bzDkS2/u8ZGXRKW6wjMvWp6DQlyVYHLG6WoREgC', NULL, 1, NULL, NULL, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3108, 'Hasan Abdullah', '3175680262', '3175680262@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$VBoXfGChHOS/6WIeLR6xNuX7gLoZiozs5pYBk8Q9ytl0yE9jL9Vwy', NULL, 1, NULL, NULL, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3109, 'Julaibib', '3172970143', '3172970143@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$HylqD8MGfJVFHHdVk9mft.SWCkha669G1XyOfBxdX86BtADQ3vkmi', NULL, 1, NULL, NULL, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3110, 'Khonsa Syakila Almahira', '3167086835', '3167086835@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$KQBUtSeb84iqTLoRF.ozP.l2yphU8i8Z3F3QZ7IdOXqsabF4fuhXi', NULL, 1, NULL, NULL, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3111, 'Muhammad Ghozi Al-Kayyis', '3172671345', '3172671345@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$IjpWFfYxgmJClCAvKkHAse.KDry9wIVvm7FMuQ/AYcVw67cty/tvi', NULL, 1, NULL, NULL, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3112, 'Muhammad Haitsam', '3161662632', '3161662632@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$Is9/6LsYS19cfk1IOsLVNOS5D1xgyEvJSzyYfbslyl4F8iz1Q49HS', NULL, 1, NULL, NULL, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3113, 'Muhammad Ibrohim Al Faatih Fisabilillah', '3168928777', '3168928777@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$paOML752qEVxKquUxx3H6OpG0RvYcF9ua0P2BrpSKR2GQs9jBmTxy', NULL, 1, NULL, NULL, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3114, 'Muhammad Rhaditya Fajr Fadani', '3169306517', '3169306517@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$tXTmfaphWzv8YnG43d/Q6uRmQ23TmYM0QzEA5TzfqKO9FKBa/7I9u', NULL, 1, NULL, NULL, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3115, 'Mysha Arista Kirania Sasmita', '3160820811', '3160820811@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$lrGtySIt1iFup4gzQn5m7eMgnBqis6.K/AFHH3GMBaiCNKGuDBo0i', NULL, 1, NULL, NULL, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3116, 'Nuha Ratifa', '3173288959', '3173288959@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$jcttJuxtf56Glo2xRAdYKuoBxDLODUn4ep6SO3oBHiOQEvWO.hfoe', NULL, 1, NULL, NULL, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3117, 'Omar Al-Mumtaaz Nurrahman Nasution', '3153531867', '3153531867@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$tm1g/M.uQ.Z4QKfgYsk5H.S1MO0gfSRTixjrJd1Utax6iH3ZtYCV2', NULL, 1, NULL, NULL, '2025-05-12 07:56:14', '2025-05-12 07:56:14'),
+(3118, 'Saadan Nursalim', '3163917517', '3163917517@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$3SskomMoXc/CNRdVAt.L5.vy5spvFLNvgPqz2xX6p6f5t5JblCDx6', NULL, 1, NULL, NULL, '2025-05-12 07:56:14', '2025-05-12 07:56:14'),
+(3119, 'Shakila Hazirah Aghniyah', '3164104017', '3164104017@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$FzFkKqzD3zDDqlWJPMMrMuQSE7PIMxlS/9IppUkH7guNZPWmSyMZC', NULL, 1, NULL, NULL, '2025-05-12 07:56:14', '2025-05-12 07:56:14'),
+(3120, 'Ahmad Althaf', '3158475653', '3158475653@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$Ujo3wHUoWdFpR1Fj3N9q3O3ruOKGqUoUi48qNBvUcFXQergVz.HTS', NULL, 1, NULL, NULL, '2025-05-12 07:56:14', '2025-05-12 07:56:14'),
+(3121, 'Aisyah Azzahra Afifah', '3156939882', '3156939882@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$PRQfnENFd6j./ZLG/wWAiO//VIQ2ybFrt4AgJdYoqtvpLcfQ/pR3e', NULL, 1, NULL, NULL, '2025-05-12 07:56:14', '2025-05-12 07:56:14'),
+(3122, 'Ali Abdurrahman (B)', '3153284466', '3153284466@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$Wlj1k3dNWed/DOARTPsd0ueqBdShaJxp03O5.vWEWhXjfkNnj2OoK', NULL, 1, NULL, NULL, '2025-05-12 07:56:14', '2025-05-12 07:56:14'),
+(3123, 'Alyssa Ahza Maryam', '0157652730', '0157652730@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$4QEYjXap83dY4VNtiyXD9OX7oXz4wl8F/KC5GcOYdeS3pGEjlihqm', NULL, 1, NULL, NULL, '2025-05-12 07:56:14', '2025-05-12 09:26:44'),
+(3124, 'Arsyila Syaqueena Ayudiansyah', '0161833489', '0161833489@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$/aRSvElHfGopFPO295g2HedwV93jwec.mlcaiHUwFnHrlMPsmuZYO', NULL, 1, NULL, NULL, '2025-05-12 07:56:14', '2025-05-12 07:56:14'),
+(3125, 'Avicenna Gazza Rizki', '3152566254', '3152566254@generasijuara.sch.id', NULL, NULL, NULL, '$2y$10$2qr2Z03Mz7sngj/c/ALYnu.fE1sAJ2NBSJu4EW3i/cH2IJlpJr4CC', NULL, 1, NULL, NULL, '2025-05-12 07:56:14', '2025-05-12 09:26:44');
 
 -- --------------------------------------------------------
 
@@ -12600,7 +12963,205 @@ INSERT INTO `user_role` (`id`, `user_id`, `role_id`, `created_at`, `updated_at`)
 (2712, 2724, 3, '2024-06-23 01:01:21', '2024-06-23 01:01:21'),
 (2713, 2725, 1, '2025-03-17 01:08:59', '2025-03-17 01:08:59'),
 (2714, 2726, 1, '2025-05-02 02:29:47', '2025-05-02 02:29:47'),
-(2715, 2727, 1, '2025-05-07 02:35:46', '2025-05-07 02:35:46');
+(2715, 2727, 1, '2025-05-07 02:35:46', '2025-05-07 02:35:46'),
+(2739, 2751, 3, '2025-05-12 03:54:52', '2025-05-12 03:54:52'),
+(2740, 2752, 3, '2025-05-12 04:01:09', '2025-05-12 04:01:09'),
+(2741, 2753, 3, '2025-05-12 04:01:09', '2025-05-12 04:01:09'),
+(2742, 2754, 3, '2025-05-12 04:01:10', '2025-05-12 04:01:10'),
+(2743, 2755, 3, '2025-05-12 04:01:10', '2025-05-12 04:01:10'),
+(2744, 2756, 3, '2025-05-12 04:01:10', '2025-05-12 04:01:10'),
+(2745, 2757, 3, '2025-05-12 04:01:10', '2025-05-12 04:01:10'),
+(2746, 2758, 3, '2025-05-12 04:01:11', '2025-05-12 04:01:11'),
+(2747, 2759, 3, '2025-05-12 04:01:11', '2025-05-12 04:01:11'),
+(2748, 2760, 3, '2025-05-12 04:01:11', '2025-05-12 04:01:11'),
+(2749, 2761, 3, '2025-05-12 04:01:11', '2025-05-12 04:01:11'),
+(2750, 2762, 3, '2025-05-12 04:01:11', '2025-05-12 04:01:11'),
+(2752, 2764, 3, '2025-05-12 04:40:58', '2025-05-12 04:40:58'),
+(2929, 2941, 3, '2025-05-12 07:55:58', '2025-05-12 07:55:58'),
+(2930, 2942, 3, '2025-05-12 07:55:58', '2025-05-12 07:55:58'),
+(2931, 2943, 3, '2025-05-12 07:55:58', '2025-05-12 07:55:58'),
+(2932, 2944, 3, '2025-05-12 07:55:58', '2025-05-12 07:55:58'),
+(2933, 2945, 3, '2025-05-12 07:55:58', '2025-05-12 07:55:58'),
+(2934, 2946, 3, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2935, 2947, 3, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2936, 2948, 3, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2937, 2949, 3, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2938, 2950, 3, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2939, 2951, 3, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2940, 2952, 3, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2941, 2953, 3, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2942, 2954, 3, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2943, 2955, 3, '2025-05-12 07:55:59', '2025-05-12 07:55:59'),
+(2944, 2956, 3, '2025-05-12 07:56:00', '2025-05-12 07:56:00'),
+(2945, 2957, 3, '2025-05-12 07:56:00', '2025-05-12 07:56:00'),
+(2946, 2958, 3, '2025-05-12 07:56:00', '2025-05-12 07:56:00'),
+(2947, 2959, 3, '2025-05-12 07:56:00', '2025-05-12 07:56:00'),
+(2948, 2960, 3, '2025-05-12 07:56:00', '2025-05-12 07:56:00'),
+(2949, 2961, 3, '2025-05-12 07:56:00', '2025-05-12 07:56:00'),
+(2950, 2962, 3, '2025-05-12 07:56:00', '2025-05-12 07:56:00'),
+(2951, 2963, 3, '2025-05-12 07:56:00', '2025-05-12 07:56:00'),
+(2952, 2964, 3, '2025-05-12 07:56:00', '2025-05-12 07:56:00'),
+(2953, 2965, 3, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2954, 2966, 3, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2955, 2967, 3, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2956, 2968, 3, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2957, 2969, 3, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2958, 2970, 3, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2959, 2971, 3, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2960, 2972, 3, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2961, 2973, 3, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2962, 2974, 3, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2963, 2975, 3, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2964, 2976, 3, '2025-05-12 07:56:01', '2025-05-12 07:56:01'),
+(2965, 2977, 3, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2966, 2978, 3, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2967, 2979, 3, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2968, 2980, 3, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2969, 2981, 3, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2970, 2982, 3, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2971, 2983, 3, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2972, 2984, 3, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2973, 2985, 3, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2974, 2986, 3, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2975, 2987, 3, '2025-05-12 07:56:02', '2025-05-12 07:56:02'),
+(2976, 2988, 3, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2977, 2989, 3, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2978, 2990, 3, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2979, 2991, 3, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2980, 2992, 3, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2981, 2993, 3, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2982, 2994, 3, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2983, 2995, 3, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2984, 2996, 3, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2985, 2997, 3, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2986, 2998, 3, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2987, 2999, 3, '2025-05-12 07:56:03', '2025-05-12 07:56:03'),
+(2988, 3000, 3, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(2989, 3001, 3, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(2990, 3002, 3, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(2991, 3003, 3, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(2992, 3004, 3, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(2993, 3005, 3, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(2994, 3006, 3, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(2995, 3007, 3, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(2996, 3008, 3, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(2997, 3009, 3, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(2998, 3010, 3, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(2999, 3011, 3, '2025-05-12 07:56:04', '2025-05-12 07:56:04'),
+(3000, 3012, 3, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3001, 3013, 3, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3002, 3014, 3, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3003, 3015, 3, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3004, 3016, 3, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3005, 3017, 3, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3006, 3018, 3, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3007, 3019, 3, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3008, 3020, 3, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3009, 3021, 3, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3010, 3022, 3, '2025-05-12 07:56:05', '2025-05-12 07:56:05'),
+(3011, 3023, 3, '2025-05-12 07:56:06', '2025-05-12 07:56:06'),
+(3012, 3024, 3, '2025-05-12 07:56:06', '2025-05-12 07:56:06'),
+(3013, 3025, 3, '2025-05-12 07:56:06', '2025-05-12 07:56:06'),
+(3014, 3026, 3, '2025-05-12 07:56:06', '2025-05-12 07:56:06'),
+(3015, 3027, 3, '2025-05-12 07:56:06', '2025-05-12 07:56:06'),
+(3016, 3028, 3, '2025-05-12 07:56:06', '2025-05-12 07:56:06'),
+(3017, 3029, 3, '2025-05-12 07:56:06', '2025-05-12 07:56:06'),
+(3018, 3030, 3, '2025-05-12 07:56:06', '2025-05-12 07:56:06'),
+(3019, 3031, 3, '2025-05-12 07:56:06', '2025-05-12 07:56:06'),
+(3020, 3032, 3, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3021, 3033, 3, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3022, 3034, 3, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3023, 3035, 3, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3024, 3036, 3, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3025, 3037, 3, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3026, 3038, 3, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3027, 3039, 3, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3028, 3040, 3, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3029, 3041, 3, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3030, 3042, 3, '2025-05-12 07:56:07', '2025-05-12 07:56:07'),
+(3031, 3043, 3, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3032, 3044, 3, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3033, 3045, 3, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3034, 3046, 3, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3035, 3047, 3, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3036, 3048, 3, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3037, 3049, 3, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3038, 3050, 3, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3039, 3051, 3, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3040, 3052, 3, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3041, 3053, 3, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3042, 3054, 3, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3043, 3055, 3, '2025-05-12 07:56:08', '2025-05-12 07:56:08'),
+(3044, 3056, 3, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3045, 3057, 3, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3046, 3058, 3, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3047, 3059, 3, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3048, 3060, 3, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3049, 3061, 3, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3050, 3062, 3, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3051, 3063, 3, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3052, 3064, 3, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3053, 3065, 3, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3054, 3066, 3, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3055, 3067, 3, '2025-05-12 07:56:09', '2025-05-12 07:56:09'),
+(3056, 3068, 3, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3057, 3069, 3, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3058, 3070, 3, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3059, 3071, 3, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3060, 3072, 3, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3061, 3073, 3, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3062, 3074, 3, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3063, 3075, 3, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3064, 3076, 3, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3065, 3077, 3, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3066, 3078, 3, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3067, 3079, 3, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3068, 3080, 3, '2025-05-12 07:56:10', '2025-05-12 07:56:10'),
+(3069, 3081, 3, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3070, 3082, 3, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3071, 3083, 3, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3072, 3084, 3, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3073, 3085, 3, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3074, 3086, 3, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3075, 3087, 3, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3076, 3088, 3, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3077, 3089, 3, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3078, 3090, 3, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3079, 3091, 3, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3080, 3092, 3, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3081, 3093, 3, '2025-05-12 07:56:11', '2025-05-12 07:56:11'),
+(3082, 3094, 3, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3083, 3095, 3, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3084, 3096, 3, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3085, 3097, 3, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3086, 3098, 3, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3087, 3099, 3, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3088, 3100, 3, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3089, 3101, 3, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3090, 3102, 3, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3091, 3103, 3, '2025-05-12 07:56:12', '2025-05-12 07:56:12'),
+(3092, 3104, 3, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3093, 3105, 3, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3094, 3106, 3, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3095, 3107, 3, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3096, 3108, 3, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3097, 3109, 3, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3098, 3110, 3, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3099, 3111, 3, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3100, 3112, 3, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3101, 3113, 3, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3102, 3114, 3, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3103, 3115, 3, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3104, 3116, 3, '2025-05-12 07:56:13', '2025-05-12 07:56:13'),
+(3105, 3117, 3, '2025-05-12 07:56:14', '2025-05-12 07:56:14'),
+(3106, 3118, 3, '2025-05-12 07:56:14', '2025-05-12 07:56:14'),
+(3107, 3119, 3, '2025-05-12 07:56:14', '2025-05-12 07:56:14'),
+(3108, 3120, 3, '2025-05-12 07:56:14', '2025-05-12 07:56:14'),
+(3109, 3121, 3, '2025-05-12 07:56:14', '2025-05-12 07:56:14'),
+(3110, 3122, 3, '2025-05-12 07:56:14', '2025-05-12 07:56:14'),
+(3111, 3123, 3, '2025-05-12 07:56:14', '2025-05-12 07:56:14'),
+(3112, 3124, 3, '2025-05-12 07:56:14', '2025-05-12 07:56:14'),
+(3113, 3125, 3, '2025-05-12 07:56:14', '2025-05-12 07:56:14');
 
 -- --------------------------------------------------------
 
@@ -13022,7 +13583,7 @@ ALTER TABLE `voucher`
 -- AUTO_INCREMENT untuk tabel `alumni`
 --
 ALTER TABLE `alumni`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT untuk tabel `cabang`
@@ -13034,13 +13595,13 @@ ALTER TABLE `cabang`
 -- AUTO_INCREMENT untuk tabel `catatan_proses_wb`
 --
 ALTER TABLE `catatan_proses_wb`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `dimensi`
 --
 ALTER TABLE `dimensi`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT untuk tabel `distribusi_mapel`
@@ -13052,49 +13613,49 @@ ALTER TABLE `distribusi_mapel`
 -- AUTO_INCREMENT untuk tabel `ekstrakurikuler`
 --
 ALTER TABLE `ekstrakurikuler`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=239;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=240;
 
 --
 -- AUTO_INCREMENT untuk tabel `elemen`
 --
 ALTER TABLE `elemen`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT untuk tabel `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT untuk tabel `jobs`
 --
 ALTER TABLE `jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=563;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=565;
 
 --
 -- AUTO_INCREMENT untuk tabel `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
 
 --
 -- AUTO_INCREMENT untuk tabel `kelas_mata_pelajaran`
 --
 ALTER TABLE `kelas_mata_pelajaran`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4696;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4709;
 
 --
 -- AUTO_INCREMENT untuk tabel `kelas_wb`
 --
 ALTER TABLE `kelas_wb`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7419;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7799;
 
 --
 -- AUTO_INCREMENT untuk tabel `kmp_setting`
 --
 ALTER TABLE `kmp_setting`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3539;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3551;
 
 --
 -- AUTO_INCREMENT untuk tabel `kuisioner`
@@ -13130,7 +13691,7 @@ ALTER TABLE `layanan_kelas`
 -- AUTO_INCREMENT untuk tabel `mata_pelajaran`
 --
 ALTER TABLE `mata_pelajaran`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT untuk tabel `migrations`
@@ -13148,7 +13709,7 @@ ALTER TABLE `news`
 -- AUTO_INCREMENT untuk tabel `nilai`
 --
 ALTER TABLE `nilai`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `nilai_items`
@@ -13160,13 +13721,13 @@ ALTER TABLE `nilai_items`
 -- AUTO_INCREMENT untuk tabel `nilai_kegiatan`
 --
 ALTER TABLE `nilai_kegiatan`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `nilai_point`
 --
 ALTER TABLE `nilai_point`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `paket_kelas`
@@ -13178,7 +13739,7 @@ ALTER TABLE `paket_kelas`
 -- AUTO_INCREMENT untuk tabel `paket_spp`
 --
 ALTER TABLE `paket_spp`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `pembayaran`
@@ -13208,13 +13769,13 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT untuk tabel `point`
 --
 ALTER TABLE `point`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `ppdb`
 --
 ALTER TABLE `ppdb`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2257;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2632;
 
 --
 -- AUTO_INCREMENT untuk tabel `ppdb_ulang`
@@ -13226,7 +13787,7 @@ ALTER TABLE `ppdb_ulang`
 -- AUTO_INCREMENT untuk tabel `raport_setting`
 --
 ALTER TABLE `raport_setting`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=163;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=164;
 
 --
 -- AUTO_INCREMENT untuk tabel `role`
@@ -13238,7 +13799,7 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT untuk tabel `rombel`
 --
 ALTER TABLE `rombel`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=401;
 
 --
 -- AUTO_INCREMENT untuk tabel `settings`
@@ -13262,7 +13823,7 @@ ALTER TABLE `tagihan_items`
 -- AUTO_INCREMENT untuk tabel `tahun_akademik`
 --
 ALTER TABLE `tahun_akademik`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 
 --
 -- AUTO_INCREMENT untuk tabel `tutor`
@@ -13274,13 +13835,13 @@ ALTER TABLE `tutor`
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2751;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3126;
 
 --
 -- AUTO_INCREMENT untuk tabel `user_role`
 --
 ALTER TABLE `user_role`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2739;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3114;
 
 --
 -- AUTO_INCREMENT untuk tabel `voucher`
