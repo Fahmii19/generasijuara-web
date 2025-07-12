@@ -165,13 +165,15 @@
                     "width" : "10%",
                     "data"  : "lanjut_kuliah",
                     render  : function (data, type, row) {
-                        if (data) {
-                            return '<span class="badge bg-green-soft text-green">Lanjut</span>';
-                        }else{
-                            return '<span class="badge bg-yellow-soft text-yellow">Tidak Lanjut</span>';
-                        }
+                    console.log(data);
+                    if (data == 0) {
+                        return '<span class="badge bg-green-soft text-green">Lanjut</span>';
+                    } else if (data == 1) {
+                        return '<span class="badge bg-yellow-soft text-yellow">Tidak Lanjut</span>';
                     }
-                },
+                    // Optional: handle other cases if needed
+                    return ''; // default return if neither 0 nor 1
+                                },
                 {
                     "title" :  "Action",
                     "data"  : null,
@@ -187,7 +189,7 @@
             order:[[1,'asc']],
             columnDefs:[]
         });
-        
+
         $('#input-search-table').on( 'keyup change clear',function() {
             table
                 // .columns(2)
