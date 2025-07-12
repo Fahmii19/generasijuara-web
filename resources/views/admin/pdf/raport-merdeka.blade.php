@@ -644,87 +644,75 @@
             </td>
         </tr>
 
-        <tr class="text-left" style="font-weight: bold;">
-            <td colspan="4" class="text-left" width="3%" style="border: 1px solid black; padding-left: 2px;">
-                Kelompok Mata Pelajaran Umum
-            </td>
-        </tr>
+        {{-- Kelompok Mata Pelajaran Umum --}}
+<tr class="text-left" style="font-weight: bold;">
+    <td colspan="4" class="text-left" width="3%" style="border: 1px solid black; padding-left: 2px;">
+        Kelompok Mata Pelajaran Umum
+    </td>
+</tr>
 
-        @foreach ($kmp as $index => $kmpItem)
+@php
+    $umumCounter = 1;
+    $pemberdayaanCounter = 1;
+@endphp
 
-            <tr class="text-left" style="">
-                <td class="text-center" width="3%" style="border: 1px solid black; padding-left: 2px;">
-                    {{ $index+1 }}
-                </td>
-                <td width="40%" style="border: 1px solid black; padding-left: 4px;">
-                    <span>{{ $kmpItem->mata_pelajaran_detail->nama }}</span>
-                </td>
-                <td class="text-center" width="7%" style="border: 1px solid black;">
-                    <span>{{ $kmpItem->p_nilai_1 }}</span>
-                </td>
-                <td width="40%" style="border: 1px solid black; padding-left: 4px;">
-                    <span>{{ $kmpItem->capaian_kompetensi }}</span>
-                </td>
-            </tr>
-
-            @if($loop->last)
-                <tr class="text-left" style="">
-                    <td class="text-center" width="3%" style="border: 1px solid black; padding-left: 2px;">
-                        {{ $index + 2 }}
-                    </td>
-                    <td width="40%" style="border: 1px solid black; padding-left: 4px;">
-                        <span>Muatan Lokal
-                        </span>
-                    </td>
-                    <td class="text-center" width="7%" style="border: 1px solid black;">
-
-                    </td>
-                    <td width="40%" style="border: 1px solid black; padding-left: 4px;">
-
-                    </td>
-                </tr>
-            @endif
-        @endforeach ()
-
-
-
-        <tr class="text-left" style="font-weight: bold;">
-            <td colspan="4" class="text-left" width="3%" style="border: 1px solid black; padding-left: 2px;">
-                Pemberdayaan dan Keterampilan
-            </td>
-        </tr>
-
-        <tr class="text-left" style="">
+@foreach ($kmp as $kmpItem)
+    @if(!in_array($kmpItem->mata_pelajaran_detail->nama, ['Pemberdayaan', 'Keterampilan', 'Wirek', 'Riset']))
+        <tr class="text-left">
             <td class="text-center" width="3%" style="border: 1px solid black; padding-left: 2px;">
-                1
+                {{ $umumCounter++ }}
             </td>
             <td width="40%" style="border: 1px solid black; padding-left: 4px;">
-                <span>Pemberdayaan
-                </span>
+                <span>{{ $kmpItem->mata_pelajaran_detail->nama }}</span>
             </td>
             <td class="text-center" width="7%" style="border: 1px solid black;">
-                91.00
+                <span>{{ $kmpItem->p_nilai_1 }}</span>
             </td>
             <td width="40%" style="border: 1px solid black; padding-left: 4px;">
-                Lorem ipsum dolor sit amet.
+                <span>{{ $kmpItem->capaian_kompetensi }}</span>
             </td>
         </tr>
+    @endif
+@endforeach
 
-        <tr class="text-left" style="">
+{{-- Muatan Lokal --}}
+<tr class="text-left">
+    <td class="text-center" width="3%" style="border: 1px solid black; padding-left: 2px;">
+        {{ $umumCounter }}
+    </td>
+    <td width="40%" style="border: 1px solid black; padding-left: 4px;">
+        <span>Muatan Lokal</span>
+    </td>
+    <td class="text-center" width="7%" style="border: 1px solid black;"></td>
+    <td width="40%" style="border: 1px solid black; padding-left: 4px;"></td>
+</tr>
+
+{{-- Pemberdayaan dan Keterampilan --}}
+<tr class="text-left" style="font-weight: bold;">
+    <td colspan="4" class="text-left" width="3%" style="border: 1px solid black; padding-left: 2px;">
+        Pemberdayaan dan Keterampilan
+    </td>
+</tr>
+
+@foreach ($kmp as $kmpItem)
+    @if(in_array($kmpItem->mata_pelajaran_detail->nama, ['Pemberdayaan', 'Keterampilan', 'Wirek', 'Riset']))
+        <tr class="text-left">
             <td class="text-center" width="3%" style="border: 1px solid black; padding-left: 2px;">
-                2
+                {{ $pemberdayaanCounter++ }}
             </td>
             <td width="40%" style="border: 1px solid black; padding-left: 4px;">
-                <span>Keterampilan
-                </span>
+                <span>{{ $kmpItem->mata_pelajaran_detail->nama }}</span>
             </td>
             <td class="text-center" width="7%" style="border: 1px solid black;">
-                91.00
+                <span>{{ $kmpItem->p_nilai_1 }}</span>
             </td>
             <td width="40%" style="border: 1px solid black; padding-left: 4px;">
-                Lorem ipsum dolor sit amet.
+                <span>{{ $kmpItem->capaian_kompetensi }}</span>
             </td>
         </tr>
+    @endif
+@endforeach
+
     </table>
 
     <table class="font-size-12" style="width: 95%; border-collapse: collapse; margin-top: 24px; margin-right: 16px; margin-left: 10px;">
