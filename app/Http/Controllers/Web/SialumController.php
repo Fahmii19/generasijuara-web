@@ -4,48 +4,48 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\AlumniModel;
+use Illuminate\Support\Facades\Log;
 use App\Mail\KirimEmail;
 use Illuminate\Support\Facades\Mail;
-use App\Models\AlumniModel;
-
-// use log
-use Illuminate\Support\Facades\Log;
 
 class SialumController extends Controller
 {
     public function add(Request $request, $id = null)
     {
-        $alumni = $id ? AlumniModel::find($id) : new AlumniModel();
+        $alumni = new AlumniModel();
         return view('alumni.add', compact('alumni'));
     }
-    // app/Http/Controllers/Web/SialumController.php
 
     public function store(Request $request)
     {
-        set_time_limit(300); // Set timeout 5 menit
-        $validated = $request->validate([
-            'nis' => 'required',
-            'nisn' => 'required',
-            'nama' => 'required',
-            'email' => 'required|email',
-            'no_hp' => 'required',
-        ]);
+        set_time_limit(300);
 
         try {
+            // Buat record alumni baru
+            $alumni = AlumniModel::create($request->all());
+
+            // Kirim email
             Mail::to($request->email)
-                ->cc('rahmat@generasijuara.sch.id')
-                ->send(new KirimEmail($validated));
+                ->cc('fahmitb70@gmail.com')
+                ->send(new KirimEmail($alumni->toArray()));
 
             return response()->json([
                 'success' => true,
-                'message' => 'Data alumni berhasil disimpan dan email konfirmasi telah dikirim'
+                'message' => 'Data alumni berhasil disimpan dan email konfirmasi telah dikirim',
+                'data' => $alumni
             ]);
         } catch (\Exception $e) {
-            Log::error('Email error: ' . $e->getMessage());
+            Log::error('Error: ' . $e->getMessage());
+
+            // Cek jika error berasal dari pengiriman email
+            $errorMessage = str_contains($e->getMessage(), 'Mail')
+                ? 'Data berhasil disimpan tetapi gagal mengirim email: ' . $e->getMessage()
+                : 'Gagal menyimpan data: ' . $e->getMessage();
 
             return response()->json([
                 'success' => false,
-                'message' => 'Data berhasil disimpan tetapi gagal mengirim email: ' . $e->getMessage()
+                'message' => $errorMessage
             ], 500);
         }
     }

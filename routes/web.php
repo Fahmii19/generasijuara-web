@@ -275,9 +275,7 @@ Route::group(['prefix' => 'sirego', 'middleware' => ['auth']], function () {
 
 Route::group(['prefix' => 'sialum'], function () {
     Route::get('/add', [WebSialum::class, 'add'])->name('web.sialum.alumni.add');
-    Route::get('/edit/{id}', [WebSialum::class, 'add'])->name('web.sialum.alumni.edit');
     Route::post('/store', [WebSialum::class, 'store'])->name('web.sialum.alumni.store');
-    Route::post('/update/{id}', [WebSialum::class, 'update'])->name('web.sialum.alumni.update');
 });
 
 Route::group(['prefix' => 'siab', 'middleware' => ['auth']], function () {
