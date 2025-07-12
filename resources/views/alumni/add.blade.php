@@ -35,6 +35,7 @@
                         <div class="mb-3 col-md-4">
                             <label class="small mb-1" for="jenis_kelamin">Jenis Kelamin</label>
                             <select class="form-control" id="jenis_kelamin" name="jenis_kelamin">
+                                <option value="">-- Pilih Jenis Kelamin --</option>
                                 <option value="l">Laki-laki</option>
                                 <option value="p">Perempuan</option>
                             </select>
@@ -145,7 +146,7 @@ function getTahunAkademik() {
             "_token": "{{ csrf_token() }}",
         },
         success: function(res) {
-            var opt_for_filter = "";
+            var opt_for_filter = "<option value=''>-- Pilih Tahun Akademik --</option>";
             var opt_for_input = "<option value=''>-- Pilih Salah Satu --</option>";
 
             $.each(res.data, function (i, row) {
@@ -158,7 +159,6 @@ function getTahunAkademik() {
             $('#tahun_akademik_source').html(opt_for_input);
             $('#tahun_akademik_destination').html(opt_for_input);
 
-            // Perbaikan utama di bagian ini
             @if(isset($alumni) && $alumni)
                 $('#id').val("{{ $alumni->id ?? '' }}");
                 $('#nis').val("{{ $alumni->nis ?? '' }}");
