@@ -48,7 +48,7 @@
             <div class="modal-body">
                 <form id="formPwd" method="POST" action="" novalidate>
                     @csrf
-                    <input class="form-control" id="id" type="hidden" placeholder="">
+                    {{-- <input class="form-control" id="id" type="hidden" placeholder=""> --}}
                     <div class="mb-3">
                         <label for="password">New Password</label>
                         <input class="form-control" id="password" type="text" placeholder="">
@@ -166,9 +166,9 @@
                     "data": "lanjut_kuliah",
                     "render": function(data, type, row) {
                         console.log(data);
-                        if (data == 0) {
+                        if (data == 1) {
                             return '<span class="badge bg-green-soft text-green">Lanjut</span>';
-                        } else if (data == 1) {
+                        } else if (data == 0) {
                             return '<span class="badge bg-yellow-soft text-yellow">Tidak Lanjut</span>';
                         }
                         // Optional: handle other cases if needed
