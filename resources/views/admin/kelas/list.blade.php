@@ -416,8 +416,8 @@
             $('#semester_filter').val(null).trigger('change');
             table.ajax.reload();
         });
-        
-        
+
+
         $('#input-search-table').on( 'keyup change clear',function() {
             table
                 // .columns(2)
@@ -449,7 +449,7 @@
 
                         tahunAkademikSelected = res.data.tahun_akademik_id;
                         $('#formKelas').find('#tahun_akademik_id').val(res.data.tahun_akademik_id);
-                        
+
                         paketKelasSelected = res.data.paket_kelas_id;
                         $('#formKelas').find('#paket_kelas_id').val(res.data.paket_kelas_id);
 
@@ -551,7 +551,7 @@
 
                         tahunAkademikSelected = res.data.tahun_akademik_id;
                         $('#formKelas').find('#tahun_akademik_id').val(res.data.tahun_akademik_id);
-                        
+
                         paketKelasSelected = res.data.paket_kelas_id;
                         $('#formKelas').find('#paket_kelas_id').val(res.data.paket_kelas_id);
 
@@ -587,7 +587,7 @@
             // }
 
             // $('#spinner-toast').modal('show');
-            
+
             enableLoadingButton("#submitTutorBtn");
             var data = {
                 "_token": "{{ csrf_token() }}",
@@ -642,13 +642,13 @@
         //         importFile = this.files[0]
         //     }
         // });
-        
+
         // $('#importBtn').on('click', function(){
         //     $('#modalImport').modal('show');
         //     $('#formImport').trigger('reset');
         //     importFile = null;
         // });
-        
+
         // $('#submitImportBtn').on('click', function(e){
         //     e.preventDefault();
         //     var form = $("#formImport");

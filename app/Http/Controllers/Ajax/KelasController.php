@@ -1105,7 +1105,7 @@ class KelasController extends Controller
                 }
             }
 
-            dd($db);
+            // dd($db);
             DB::commit();
             return response()->json(['error' => false, 'message' => null, 'data' => $db], 200);
         } catch (\Exception $e) {
